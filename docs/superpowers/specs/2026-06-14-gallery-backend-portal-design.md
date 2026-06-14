@@ -22,8 +22,8 @@ The doula project is an Astro 5 SSR + Supabase CMS whose **auth, Supabase client
 
 ## 2. Architecture
 
-- **Astro 5**, `output: 'server'` (SSR), **`@astrojs/netlify`** adapter, **Node 22**.
-- **Hosting:** Netlify.
+- **Astro 5**, `output: 'server'` (SSR), **`@astrojs/vercel`** adapter, **Node 22**.
+- **Hosting:** Vercel.
 - One repo. Each current HTML page becomes an `.astro` page. Shared `src/layouts/Layout.astro` + `src/components/Header.astro` / `Footer.astro` replace the runtime DOM injection in `js/main.js`. The existing `css/styles.css` moves to `src/styles/` unchanged — the visual design is preserved.
 - Public pages render server-side from Supabase using the **anon key** (RLS-limited). `/admin/*` is guarded by ported middleware. Writes use the **service-role key** (server only).
 - **Caching:** anonymous GETs on public routes get `Cache-Control: public, s-maxage=60, stale-while-revalidate=86400`; authenticated/admin responses get `private, no-store`.
@@ -105,9 +105,9 @@ Admin shell: shared `AdminLayout.astro` with nav, themed to VERSO (dark/editoria
 ## 6. Provisioning (user-owned; cannot be automated here)
 
 1. Create a Supabase project. Run provided `supabase/schema.sql` (tables, RLS, triggers, `gallery-images` bucket).
-2. Paste into `.env` (local) and Netlify env: `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`.
+2. Paste into `.env` (local) and Vercel project env: `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`.
 3. Create the single admin user via the Supabase dashboard (Auth → Users). Public site renders without this; only `/admin` requires it.
-4. Netlify: connect repo, set `NODE_VERSION=22`, deploy.
+4. Vercel: import the repo (auto-detects Astro), set the three env vars, deploy. Node 22 comes from `engines.node` in `package.json`.
 
 ---
 

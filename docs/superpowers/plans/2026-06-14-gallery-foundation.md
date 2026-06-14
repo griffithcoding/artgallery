@@ -4,9 +4,9 @@
 
 **Goal:** Convert the static VERSO gallery site to an Astro 5 SSR app that renders identically to today, behind a data-access seam, with Supabase clients, auth middleware, and an admin login shell ready for the module plans to build on.
 
-**Architecture:** Astro 5 `output: 'server'` on the Netlify adapter (Node 22). Public pages call a data-access module (`src/lib/gallery.ts`) whose interface is fixed now and backed by the ported static generator (`src/lib/data.ts`); the Artwork CMS plan later swaps the implementation to Supabase without touching pages. Auth/session/CSRF come from a ported Supabase SSR backbone.
+**Architecture:** Astro 5 `output: 'server'` on the Vercel adapter (Node 22). Public pages call a data-access module (`src/lib/gallery.ts`) whose interface is fixed now and backed by the ported static generator (`src/lib/data.ts`); the Artwork CMS plan later swaps the implementation to Supabase without touching pages. Auth/session/CSRF come from a ported Supabase SSR backbone.
 
-**Tech Stack:** Astro 5, `@astrojs/netlify`, `@astrojs/sitemap`, `@supabase/ssr`, `@supabase/supabase-js`, `sanitize-html`, TypeScript, Vitest.
+**Tech Stack:** Astro 5, `@astrojs/vercel`, `@astrojs/sitemap`, `@supabase/ssr`, `@supabase/supabase-js`, `sanitize-html`, TypeScript, Vitest.
 
 **Source references:**
 - Existing static pages live at repo root (`index.html`, `collection.html`, `artwork.html`, `artists.html`, `artist.html`, `exhibitions.html`, `exhibition.html`, `viewing-rooms.html`, `about.html`, `visit.html`, `contact.html`, `press.html`, `404.html`). Their `<main>` markup is the source content for the converted `.astro` pages.
@@ -88,7 +88,7 @@ Files removed at the end (Task 17): root `*.html`, `js/`, `css/` (after parity c
     "test": "vitest run"
   },
   "dependencies": {
-    "@astrojs/netlify": "^6.6.5",
+    "@astrojs/vercel": "^8.2.11",
     "@astrojs/sitemap": "^3.4.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.107.0",
@@ -108,12 +108,12 @@ Files removed at the end (Task 17): root `*.html`, `js/`, `css/` (after parity c
 ```js
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import netlify from '@astrojs/netlify';
+import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   site: 'https://www.versogallery.com',
   output: 'server',
-  adapter: netlify(),
+  adapter: vercel(),
   security: { checkOrigin: false }, // replaced by Origin/Host check in middleware
   integrations: [sitemap({ changefreq: 'weekly', priority: 0.7 })],
   build: { inlineStylesheets: 'auto' },
@@ -137,7 +137,7 @@ node_modules/
 dist/
 .astro/
 .env
-.netlify/
+.vercel/
 ```
 
 - [ ] **Step 5: Create `.env.example`**
@@ -1021,7 +1021,7 @@ create policy galleryimg_public_read on storage.objects
 # Supabase setup
 1. Create a project at supabase.com.
 2. SQL Editor → run `schema.sql`.
-3. Project Settings → API: copy URL, anon key, service_role key into `.env` and Netlify env:
+3. Project Settings → API: copy URL, anon key, service_role key into `.env` and Vercel project env:
    PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
 4. Authentication → Providers → Email: enable; disable "Allow new users to sign up".
 5. Authentication → Users → Add user: create the single admin (email + password).
@@ -1328,22 +1328,14 @@ git commit -m "test: add slug and sanitize unit tests"
 
 ---
 
-## Task 16: Netlify config, sitemap, llms/SEO parity
+## Task 16: Vercel config, sitemap, llms/SEO parity
 
 **Files:**
-- Create: `netlify.toml`
 - Modify: `public/llms.txt`, `public/llms-full.txt` (route updates), delete `public/sitemap.xml`
 
-- [ ] **Step 1: Create `netlify.toml`**
+- [ ] **Step 1: Confirm Vercel deploy config**
 
-```toml
-[build]
-  command = "npm run build"
-  publish = "dist"
-
-[build.environment]
-  NODE_VERSION = "22"
-```
+No `vercel.json` is required — Vercel auto-detects Astro and the `@astrojs/vercel` adapter produces the SSR output (`.vercel/output`). Node 22 is pinned via `engines.node` in `package.json` (Task 1). Nothing to create here; this step is a checkpoint. If a custom config is ever needed, add a minimal `vercel.json`, but do not add one now.
 
 - [ ] **Step 2: Delete the static sitemap** (the integration generates one)
 
@@ -1361,8 +1353,8 @@ Expected: `dist/` contains `sitemap-index.xml`; build succeeds.
 - [ ] **Step 6: Commit**
 
 ```bash
-git add netlify.toml public/llms.txt public/llms-full.txt public/robots.txt
-git commit -m "chore: add Netlify config; update sitemap, llms, robots for clean routes"
+git add public/llms.txt public/llms-full.txt public/robots.txt
+git commit -m "chore: update sitemap, llms, robots for clean routes"
 ```
 
 ---
