@@ -140,10 +140,10 @@
   }
 
   /* ---------- Render helpers ---------- */
-  function formatPrice(w) {
+  function formatAvailability(w) {
     if (w.availability === 'Sold') return 'Sold';
-    if (w.price == null) return 'Price on request';
-    return '$' + w.price.toLocaleString('en-US');
+    if (w.availability === 'Inquire') return 'Inquire';
+    return 'Available';
   }
 
   function artworkCard(w) {
@@ -155,7 +155,7 @@
         <span class="artist-name">${w.artistName}</span>
         <span class="art-title">${w.title}</span><span class="art-meta">, ${w.year}</span>
         <div class="art-meta">${w.medium}</div>
-        <div class="art-price">${formatPrice(w)}</div>
+        <div class="art-status">${formatAvailability(w)}</div>
       </a>`;
   }
 
@@ -188,7 +188,7 @@
           <div class="form-grid">
             <div class="field"><label>Name</label><input name="name" required></div>
             <div class="field"><label>Email</label><input type="email" name="email" required></div>
-            <div class="field full"><label>Message</label><textarea name="message" rows="3" placeholder="I'd like to learn more about this work, including price and availability."></textarea></div>
+            <div class="field full"><label>Message</label><textarea name="message" rows="3" placeholder="I'd like to learn more about this work, including availability."></textarea></div>
           </div>
           <button class="btn btn--solid mt-2" type="submit" style="width:100%;justify-content:center;">Send inquiry</button>
           <p class="muted" style="font-size:.74rem;margin-top:1rem;">A gallery representative typically replies within one business day.</p>
@@ -208,7 +208,7 @@
 
   /* ---------- Public namespace ---------- */
   window.VERSO = {
-    BRAND, NAV, formatPrice, artworkCard, artistCard, openInquiry,
+    BRAND, NAV, formatAvailability, artworkCard, artistCard, openInquiry,
     getParam: (k) => new URLSearchParams(location.search).get(k),
     onNewsletter: function (e) {
       e.preventDefault();

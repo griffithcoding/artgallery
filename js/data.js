@@ -119,11 +119,11 @@
     let title = TITLE_A[Math.floor(r() * TITLE_A.length)];
     if (r() > 0.5) title += ' ' + TITLE_B[Math.floor(r() * TITLE_B.length)];
     const wIn = 12 + Math.floor(r() * 60), hIn = 12 + Math.floor(r() * 72);
-    const priceTier = r();
-    let price, availability;
-    if (priceTier > 0.82) { price = null; availability = 'Sold'; }
-    else if (priceTier > 0.55) { price = null; availability = 'Inquire'; }
-    else { price = (1 + Math.floor(r() * 48)) * 500 + 1500; availability = 'Available'; }
+    const availTier = r();
+    let availability;
+    if (availTier > 0.82) availability = 'Sold';
+    else if (availTier > 0.55) availability = 'Inquire';
+    else availability = 'Available';
     const id = 'w' + String(i).padStart(4, '0');
     artworks.push({
       id,
@@ -138,7 +138,6 @@
       subject,
       dimensions: `${hIn} × ${wIn} in`,
       ratio,
-      price,
       availability,
       image: artSVG(id, ratio),
     });

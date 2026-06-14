@@ -197,7 +197,7 @@ h3.display { font-size: clamp(1.5rem, 3vw, 2.25rem); }
 .art-card .artist-name { font-size: 0.82rem; font-weight: 500; letter-spacing: 0.02em; }
 .art-card .art-title { font-family: var(--serif); font-style: italic; font-size: 1.05rem; color: var(--ink); line-height: 1.3; }
 .art-card .art-meta { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.2rem; }
-.art-card .art-price { font-size: 0.78rem; color: var(--ink); margin-top: 0.35rem; letter-spacing: 0.02em; }
+.art-card .art-status { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.35rem; letter-spacing: 0.04em; text-transform: uppercase; }
 
 /* Section header */
 .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: clamp(1.5rem, 4vw, 3rem); flex-wrap: wrap; }

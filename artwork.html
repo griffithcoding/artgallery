@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Artwork — VERSO Gallery</title>
-  <meta name="description" content="View this contemporary artwork at VERSO Gallery, Brooklyn — with medium, dimensions, year, price, and availability." />
+  <meta name="description" content="View this contemporary artwork at VERSO Gallery, Brooklyn — with medium, dimensions, year, and availability." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="theme-color" content="#16150f" />
   <meta property="og:type" content="article" />
@@ -43,12 +43,11 @@
 
       document.title = w.title + ' (' + w.year + ') — ' + w.artistName + ' | VERSO Gallery';
       var meta = document.querySelector('meta[name=description]');
-      meta.content = w.title + ' by ' + w.artistName + ', ' + w.year + '. ' + w.medium + ', ' + w.dimensions + '. ' + VERSO.formatPrice(w) + ' at VERSO Gallery, Brooklyn.';
+      meta.content = w.title + ' by ' + w.artistName + ', ' + w.year + '. ' + w.medium + ', ' + w.dimensions + '. ' + w.availability + ' at VERSO Gallery, Brooklyn.';
 
       document.getElementById('crumb').innerHTML =
         '<a href="index.html">Home</a> / <a href="collection.html">Works</a> / <a href="artist.html?slug=' + artist.slug + '">' + w.artistName + '</a> / <span>' + w.title + '</span>';
 
-      var priceLabel = VERSO.formatPrice(w);
       document.getElementById('detail').innerHTML =
         '<div class="artwork-stage">' +
           '<span class="frame" data-ratio="' + w.ratio + '" style="width:100%;max-width:560px;">' +
@@ -64,7 +63,6 @@
             '<div><dt>Dimensions</dt><dd>' + w.dimensions + '</dd></div>' +
             '<div><dt>Year</dt><dd>' + w.year + '</dd></div>' +
             '<div><dt>Availability</dt><dd>' + w.availability + '</dd></div>' +
-            '<div><dt>Price</dt><dd>' + priceLabel + '</dd></div>' +
           '</dl>' +
           (w.availability === 'Sold'
             ? '<button class="btn" disabled style="opacity:.5;width:100%;justify-content:center;">Sold</button>'
@@ -83,9 +81,7 @@
       // JSON-LD: VisualArtwork + Offer + Breadcrumb (AI/SEO)
       var offer = (w.availability === 'Sold')
         ? { "@type": "Offer", "availability": "https://schema.org/SoldOut", "seller": { "@id": "https://www.versogallery.com/#organization" } }
-        : (w.price != null)
-          ? { "@type": "Offer", "price": w.price, "priceCurrency": "USD", "availability": "https://schema.org/InStock", "seller": { "@id": "https://www.versogallery.com/#organization" } }
-          : { "@type": "Offer", "availability": "https://schema.org/InStock", "priceSpecification": { "@type": "PriceSpecification", "valueAddedTaxIncluded": false }, "seller": { "@id": "https://www.versogallery.com/#organization" } };
+        : { "@type": "Offer", "availability": "https://schema.org/InStock", "seller": { "@id": "https://www.versogallery.com/#organization" } };
       var ld = {
         "@context": "https://schema.org",
         "@type": "VisualArtwork",

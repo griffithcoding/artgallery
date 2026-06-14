@@ -115,9 +115,7 @@
       return true;
     });
     const dir = { 'year-desc': (a, b) => b.year - a.year, 'year-asc': (a, b) => a.year - b.year,
-      'artist': (a, b) => a.artistName.localeCompare(b.artistName),
-      'price-asc': (a, b) => (a.price || Infinity) - (b.price || Infinity),
-      'price-desc': (a, b) => (b.price || -1) - (a.price || -1) };
+      'artist': (a, b) => a.artistName.localeCompare(b.artistName) };
     if (dir[state.sort]) list = list.slice().sort(dir[state.sort]);
     return list;
   }
