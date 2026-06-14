@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact & Advisory — VERSO Gallery, Brooklyn</title>
+  <meta name="description" content="Contact VERSO Gallery in Brooklyn for sales, private viewings, art advisory, consignment, and press. We typically reply within one business day." />
+  <link rel="canonical" href="https://www.versogallery.com/contact.html" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#16150f" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="VERSO Gallery" />
+  <meta property="og:title" content="Contact & Advisory — VERSO Gallery" />
+  <meta property="og:description" content="Contact VERSO Gallery, Brooklyn for sales, viewings, advisory, and press." />
+  <meta property="og:url" content="https://www.versogallery.com/contact.html" />
+  <meta property="og:image" content="https://www.versogallery.com/images/og-cover.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact VERSO Gallery",
+    "url": "https://www.versogallery.com/contact.html",
+    "isPartOf": { "@id": "https://www.versogallery.com/#website" }
+  }
+  </script>
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" style="font-size:.78rem;color:var(--ink-soft);margin-bottom:1.2rem;">
+      <a href="index.html">Home</a> &nbsp;/&nbsp; <span>Contact</span>
+    </nav>
+
+    <div class="hero-grid" style="align-items:start;">
+      <div>
+        <p class="eyebrow">Get in touch</p>
+        <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 1rem;">Contact &amp; advisory</h1>
+        <p class="prose">Whether you’re asking about a specific work, starting a collection, consigning, or writing about the gallery, we’d love to hear from you. A representative typically replies within one business day.</p>
+        <dl class="spec-list mt-2" style="border-top:1px solid var(--line);">
+          <div><dt>Sales & viewings</dt><dd><a class="link-underline" href="mailto:hello@versogallery.com">hello@versogallery.com</a></dd></div>
+          <div><dt>Press</dt><dd><a class="link-underline" href="mailto:press@versogallery.com">press@versogallery.com</a></dd></div>
+          <div><dt>Phone</dt><dd><a class="link-underline" href="tel:+17185550142">+1 (718) 555-0142</a></dd></div>
+          <div><dt>Visit</dt><dd>312 Wythe Avenue, Brooklyn</dd></div>
+        </dl>
+      </div>
+
+      <div>
+        <form onsubmit="return VERSO.submitInquiry(event)" style="border:1px solid var(--line);padding:clamp(1.5rem,4vw,2.5rem);background:var(--paper-pure);">
+          <div class="form-grid">
+            <div class="field"><label>Name</label><input name="name" required /></div>
+            <div class="field"><label>Email</label><input type="email" name="email" required /></div>
+            <div class="field full"><label>Reason for contact</label>
+              <select name="topic">
+                <option>A specific artwork</option>
+                <option>Building a collection / advisory</option>
+                <option>Private or after-hours viewing</option>
+                <option>Consignment</option>
+                <option>Press / media</option>
+                <option>Something else</option>
+              </select>
+            </div>
+            <div class="field full"><label>Message</label><textarea name="message" rows="5" placeholder="Tell us what you’re looking for…"></textarea></div>
+          </div>
+          <button class="btn btn--solid mt-2" type="submit" style="width:100%;justify-content:center;">Send message</button>
+          <p class="muted" style="font-size:.74rem;margin-top:1rem;">By submitting you agree to be contacted by VERSO Gallery. We never share your details.</p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

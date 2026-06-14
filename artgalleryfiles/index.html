@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VERSO — Contemporary Art Gallery in Brooklyn, NY</title>
+  <meta name="description" content="VERSO is an independent contemporary art gallery in Williamsburg, Brooklyn, with an open archive of more than 20,000 works. Browse exhibitions, artists, and works for sale — with prices, not just inquiries." />
+  <link rel="canonical" href="https://www.versogallery.com/" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="author" content="VERSO Gallery" />
+  <meta name="theme-color" content="#16150f" />
+  <meta name="keywords" content="contemporary art gallery Brooklyn, Williamsburg art gallery, buy contemporary art NYC, emerging artists Brooklyn, original art for sale, art exhibitions Brooklyn" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="VERSO Gallery" />
+  <meta property="og:title" content="VERSO — Contemporary Art Gallery in Brooklyn, NY" />
+  <meta property="og:description" content="An independent Brooklyn gallery with an open archive of 20,000+ contemporary works. Exhibitions, artists, and works for sale." />
+  <meta property="og:url" content="https://www.versogallery.com/" />
+  <meta property="og:image" content="https://www.versogallery.com/images/og-cover.svg" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="VERSO — Contemporary Art Gallery in Brooklyn, NY" />
+  <meta name="twitter:description" content="An independent Brooklyn gallery with an open archive of 20,000+ contemporary works." />
+  <meta name="twitter:image" content="https://www.versogallery.com/images/og-cover.svg" />
+
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="images/favicon.svg" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- ============ Structured data (SEO + AI engine optimization) ============ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["ArtGallery", "Organization"],
+        "@id": "https://www.versogallery.com/#organization",
+        "name": "VERSO Gallery",
+        "alternateName": "VERSO",
+        "url": "https://www.versogallery.com/",
+        "logo": "https://www.versogallery.com/images/og-cover.svg",
+        "image": "https://www.versogallery.com/images/og-cover.svg",
+        "description": "Independent contemporary art gallery in Williamsburg, Brooklyn, with an open archive of more than 20,000 works.",
+        "email": "hello@versogallery.com",
+        "telephone": "+1-718-555-0142",
+        "priceRange": "$$-$$$$",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "312 Wythe Avenue",
+          "addressLocality": "Brooklyn",
+          "addressRegion": "NY",
+          "postalCode": "11249",
+          "addressCountry": "US"
+        },
+        "geo": { "@type": "GeoCoordinates", "latitude": 40.7188, "longitude": -73.9610 },
+        "openingHoursSpecification": [{
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          "opens": "11:00", "closes": "18:00"
+        }],
+        "sameAs": ["https://www.instagram.com/", "https://www.artsy.net/"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.versogallery.com/#website",
+        "url": "https://www.versogallery.com/",
+        "name": "VERSO Gallery",
+        "publisher": { "@id": "https://www.versogallery.com/#organization" },
+        "inLanguage": "en-US"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">Now on view · Williamsburg, Brooklyn</p>
+          <h1 class="display reveal">An open archive of contemporary art.</h1>
+          <p class="lead reveal tldr-block">VERSO is an independent gallery in Brooklyn representing emerging and mid-career artists — with more than 20,000 works browsable online, prices shown openly, and a new exhibition every six weeks.</p>
+          <div class="hero-meta reveal">
+            <div><dt>Current</dt><dd id="heroCurrent">—</dd></div>
+            <div><dt>Hours</dt><dd>Tue–Sat, 11–6</dd></div>
+            <div><dt>Where</dt><dd>312 Wythe Ave, Brooklyn</dd></div>
+          </div>
+          <div class="flex gap-1 reveal" style="flex-wrap:wrap;">
+            <a class="btn btn--solid" href="collection.html">Browse the archive</a>
+            <a class="btn" href="exhibitions.html">Current exhibition</a>
+          </div>
+        </div>
+        <div class="reveal">
+          <a id="heroImage" href="exhibitions.html" class="frame frame--hover" data-ratio="portrait" aria-label="Current exhibition"></a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Featured works -->
+    <section class="section wrap">
+      <div class="section-head">
+        <h2 class="display reveal">Selected works</h2>
+        <a class="link-underline reveal" href="collection.html">View all 20,000 →</a>
+      </div>
+      <div class="grid grid--4" id="featuredWorks"></div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Stat band -->
+    <section class="section--tight wrap">
+      <div class="stat-band">
+        <div class="reveal"><div class="num" id="statWorks">20,000+</div><div class="label">Works in archive</div></div>
+        <div class="reveal"><div class="num" id="statArtists">—</div><div class="label">Represented artists</div></div>
+        <div class="reveal"><div class="num">6 wks</div><div class="label">New show cycle</div></div>
+        <div class="reveal"><div class="num">2015</div><div class="label">Founded in Brooklyn</div></div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Featured artists -->
+    <section class="section wrap">
+      <div class="section-head">
+        <h2 class="display reveal">Artists</h2>
+        <a class="link-underline reveal" href="artists.html">All artists →</a>
+      </div>
+      <div class="grid grid--4" id="featuredArtists"></div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- About teaser -->
+    <section class="section wrap">
+      <div class="hero-grid">
+        <div class="reveal">
+          <a href="about.html" class="frame frame--hover" data-ratio="landscape" id="aboutImage" aria-label="About VERSO"></a>
+        </div>
+        <div class="reveal">
+          <p class="eyebrow">The gallery</p>
+          <h2 class="display" style="margin:.5rem 0 1.2rem;">Built like a public archive, run like a gallery.</h2>
+          <p class="prose">We opened VERSO in 2015 on a simple premise: a great gallery shouldn’t hide most of its program in a back room. So we put the whole archive online — every available work, with its price — and let the exhibitions do the editing. The result is a gallery you can walk through in person on Wythe Avenue, or browse end-to-end from anywhere.</p>
+          <a class="btn mt-2" href="about.html">More about us</a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Newsletter band -->
+    <section class="section--tight wrap center">
+      <p class="eyebrow reveal">Stay close to the program</p>
+      <h2 class="display reveal" style="max-width:18ch;margin:.6rem auto 1.4rem;">Openings, new works, and viewing rooms — first.</h2>
+      <form class="newsletter reveal" style="margin-inline:auto;border-color:var(--line);" onsubmit="return VERSO.onNewsletter(event)">
+        <input type="email" required placeholder="Your email" aria-label="Email address" style="color:var(--ink);" />
+        <button type="submit" style="color:var(--ink);">Join</button>
+      </form>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var D = window.VERSO_DATA;
+      // Featured works (deterministic pick)
+      var feat = D.artworks.slice(0, 8);
+      document.getElementById('featuredWorks').innerHTML = feat.map(VERSO.artworkCard).join('');
+      // Featured artists
+      var artists = D.artists.slice(0, 8);
+      document.getElementById('featuredArtists').innerHTML = artists.map(function (a) {
+        return VERSO.artistCard(a, D.worksByArtist(a.id)[0]);
+      }).join('');
+      // Stats
+      document.getElementById('statArtists').textContent = D.artists.length;
+      // Hero current exhibition
+      var current = D.exhibitions.find(function (e) { return e.status === 'On View'; }) || D.exhibitions[0];
+      document.getElementById('heroCurrent').textContent = current.title;
+      var heroImg = D.worksByArtist(current.artistIds[0])[0] || D.artworks[0];
+      document.getElementById('heroImage').innerHTML = '<img src="' + heroImg.image + '" alt="From the exhibition ' + current.title + '" />';
+      document.getElementById('heroImage').href = 'exhibition.html?slug=' + current.slug;
+      // About / generic image
+      document.getElementById('aboutImage').innerHTML = '<img src="' + D.artworks[12].image + '" alt="Inside VERSO gallery" />';
+      // Re-run reveal for freshly injected cards
+      document.querySelectorAll('#featuredWorks .reveal, #featuredArtists .reveal').forEach(function (el) { el.classList.add('is-visible'); });
+    })();
+  </script>
+</body>
+</html>

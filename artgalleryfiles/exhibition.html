@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Exhibition — VERSO Gallery</title>
+  <meta name="description" content="Exhibition at VERSO Gallery, Brooklyn." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#16150f" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VERSO Gallery" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" id="crumb" style="font-size:.78rem;color:var(--ink-soft);margin-bottom:1.6rem;"></nav>
+    <header id="exHead" style="max-width:72ch;margin-bottom:2.5rem;"></header>
+    <div class="frame" data-ratio="landscape" id="exHero" style="margin-bottom:3rem;"></div>
+    <section class="prose" id="exBody" style="max-width:68ch;margin-bottom:3.5rem;"></section>
+    <section style="border-top:1px solid var(--line);padding-top:2.5rem;">
+      <h2 class="display" style="margin-bottom:2rem;">Works in the exhibition</h2>
+      <div class="grid grid--3" id="exWorks"></div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var D = window.VERSO_DATA;
+      var slug = VERSO.getParam('slug');
+      var e = D.exhibitionBySlug(slug) || D.exhibitions[0];
+      var names = e.artistIds.map(function (id) { return D.artistById(id).name; });
+
+      document.title = e.title + ' — Exhibition | VERSO Gallery, Brooklyn';
+      document.querySelector('meta[name=description]').content =
+        e.title + ' (' + e.dates + ') at VERSO Gallery, Brooklyn. ' + e.blurb;
+
+      document.getElementById('crumb').innerHTML =
+        '<a href="index.html">Home</a> / <a href="exhibitions.html">Exhibitions</a> / <span>' + e.title + '</span>';
+
+      document.getElementById('exHead').innerHTML =
+        '<span class="exhibition-status">' + e.status + ' · ' + e.dates + '</span>' +
+        '<h1 class="display" style="font-size:clamp(2.4rem,6vw,4rem);margin:.4rem 0 .6rem;">' + e.title + '</h1>' +
+        '<p class="lead">' + e.subtitle + '</p>' +
+        '<p class="muted" style="margin-top:.6rem;">Featuring ' + names.join(', ') + '</p>';
+
+      var works = [];
+      e.artistIds.forEach(function (id) { works = works.concat(D.worksByArtist(id).slice(0, 3)); });
+      if (!works.length) works = D.artworks.slice(0, 6);
+      document.getElementById('exHero').innerHTML = '<img src="' + works[0].image + '" alt="Installation view, ' + e.title + '" />';
+      document.getElementById('exBody').innerHTML =
+        '<p class="lead tldr-block">' + e.blurb + '</p>' +
+        '<p>The exhibition brings together recent work by ' + names.join(', ') + ', on view at VERSO’s Wythe Avenue space and in a companion online viewing room. A printed checklist with prices is available at the front desk and online — every work in the show can be reserved or inquired about directly from its page.</p>' +
+        '<p>Gallery hours are Tuesday through Saturday, 11am–6pm. For a private viewing or press materials, contact <a class="link-underline" href="mailto:hello@versogallery.com">hello@versogallery.com</a>.</p>';
+      document.getElementById('exWorks').innerHTML = works.map(VERSO.artworkCard).join('');
+      document.querySelectorAll('#exWorks .reveal').forEach(function (el) { el.classList.add('is-visible'); });
+
+      // JSON-LD ExhibitionEvent + Breadcrumb
+      var ld = {
+        "@context": "https://schema.org", "@type": "ExhibitionEvent",
+        "name": e.title, "description": e.blurb,
+        "startDate": String(e.year), "eventStatus": e.status === 'Past' ? "https://schema.org/EventScheduled" : "https://schema.org/EventScheduled",
+        "location": { "@type": "Place", "name": "VERSO Gallery", "address": { "@type": "PostalAddress", "streetAddress": "312 Wythe Avenue", "addressLocality": "Brooklyn", "addressRegion": "NY", "postalCode": "11249", "addressCountry": "US" } },
+        "organizer": { "@id": "https://www.versogallery.com/#organization" },
+        "performer": names.map(function (n) { return { "@type": "Person", "name": n }; })
+      };
+      var s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(ld); document.head.appendChild(s);
+    })();
+  </script>
+</body>
+</html>

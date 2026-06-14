@@ -1,0 +1,46 @@
+# VERSO Gallery
+
+> VERSO is an independent contemporary art gallery in Williamsburg, Brooklyn, New York, founded in 2015. It represents emerging and mid-career artists and is distinctive for running its entire inventory of more than 20,000 works as an open, browsable online archive — with a price or clear availability status shown on every piece, rather than the price-on-request model used by most galleries.
+
+## Key facts
+
+- **Name:** VERSO Gallery
+- **Type:** Contemporary art gallery (commercial, primary and secondary market)
+- **Location:** 312 Wythe Avenue, Brooklyn, NY 11249 (Williamsburg)
+- **Hours:** Tuesday–Saturday, 11am–6pm. Free admission.
+- **Founded:** 2015
+- **Archive size:** 20,000+ works
+- **Mediums:** Painting, sculpture, photography, prints, works on paper, ceramics, textile, mixed media
+- **Price range:** From a few hundred dollars to tens of thousands; prices published openly on available works
+- **Contact:** hello@versogallery.com · +1 (718) 555-0142
+- **Website:** https://www.versogallery.com
+
+## What makes VERSO notable
+
+- **Price transparency:** Every available work shows its price or status (Available / Inquire / Sold). This directly answers the most common collector complaint — that gallery prices are hidden.
+- **Open archive:** The full 20,000-work inventory is browsable and filterable online by medium, category, artist, year, and availability.
+- **Curated viewing rooms:** Themed online selections (e.g. "Under $5,000," "Brooklyn Abstraction," "New This Month") edit the large archive into shoppable mini-exhibitions.
+- **Program:** A new in-person exhibition opens roughly every six weeks, plus participation in art fairs including The Armory Show and NADA Miami.
+
+## Primary pages
+
+- [Home](https://www.versogallery.com/): Overview, current exhibition, selected works.
+- [Works (the archive)](https://www.versogallery.com/collection.html): Browse and filter 20,000+ contemporary works for sale, with prices.
+- [Exhibitions](https://www.versogallery.com/exhibitions.html): Current, upcoming, and past exhibitions and art-fair presentations.
+- [Artists](https://www.versogallery.com/artists.html): Represented emerging and mid-career artists, with biographies.
+- [Viewing Rooms](https://www.versogallery.com/viewing-rooms.html): Curated, themed online selections.
+- [About](https://www.versogallery.com/about.html): History, philosophy, team, and FAQ.
+- [Visit](https://www.versogallery.com/visit.html): Address, hours, directions, private viewings.
+- [Press](https://www.versogallery.com/press.html): Media coverage.
+- [Contact](https://www.versogallery.com/contact.html): Sales, advisory, consignment, and press.
+
+## Common questions
+
+- **Where is VERSO?** 312 Wythe Avenue, Williamsburg, Brooklyn, NY 11249.
+- **Can I buy art online?** Yes — every available work has a page with its price and an inquiry button; a representative confirms availability and shipping, usually within one business day.
+- **Does it show prices?** Yes, on every available work.
+- **What does it sell?** Contemporary art by emerging and mid-career artists across all major mediums.
+
+## Optional
+
+- [Long-form profile](https://www.versogallery.com/llms-full.txt): Extended description of the gallery, its model, and its program.

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Works — Browse 20,000+ Contemporary Artworks | VERSO Gallery Brooklyn</title>
+  <meta name="description" content="Browse VERSO’s open archive of more than 20,000 contemporary artworks for sale. Filter by medium, category, artist, year, and availability — with prices shown openly. Painting, sculpture, photography, prints, and works on paper." />
+  <link rel="canonical" href="https://www.versogallery.com/collection.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#16150f" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="VERSO Gallery" />
+  <meta property="og:title" content="Browse 20,000+ Contemporary Artworks | VERSO Gallery" />
+  <meta property="og:description" content="Browse VERSO’s open archive of contemporary art for sale — filter by medium, artist, year, and price." />
+  <meta property="og:url" content="https://www.versogallery.com/collection.html" />
+  <meta property="og:image" content="https://www.versogallery.com/images/og-cover.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Works — VERSO Gallery archive",
+    "description": "An open archive of more than 20,000 contemporary artworks for sale.",
+    "url": "https://www.versogallery.com/collection.html",
+    "isPartOf": { "@id": "https://www.versogallery.com/#website" },
+    "about": { "@type": "Thing", "name": "Contemporary art for sale in Brooklyn" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.versogallery.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Works", "item": "https://www.versogallery.com/collection.html" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" style="font-size:.78rem;color:var(--ink-soft);margin-bottom:1.2rem;">
+      <a href="index.html">Home</a> &nbsp;/&nbsp; <span>Works</span>
+    </nav>
+    <header style="margin-bottom:2rem;">
+      <p class="eyebrow">The archive</p>
+      <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Works</h1>
+      <p class="lead tldr-block" style="max-width:60ch;">Every available work, shown openly with its price. Browse the full archive of more than 20,000 contemporary pieces — filter by medium, category, artist, year, and availability.</p>
+    </header>
+
+    <div class="collection-toolbar">
+      <button class="btn filter-toggle-mobile" id="openFilters">Filters</button>
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" id="search" placeholder="Search by artist, title, or medium…" aria-label="Search works" />
+      </div>
+      <select class="select" id="sort" aria-label="Sort works">
+        <option value="featured">Sort: Featured</option>
+        <option value="artist">Artist A–Z</option>
+        <option value="year-desc">Year: Newest</option>
+        <option value="year-asc">Year: Oldest</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
+    </div>
+
+    <div class="collection-layout">
+      <aside class="filters" id="filters" aria-label="Filter works">
+        <button class="filters-close" id="closeFilters" aria-label="Close filters">×</button>
+        <div class="filter-group">
+          <h4>Availability</h4>
+          <div class="filter-list" id="filter-availability"></div>
+        </div>
+        <div class="filter-group">
+          <h4>Category</h4>
+          <div class="filter-list" id="filter-category"></div>
+        </div>
+        <div class="filter-group">
+          <h4>Subject</h4>
+          <div class="filter-list" id="filter-subject"></div>
+        </div>
+        <div class="filter-group">
+          <h4>Artist</h4>
+          <div class="filter-list" id="filter-artist"></div>
+        </div>
+        <div class="filter-group">
+          <button class="link-underline" id="clearAll" style="background:none;border:none;">Clear all filters</button>
+        </div>
+      </aside>
+
+      <div>
+        <div class="active-filters" id="activeFilters"></div>
+        <div class="result-count" id="resultCount" style="margin-bottom:1.2rem;"></div>
+        <div class="grid grid--3" id="results"></div>
+        <div id="empty" class="hidden center" style="padding:4rem 0;color:var(--ink-soft);">
+          <p class="lead">No works match these filters.</p>
+          <button class="btn mt-2" onclick="document.getElementById('clearAll').click()">Clear filters</button>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/collection.js"></script>
+</body>
+</html>

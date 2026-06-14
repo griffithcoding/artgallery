@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Exhibitions — VERSO Gallery, Brooklyn</title>
+  <meta name="description" content="Current, upcoming, and past exhibitions at VERSO Gallery in Williamsburg, Brooklyn. A new contemporary art exhibition opens roughly every six weeks." />
+  <link rel="canonical" href="https://www.versogallery.com/exhibitions.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#16150f" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="VERSO Gallery" />
+  <meta property="og:title" content="Exhibitions — VERSO Gallery, Brooklyn" />
+  <meta property="og:description" content="Current, upcoming, and past exhibitions at VERSO Gallery, Brooklyn." />
+  <meta property="og:url" content="https://www.versogallery.com/exhibitions.html" />
+  <meta property="og:image" content="https://www.versogallery.com/images/og-cover.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.versogallery.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Exhibitions", "item": "https://www.versogallery.com/exhibitions.html" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" style="font-size:.78rem;color:var(--ink-soft);margin-bottom:1.2rem;">
+      <a href="index.html">Home</a> &nbsp;/&nbsp; <span>Exhibitions</span>
+    </nav>
+    <header style="margin-bottom:2rem;">
+      <p class="eyebrow">The program</p>
+      <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Exhibitions</h1>
+      <p class="lead" style="max-width:60ch;">A new exhibition opens roughly every six weeks, alongside rotating online viewing rooms and art-fair presentations.</p>
+    </header>
+
+    <div class="tabs" id="tabs">
+      <button data-tab="On View" aria-selected="true">Current</button>
+      <button data-tab="Upcoming" aria-selected="false">Upcoming</button>
+      <button data-tab="Past" aria-selected="false">Past</button>
+      <button data-tab="Fairs" aria-selected="false">Art Fairs</button>
+    </div>
+
+    <div id="exList"></div>
+
+    <section id="fairsList" class="hidden"></section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var D = window.VERSO_DATA;
+      function exRow(e) {
+        var img = (D.worksByArtist(e.artistIds[0])[0] || D.artworks[0]).image;
+        return '<a class="exhibition-row" href="exhibition.html?slug=' + e.slug + '">' +
+          '<span class="frame frame--hover" data-ratio="landscape"><img src="' + img + '" alt="' + e.title + '" /></span>' +
+          '<div><span class="exhibition-status">' + e.status + ' · ' + e.dates + '</span>' +
+          '<h2 class="display" style="font-size:clamp(1.6rem,4vw,2.6rem);">' + e.title + '</h2>' +
+          '<p class="muted" style="margin:.4rem 0 1rem;">' + e.subtitle + '</p>' +
+          '<p class="prose">' + e.blurb + '</p>' +
+          '<span class="link-underline" style="display:inline-block;margin-top:1.2rem;">View exhibition →</span></div></a>';
+      }
+      function render(tab) {
+        var list = document.getElementById('exList');
+        var fairs = document.getElementById('fairsList');
+        if (tab === 'Fairs') {
+          list.classList.add('hidden'); fairs.classList.remove('hidden');
+          fairs.innerHTML = D.fairs.map(function (f) {
+            return '<div class="press-item"><div><span class="exhibition-status">' + f.status + '</span></div>' +
+              '<div><span class="outlet">' + f.name + '</span> — ' + f.city + '<div class="muted" style="font-size:.85rem;">' + f.booth + '</div></div>' +
+              '<div class="date">' + f.dates + '</div></div>';
+          }).join('');
+          return;
+        }
+        fairs.classList.add('hidden'); list.classList.remove('hidden');
+        var rows = D.exhibitions.filter(function (e) { return e.status === tab; });
+        list.innerHTML = rows.length ? rows.map(exRow).join('') : '<p class="muted" style="padding:3rem 0;">Nothing ' + tab.toLowerCase() + ' at the moment — check back soon.</p>';
+      }
+      document.getElementById('tabs').addEventListener('click', function (e) {
+        if (e.target.tagName !== 'BUTTON') return;
+        [...this.children].forEach(function (b) { b.setAttribute('aria-selected', b === e.target); });
+        render(e.target.dataset.tab);
+      });
+      render('On View');
+    })();
+  </script>
+</body>
+</html>

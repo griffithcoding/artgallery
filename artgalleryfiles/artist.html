@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Artist — VERSO Gallery</title>
+  <meta name="description" content="Artist biography and available works at VERSO Gallery, Brooklyn." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#16150f" />
+  <meta property="og:type" content="profile" />
+  <meta property="og:site_name" content="VERSO Gallery" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" id="crumb" style="font-size:.78rem;color:var(--ink-soft);margin-bottom:1.6rem;"></nav>
+
+    <section class="artist-hero" id="artistHero" style="margin-bottom:3.5rem;"></section>
+
+    <section style="border-top:1px solid var(--line);padding-top:2.5rem;">
+      <div class="section-head">
+        <h2 class="display">Available works</h2>
+        <span class="result-count" id="workCount"></span>
+      </div>
+      <div class="grid grid--4" id="artistWorks"></div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var D = window.VERSO_DATA;
+      var slug = VERSO.getParam('slug');
+      var a = D.artistBySlug(slug) || D.artists[0];
+      var works = D.worksByArtist(a.id);
+
+      document.title = a.name + ' — Artist | VERSO Gallery, Brooklyn';
+      document.querySelector('meta[name=description]').content =
+        a.name + ' (' + a.birth + '), represented by VERSO Gallery, Brooklyn. ' + a.bio.slice(0, 120) + '…';
+
+      document.getElementById('crumb').innerHTML =
+        '<a href="index.html">Home</a> / <a href="artists.html">Artists</a> / <span>' + a.name + '</span>';
+
+      var portrait = (works[0] && works[0].image) || D.artSVG(a.id, 'portrait');
+      document.getElementById('artistHero').innerHTML =
+        '<div><span class="frame" data-ratio="portrait"><img src="' + portrait + '" alt="Work by ' + a.name + '" /></span></div>' +
+        '<div>' +
+          '<p class="eyebrow">' + a.birth + '</p>' +
+          '<h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 1.2rem;">' + a.name + '</h1>' +
+          '<p class="prose lead" style="margin-bottom:1.4rem;">' + a.discipline + '</p>' +
+          '<div class="prose">' + a.bio + '</div>' +
+          '<div class="flex gap-1 mt-2" style="flex-wrap:wrap;">' +
+            '<a class="btn" href="collection.html?artist=' + encodeURIComponent(a.name) + '">All works by ' + a.name.split(' ')[0] + '</a>' +
+            '<button class="btn btn--solid" onclick="VERSO.openInquiry(\'Works by ' + a.name.replace(/'/g, "\\'") + '\')">Inquire</button>' +
+          '</div>' +
+        '</div>';
+
+      document.getElementById('workCount').textContent = works.length + ' works';
+      document.getElementById('artistWorks').innerHTML = works.slice(0, 12).map(VERSO.artworkCard).join('');
+      document.querySelectorAll('#artistWorks .reveal').forEach(function (e) { e.classList.add('is-visible'); });
+
+      // JSON-LD Person + Breadcrumb
+      var ld = {
+        "@context": "https://schema.org", "@type": "Person",
+        "@id": "https://www.versogallery.com/artist.html?slug=" + a.slug + "#person",
+        "name": a.name, "jobTitle": "Artist", "description": a.bio,
+        "image": "https://www.versogallery.com/images/og-cover.svg",
+        "knowsAbout": [a.discipline, "Contemporary art"],
+        "worksFor": { "@id": "https://www.versogallery.com/#organization" }
+      };
+      var s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(ld); document.head.appendChild(s);
+    })();
+  </script>
+</body>
+</html>

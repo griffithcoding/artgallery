@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Viewing Rooms — Curated Collections | VERSO Gallery Brooklyn</title>
+  <meta name="description" content="Online viewing rooms from VERSO Gallery — curated, themed selections from our 20,000-work archive, including affordable works under $5,000, Brooklyn abstraction, and new acquisitions." />
+  <link rel="canonical" href="https://www.versogallery.com/viewing-rooms.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#16150f" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="VERSO Gallery" />
+  <meta property="og:title" content="Viewing Rooms — VERSO Gallery" />
+  <meta property="og:description" content="Curated online viewing rooms from VERSO Gallery’s contemporary art archive." />
+  <meta property="og:url" content="https://www.versogallery.com/viewing-rooms.html" />
+  <meta property="og:image" content="https://www.versogallery.com/images/og-cover.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.versogallery.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Viewing Rooms", "item": "https://www.versogallery.com/viewing-rooms.html" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" style="font-size:.78rem;color:var(--ink-soft);margin-bottom:1.2rem;">
+      <a href="index.html">Home</a> &nbsp;/&nbsp; <span>Viewing Rooms</span>
+    </nav>
+    <header style="margin-bottom:2.5rem;">
+      <p class="eyebrow">Curated online</p>
+      <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Viewing Rooms</h1>
+      <p class="lead" style="max-width:62ch;">Twenty thousand works is a lot to browse. These curated rooms are our way of editing the archive down to a single idea, price band, or moment — each one a short, shoppable exhibition you can walk through from anywhere.</p>
+    </header>
+    <div id="rooms"></div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var D = window.VERSO_DATA;
+      var rooms = [
+        { title: 'Under $5,000', desc: 'A standing room for new collectors — original works you can take home today, all priced under five thousand dollars.', link: 'collection.html?sort=price-asc', filter: function (w) { return w.price != null && w.price <= 5000; } },
+        { title: 'Brooklyn Abstraction', desc: 'Color, gesture, and structure from the painters in our program working in a non-representational mode.', link: 'collection.html?subject=Abstraction', filter: function (w) { return w.subject === 'Abstraction' || w.subject === 'Color Field' || w.subject === 'Geometric'; } },
+        { title: 'New This Month', desc: 'The most recent additions to the archive — fresh from the studio and the framer.', link: 'collection.html?sort=year-desc', filter: function (w) { return w.year >= 2024; } },
+        { title: 'Works on Paper', desc: 'Drawings, prints, and studies — the most intimate (and often most affordable) way into an artist’s practice.', link: 'collection.html?category=Works%20on%20Paper', filter: function (w) { return w.category === 'Works on Paper' || w.category === 'Prints'; } },
+      ];
+      document.getElementById('rooms').innerHTML = rooms.map(function (r, i) {
+        var works = D.artworks.filter(r.filter).slice(0, 4);
+        if (!works.length) works = D.artworks.slice(i * 4, i * 4 + 4);
+        return '<section style="border-top:1px solid var(--line);padding-block:clamp(2rem,5vw,3.5rem);">' +
+          '<div class="section-head"><div style="max-width:50ch;"><h2 class="display" style="font-size:clamp(1.6rem,4vw,2.4rem);">' + r.title + '</h2>' +
+          '<p class="muted" style="margin-top:.5rem;">' + r.desc + '</p></div>' +
+          '<a class="link-underline" href="' + r.link + '">Enter room →</a></div>' +
+          '<div class="grid grid--4">' + works.map(VERSO.artworkCard).join('') + '</div></section>';
+      }).join('');
+      document.querySelectorAll('#rooms .reveal').forEach(function (e) { e.classList.add('is-visible'); });
+    })();
+  </script>
+</body>
+</html>

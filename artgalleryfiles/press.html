@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Press — VERSO Gallery, Brooklyn</title>
+  <meta name="description" content="Press and media coverage of VERSO Gallery, Brooklyn — features, reviews, and listings in Artforum, The New York Times, Hyperallergic, ARTnews, and more." />
+  <link rel="canonical" href="https://www.versogallery.com/press.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#16150f" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="VERSO Gallery" />
+  <meta property="og:title" content="Press — VERSO Gallery, Brooklyn" />
+  <meta property="og:description" content="Press coverage of VERSO Gallery, Brooklyn." />
+  <meta property="og:url" content="https://www.versogallery.com/press.html" />
+  <meta property="og:image" content="https://www.versogallery.com/images/og-cover.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.versogallery.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Press", "item": "https://www.versogallery.com/press.html" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" style="font-size:.78rem;color:var(--ink-soft);margin-bottom:1.2rem;">
+      <a href="index.html">Home</a> &nbsp;/&nbsp; <span>Press</span>
+    </nav>
+    <header style="margin-bottom:2.5rem;">
+      <p class="eyebrow">In the press</p>
+      <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Press</h1>
+      <p class="lead" style="max-width:58ch;">Selected coverage of the gallery, its artists, and its open-archive model. For images, interviews, or press releases, contact <a class="link-underline" href="mailto:press@versogallery.com">press@versogallery.com</a>.</p>
+    </header>
+    <div id="pressList"></div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var D = window.VERSO_DATA;
+      document.getElementById('pressList').innerHTML = D.press.map(function (p) {
+        return '<div class="press-item">' +
+          '<div><span class="outlet">' + p.outlet + '</span><div class="date">' + p.kind + '</div></div>' +
+          '<div>' + p.headline + '</div>' +
+          '<div class="date">' + p.date + '</div></div>';
+      }).join('');
+    })();
+  </script>
+</body>
+</html>

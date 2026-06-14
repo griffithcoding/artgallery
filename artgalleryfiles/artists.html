@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Artists — VERSO Gallery, Brooklyn</title>
+  <meta name="description" content="The artists represented by VERSO Gallery in Brooklyn — emerging and mid-career painters, sculptors, photographers, and printmakers. Browse biographies and available works." />
+  <link rel="canonical" href="https://www.versogallery.com/artists.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#16150f" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="VERSO Gallery" />
+  <meta property="og:title" content="Artists — VERSO Gallery, Brooklyn" />
+  <meta property="og:description" content="Emerging and mid-career artists represented by VERSO Gallery, Brooklyn." />
+  <meta property="og:url" content="https://www.versogallery.com/artists.html" />
+  <meta property="og:image" content="https://www.versogallery.com/images/og-cover.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.versogallery.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Artists", "item": "https://www.versogallery.com/artists.html" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" style="font-size:.78rem;color:var(--ink-soft);margin-bottom:1.2rem;">
+      <a href="index.html">Home</a> &nbsp;/&nbsp; <span>Artists</span>
+    </nav>
+    <header style="margin-bottom:2rem;">
+      <p class="eyebrow">Represented</p>
+      <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Artists</h1>
+      <p class="lead" style="max-width:60ch;">VERSO works with emerging and mid-career artists across painting, sculpture, photography, and works on paper. Each artist’s page links to their full set of available works.</p>
+    </header>
+
+    <div class="artist-letter-nav" id="letterNav"></div>
+    <div class="grid grid--4" id="artistGrid"></div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var D = window.VERSO_DATA;
+      var grid = document.getElementById('artistGrid');
+      grid.innerHTML = D.artists.map(function (a) {
+        var card = VERSO.artistCard(a, D.worksByArtist(a.id)[0]);
+        var letter = a.name.split(' ').pop()[0].toUpperCase();
+        return card.replace('<a ', '<a data-letter="' + letter + '" ');
+      }).join('');
+      grid.querySelectorAll('.reveal').forEach(function (e) { e.classList.add('is-visible'); });
+
+      // Letter nav (by last name)
+      var letters = [...new Set(D.artists.map(function (a) { return a.name.split(' ').pop()[0].toUpperCase(); }))].sort();
+      document.getElementById('letterNav').innerHTML =
+        '<button data-l="all">All</button>' + letters.map(function (l) { return '<button data-l="' + l + '">' + l + '</button>'; }).join('');
+      document.getElementById('letterNav').addEventListener('click', function (e) {
+        if (e.target.tagName !== 'BUTTON') return;
+        var l = e.target.dataset.l;
+        grid.querySelectorAll('[data-letter]').forEach(function (c) {
+          c.style.display = (l === 'all' || c.dataset.letter === l) ? '' : 'none';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

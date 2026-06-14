@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Artwork — VERSO Gallery</title>
+  <meta name="description" content="View this contemporary artwork at VERSO Gallery, Brooklyn — with medium, dimensions, year, price, and availability." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#16150f" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VERSO Gallery" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="wrap section--tight" id="artworkMain">
+    <nav aria-label="Breadcrumb" id="crumb" style="font-size:.78rem;color:var(--ink-soft);margin-bottom:1.6rem;"></nav>
+    <div class="artwork-detail" id="detail"></div>
+
+    <section class="section" id="moreSection" style="border-top:1px solid var(--line);margin-top:4rem;">
+      <div class="section-head">
+        <h2 class="display">More from <span id="moreArtist"></span></h2>
+        <a class="link-underline" id="moreLink" href="#">View artist →</a>
+      </div>
+      <div class="grid grid--4" id="moreWorks"></div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var D = window.VERSO_DATA;
+      var id = VERSO.getParam('id');
+      var w = D.artworkBySlug(id) || D.artworks[0];
+      var artist = D.artistById(w.artistId);
+
+      document.title = w.title + ' (' + w.year + ') — ' + w.artistName + ' | VERSO Gallery';
+      var meta = document.querySelector('meta[name=description]');
+      meta.content = w.title + ' by ' + w.artistName + ', ' + w.year + '. ' + w.medium + ', ' + w.dimensions + '. ' + VERSO.formatPrice(w) + ' at VERSO Gallery, Brooklyn.';
+
+      document.getElementById('crumb').innerHTML =
+        '<a href="index.html">Home</a> / <a href="collection.html">Works</a> / <a href="artist.html?slug=' + artist.slug + '">' + w.artistName + '</a> / <span>' + w.title + '</span>';
+
+      var priceLabel = VERSO.formatPrice(w);
+      document.getElementById('detail').innerHTML =
+        '<div class="artwork-stage">' +
+          '<span class="frame" data-ratio="' + w.ratio + '" style="width:100%;max-width:560px;">' +
+            '<img src="' + w.image + '" alt="' + w.title + ' (' + w.year + '), ' + w.medium + ', by ' + w.artistName + '" />' +
+          '</span>' +
+        '</div>' +
+        '<div class="artwork-info">' +
+          '<a class="link-underline" href="artist.html?slug=' + artist.slug + '" style="border:none;padding:0;color:var(--ink-soft);">' + w.artistName + '</a>' +
+          '<h1 class="art-title" style="margin:.4rem 0 1.4rem;">' + w.title + ', <span style="font-style:normal;">' + w.year + '</span></h1>' +
+          '<dl class="spec-list">' +
+            '<div><dt>Medium</dt><dd>' + w.medium + '</dd></div>' +
+            '<div><dt>Category</dt><dd>' + w.category + '</dd></div>' +
+            '<div><dt>Dimensions</dt><dd>' + w.dimensions + '</dd></div>' +
+            '<div><dt>Year</dt><dd>' + w.year + '</dd></div>' +
+            '<div><dt>Availability</dt><dd>' + w.availability + '</dd></div>' +
+            '<div><dt>Price</dt><dd>' + priceLabel + '</dd></div>' +
+          '</dl>' +
+          (w.availability === 'Sold'
+            ? '<button class="btn" disabled style="opacity:.5;width:100%;justify-content:center;">Sold</button>'
+            : '<button class="btn btn--solid" style="width:100%;justify-content:center;" onclick="VERSO.openInquiry(\'' + w.title.replace(/'/g, "\\'") + ' — ' + w.artistName.replace(/'/g, "\\'") + '\')">Inquire about this work</button>') +
+          '<p class="muted" style="font-size:.8rem;margin-top:1rem;">Questions about condition, framing, shipping, or studio visits? Email <a class="link-underline" href="mailto:hello@versogallery.com">hello@versogallery.com</a>.</p>' +
+        '</div>';
+
+      // Related works
+      var more = D.worksByArtist(w.artistId).filter(function (x) { return x.id !== w.id; }).slice(0, 4);
+      if (!more.length) more = D.artworks.filter(function (x) { return x.id !== w.id; }).slice(0, 4);
+      document.getElementById('moreArtist').textContent = w.artistName;
+      document.getElementById('moreLink').href = 'artist.html?slug=' + artist.slug;
+      document.getElementById('moreWorks').innerHTML = more.map(VERSO.artworkCard).join('');
+      document.querySelectorAll('#moreWorks .reveal').forEach(function (e) { e.classList.add('is-visible'); });
+
+      // JSON-LD: VisualArtwork + Offer + Breadcrumb (AI/SEO)
+      var offer = (w.availability === 'Sold')
+        ? { "@type": "Offer", "availability": "https://schema.org/SoldOut", "seller": { "@id": "https://www.versogallery.com/#organization" } }
+        : (w.price != null)
+          ? { "@type": "Offer", "price": w.price, "priceCurrency": "USD", "availability": "https://schema.org/InStock", "seller": { "@id": "https://www.versogallery.com/#organization" } }
+          : { "@type": "Offer", "availability": "https://schema.org/InStock", "priceSpecification": { "@type": "PriceSpecification", "valueAddedTaxIncluded": false }, "seller": { "@id": "https://www.versogallery.com/#organization" } };
+      var ld = {
+        "@context": "https://schema.org",
+        "@type": "VisualArtwork",
+        "name": w.title,
+        "image": "https://www.versogallery.com/" + (w.image.indexOf('data:') === 0 ? 'images/og-cover.svg' : w.image),
+        "dateCreated": String(w.year),
+        "artform": w.category,
+        "artMedium": w.medium,
+        "creator": { "@type": "Person", "name": w.artistName, "@id": "https://www.versogallery.com/artist.html?slug=" + artist.slug + "#person" },
+        "width": w.dimensions.split('×')[1] ? w.dimensions.split('×')[1].trim() : undefined,
+        "height": w.dimensions.split('×')[0] ? w.dimensions.split('×')[0].trim() : undefined,
+        "offers": offer,
+        "isPartOf": { "@id": "https://www.versogallery.com/#website" }
+      };
+      var s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = JSON.stringify(ld); document.head.appendChild(s);
+    })();
+  </script>
+</body>
+</html>
