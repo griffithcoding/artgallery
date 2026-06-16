@@ -18,8 +18,8 @@ const list = (artists ?? []) as any[];
     </div>
     <a class="admin-btn" href="/admin/artists/new">+ New artist</a>
   </div>
-  {saved && <p class="admin-status" style="color:#86e7b0;">Saved.</p>}
-  {list.length === 0 && <p style="color:#7f9cb3;">No artists yet.</p>}
+  {saved && <p class="admin-status" style="color:#5b7a4f;">Saved.</p>}
+  {list.length === 0 && <p style="color:#6b6860;">No artists yet.</p>}
   <div class="admin-grid">
     {list.map((a) => (
       <div class="admin-tile">

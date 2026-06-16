@@ -26,21 +26,21 @@ export default function Studio({ userId, email }: Props) {
           alignItems: 'center',
           gap: '1rem',
           padding: '0.55rem 1rem',
-          background: '#16150f',
-          color: '#e9e6dc',
-          borderBottom: '1px solid #2c2a20',
+          background: '#f7f6f3',
+          color: '#16150f',
+          borderBottom: '1px solid #e4e2db',
           fontFamily: 'system-ui, -apple-system, Segoe UI, sans-serif',
           fontSize: '0.85rem',
           flex: '0 0 auto',
         }}
       >
-        <strong style={{ letterSpacing: '0.14em', textTransform: 'uppercase', color: '#8fd6ef', fontSize: '0.72rem' }}>
+        <strong style={{ letterSpacing: '0.14em', textTransform: 'uppercase', color: '#16150f', fontSize: '0.72rem' }}>
           Mazlish + Wright
         </strong>
-        <span style={{ color: '#b8b3a2' }}>Design Studio</span>
-        {email && <span style={{ color: '#6f6b5f', fontSize: '0.78rem' }}>{email}</span>}
-        <span style={{ marginLeft: 'auto', color: '#6f6b5f', fontSize: '0.75rem' }}>Saved automatically</span>
-        <a href="/admin/logout" style={{ color: '#cfc9b8', textDecoration: 'none', fontSize: '0.78rem' }}>Sign out</a>
+        <span style={{ color: '#6b6860' }}>Design Studio</span>
+        {email && <span style={{ color: '#8e8a80', fontSize: '0.78rem' }}>{email}</span>}
+        <span style={{ marginLeft: 'auto', color: '#8e8a80', fontSize: '0.75rem' }}>Saved automatically</span>
+        <a href="/admin/logout" style={{ color: '#6b6860', textDecoration: 'none', fontSize: '0.78rem' }}>Sign out</a>
       </header>
       <div style={{ flex: '1 1 auto', position: 'relative' }}>
         <Tldraw persistenceKey={`verso-studio-${userId}`} />

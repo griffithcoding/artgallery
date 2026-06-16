@@ -18,9 +18,9 @@ const list = (works ?? []) as any[];
     </div>
     <a class="admin-btn" href="/admin/artworks/new">+ New artwork</a>
   </div>
-  {saved && <p class="admin-status" style="color:#86e7b0;">Saved.</p>}
+  {saved && <p class="admin-status" style="color:#5b7a4f;">Saved.</p>}
   {list.length === 0 && (
-    <p style="color:#7f9cb3;">No artworks yet. <a href="/admin/artworks/new" style="color:var(--mw-ice);">Add the first →</a></p>
+    <p style="color:#6b6860;">No artworks yet. <a href="/admin/artworks/new" style="color:var(--mw-accent);">Add the first →</a></p>
   )}
   <div class="admin-grid">
     {list.map((w) => (
