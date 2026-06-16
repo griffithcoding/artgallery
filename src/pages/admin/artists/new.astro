@@ -1,0 +1,21 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+---
+<AdminLayout title="New artist">
+  <h1 style="font-weight:400;">New artist</h1>
+  <form method="POST" action="/admin/artists/save" class="admin-card" style="max-width:640px;">
+    <div class="admin-field"><label>Name</label><input name="name" required /></div>
+    <div class="admin-field"><label>Birthplace (e.g. b. Lagos)</label><input name="birthplace" /></div>
+    <div class="admin-field"><label>Birth year</label><input name="birth_year" type="number" /></div>
+    <div class="admin-field"><label>Discipline</label><input name="discipline" /></div>
+    <div class="admin-field"><label>Bio</label><textarea name="bio" rows="5"></textarea></div>
+    <div class="admin-field"><label>Portrait image</label>
+      <input type="file" id="portraitFile" data-kind="artists" accept="image/*" />
+      <input type="hidden" name="portrait_image_url" id="portraitUrl" />
+      <small id="portraitMsg" style="color:#8a8675;"></small>
+    </div>
+    <button class="admin-btn" type="submit">Create artist</button>
+  </form>
+  <script>import '../../../scripts/admin-upload.ts';</script>
+</AdminLayout>

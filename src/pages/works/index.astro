@@ -32,6 +32,11 @@ const jsonLd = {
       <p class="lead tldr-block" style="max-width:60ch;">Every available work, shown openly. Browse the gallery’s curated collection — filter by medium, category, artist, year, and availability.</p>
     </header>
 
+    {artworks.length === 0 && (
+      <p class="lead" style="max-width:60ch;">The collection is being prepared. Please check back soon, or <a class="link-underline" href="/contact">get in touch</a> to discuss available works.</p>
+    )}
+
+    {artworks.length > 0 && (
     <div class="collection-toolbar">
       <button class="btn filter-toggle-mobile" id="openFilters">Filters</button>
       <div class="search-box">
@@ -81,6 +86,7 @@ const jsonLd = {
         <div class="pagination" id="pagination"></div>
       </div>
     </div>
+    )}
   </main>
 
   <script id="works-data" type="application/json" set:html={JSON.stringify(artworks)}></script>

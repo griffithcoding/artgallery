@@ -39,17 +39,23 @@ const jsonLd = {
       <p class="lead" style="max-width:60ch;">VERSO works with emerging and mid-career artists across painting, sculpture, photography, and works on paper. Each artist’s page links to their full set of available works.</p>
     </header>
 
-    <div class="artist-letter-nav" id="letterNav">
-      <button data-l="all">All</button>
-      {letters.map((l) => <button data-l={l}>{l}</button>)}
-    </div>
-    <div class="grid grid--4" id="artistGrid">
-      {cards.map((c) => (
-        <div data-letter={c.letter}>
-          <ArtistCard artist={c.artist} image={c.image} />
+    {allArtists.length === 0 ? (
+      <p class="lead" style="max-width:60ch;">Artist profiles are coming soon.</p>
+    ) : (
+      <>
+        <div class="artist-letter-nav" id="letterNav">
+          <button data-l="all">All</button>
+          {letters.map((l) => <button data-l={l}>{l}</button>)}
         </div>
-      ))}
-    </div>
+        <div class="grid grid--4" id="artistGrid">
+          {cards.map((c) => (
+            <div data-letter={c.letter}>
+              <ArtistCard artist={c.artist} image={c.image} />
+            </div>
+          ))}
+        </div>
+      </>
+    )}
   </main>
   <script>
     const nav = document.getElementById('letterNav');

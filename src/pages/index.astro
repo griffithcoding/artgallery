@@ -1,11 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ArtworkCard from '../components/ArtworkCard.astro';
-import { getArtworks, getExhibitions, getWorksByArtist } from '../lib/gallery';
+import { getArtworks, getFeaturedArtworks, getExhibitions, getWorksByArtist, artSVG } from '../lib/gallery';
 import { BRAND } from '../lib/site';
 
 const allWorks = await getArtworks();
-const works = allWorks.slice(0, 8);
+const works = await getFeaturedArtworks(8);
 const exhibitions = await getExhibitions();
 const current = exhibitions.find((e) => e.status === 'On View') ?? exhibitions[0];
 const heroWork = (await getWorksByArtist(current.artistIds[0]))[0] ?? allWorks[0];
@@ -127,7 +127,7 @@ const jsonLd = {
         </div>
         <div class="reveal">
           <a href={`/exhibitions/${current.slug}`} class="frame frame--hover" data-ratio="portrait" aria-label={`Current exhibition: ${current.title}`}>
-            <img src={heroWork.image} alt={`Contemporary artwork from the exhibition ${current.title} at VERSO Gallery, Williamsburg, Brooklyn`} width="600" height="800" />
+            <img src={heroWork?.image ?? artSVG(current.slug, 'portrait')} alt={`Contemporary artwork from the exhibition ${current.title} at VERSO Gallery, Williamsburg, Brooklyn`} width="600" height="800" />
           </a>
         </div>
       </div>
@@ -169,7 +169,7 @@ const jsonLd = {
         </div>
         <div class="reveal">
           <a href="/exhibitions" class="frame frame--hover" data-ratio="landscape" aria-label="Exhibitions at VERSO Gallery">
-            <img src={allWorks[12]?.image} alt="Inside VERSO Gallery, a contemporary art gallery in Williamsburg, Brooklyn" />
+            <img src={allWorks[12]?.image ?? artSVG('verso-visit', 'landscape')} alt="Inside VERSO Gallery, a contemporary art gallery in Williamsburg, Brooklyn" />
           </a>
         </div>
       </div>

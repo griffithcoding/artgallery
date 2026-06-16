@@ -51,3 +51,17 @@ export function createSupabaseAdmin() {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }
+
+/** Context-free anon client for public reads (RLS-limited SELECTs). */
+export function createSupabaseAnon() {
+  return createClient(URL, ANON, { auth: { persistSession: false } });
+}
+
+/**
+ * True only when Supabase is provisioned (URL + anon key present). The data
+ * seam uses this to stay on the in-repo generator until the gallery owner
+ * sets the env vars — so the public site never breaks pre-provision.
+ */
+export function isSupabaseConfigured(): boolean {
+  return Boolean(URL && ANON);
+}

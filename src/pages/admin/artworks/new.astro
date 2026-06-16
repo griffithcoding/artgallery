@@ -1,0 +1,39 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+import { categories, subjects } from '../../../lib/gallery';
+const { data: artists } = await createSupabaseAdmin().from('artists').select('id, name').order('name');
+const RATIOS = ['portrait', 'landscape', 'square', 'tall'];
+const AVAIL = ['Available', 'Inquire', 'Sold'];
+---
+<AdminLayout title="New artwork">
+  <h1 style="font-weight:400;">New artwork</h1>
+  <form method="POST" action="/admin/artworks/save" class="admin-card" style="max-width:680px;">
+    <div class="admin-field"><label>Title</label><input name="title" required /></div>
+    <div class="admin-field"><label>Artist</label>
+      <select name="artist_id"><option value="">— none —</option>
+        {(artists ?? []).map((a) => <option value={a.id}>{a.name}</option>)}
+      </select></div>
+    <div class="admin-field"><label>Year</label><input name="year" type="number" /></div>
+    <div class="admin-field"><label>Medium</label><input name="medium" /></div>
+    <div class="admin-field"><label>Category</label>
+      <select name="category">{categories.map((c) => <option value={c}>{c}</option>)}</select></div>
+    <div class="admin-field"><label>Subject</label>
+      <select name="subject">{subjects.map((s) => <option value={s}>{s}</option>)}</select></div>
+    <div class="admin-field"><label>Dimensions</label><input name="dimensions" placeholder="40 × 30 in" /></div>
+    <div class="admin-field"><label>Ratio</label>
+      <select name="ratio">{RATIOS.map((r) => <option value={r}>{r}</option>)}</select></div>
+    <div class="admin-field"><label>Availability</label>
+      <select name="availability">{AVAIL.map((a) => <option value={a}>{a}</option>)}</select></div>
+    <div class="admin-field"><label>Sort order</label><input name="sort_order" type="number" value="0" /></div>
+    <div class="admin-field"><label><input type="checkbox" name="featured" /> Featured on home page</label></div>
+    <div class="admin-field"><label>Image</label>
+      <input type="file" data-kind="artworks" accept="image/*" />
+      <input type="hidden" name="image_url" />
+      <small style="color:#8a8675;">No image → a generated placeholder is shown.</small>
+    </div>
+    <button class="admin-btn" type="submit">Create artwork</button>
+  </form>
+  <script>import '../../../scripts/admin-upload.ts';</script>
+</AdminLayout>

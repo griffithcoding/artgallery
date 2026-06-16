@@ -1,0 +1,34 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+const { data: artists } = await createSupabaseAdmin().from('artists').select('*').order('name');
+const saved = Astro.url.searchParams.get('saved');
+---
+<AdminLayout title="Artists">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+    <h1 style="font-weight:400;">Artists</h1>
+    <a class="admin-btn" href="/admin/artists/new">New artist</a>
+  </div>
+  {saved && <p class="admin-status" style="color:#9fdca0;">Saved.</p>}
+  <div class="admin-card" style="padding:.4rem 1rem;">
+    <table class="admin-table">
+      <thead><tr><th>Name</th><th>Discipline</th><th style="text-align:right;">Actions</th></tr></thead>
+      <tbody>
+        {(artists ?? []).map((a) => (
+          <tr>
+            <td><a href={`/admin/artists/${a.id}`} style="color:#e9e6dc;">{a.name}</a></td>
+            <td style="color:#cfc9b8;">{a.discipline}</td>
+            <td style="text-align:right;">
+              <form method="POST" action="/admin/artists/action" onsubmit="return confirm('Delete this artist?')">
+                <input type="hidden" name="id" value={a.id} />
+                <button class="admin-btn" style="background:#7a2418;" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    {(artists ?? []).length === 0 && <p style="padding:1rem .4rem;color:#8a8675;">No artists yet.</p>}
+  </div>
+</AdminLayout>

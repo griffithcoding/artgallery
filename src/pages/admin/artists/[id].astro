@@ -1,0 +1,26 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+const { id } = Astro.params;
+const { data: a } = await createSupabaseAdmin().from('artists').select('*').eq('id', id).maybeSingle();
+if (!a) return Astro.redirect('/admin/artists', 303);
+---
+<AdminLayout title={`Edit ${a.name}`}>
+  <h1 style="font-weight:400;">Edit artist</h1>
+  <form method="POST" action="/admin/artists/save" class="admin-card" style="max-width:640px;">
+    <input type="hidden" name="id" value={a.id} />
+    <div class="admin-field"><label>Name</label><input name="name" value={a.name} required /></div>
+    <div class="admin-field"><label>Birthplace</label><input name="birthplace" value={a.birthplace} /></div>
+    <div class="admin-field"><label>Birth year</label><input name="birth_year" type="number" value={a.birth_year ?? ''} /></div>
+    <div class="admin-field"><label>Discipline</label><input name="discipline" value={a.discipline} /></div>
+    <div class="admin-field"><label>Bio</label><textarea name="bio" rows="5">{a.bio}</textarea></div>
+    <div class="admin-field"><label>Portrait image</label>
+      <input type="file" data-kind="artists" accept="image/*" />
+      <input type="hidden" name="portrait_image_url" value={a.portrait_image_url ?? ''} />
+      <small style="color:#8a8675;">{a.portrait_image_url ? 'Current image kept unless you upload a new one.' : ''}</small>
+    </div>
+    <button class="admin-btn" type="submit">Save changes</button>
+  </form>
+  <script>import '../../../scripts/admin-upload.ts';</script>
+</AdminLayout>

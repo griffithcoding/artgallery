@@ -1,0 +1,44 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+import { categories, subjects } from '../../../lib/gallery';
+const { id } = Astro.params;
+const sb = createSupabaseAdmin();
+const { data: w } = await sb.from('artworks').select('*').eq('id', id).maybeSingle();
+if (!w) return Astro.redirect('/admin/artworks', 303);
+const { data: artists } = await sb.from('artists').select('id, name').order('name');
+const RATIOS = ['portrait', 'landscape', 'square', 'tall'];
+const AVAIL = ['Available', 'Inquire', 'Sold'];
+---
+<AdminLayout title={`Edit ${w.title}`}>
+  <h1 style="font-weight:400;">Edit artwork</h1>
+  <form method="POST" action="/admin/artworks/save" class="admin-card" style="max-width:680px;">
+    <input type="hidden" name="id" value={w.id} />
+    <div class="admin-field"><label>Title</label><input name="title" value={w.title} required /></div>
+    <div class="admin-field"><label>Artist</label>
+      <select name="artist_id"><option value="">— none —</option>
+        {(artists ?? []).map((a) => <option value={a.id} selected={a.id === w.artist_id}>{a.name}</option>)}
+      </select></div>
+    <div class="admin-field"><label>Year</label><input name="year" type="number" value={w.year ?? ''} /></div>
+    <div class="admin-field"><label>Medium</label><input name="medium" value={w.medium} /></div>
+    <div class="admin-field"><label>Category</label>
+      <select name="category">{categories.map((c) => <option value={c} selected={c === w.category}>{c}</option>)}</select></div>
+    <div class="admin-field"><label>Subject</label>
+      <select name="subject">{subjects.map((s) => <option value={s} selected={s === w.subject}>{s}</option>)}</select></div>
+    <div class="admin-field"><label>Dimensions</label><input name="dimensions" value={w.dimensions} /></div>
+    <div class="admin-field"><label>Ratio</label>
+      <select name="ratio">{RATIOS.map((r) => <option value={r} selected={r === w.ratio}>{r}</option>)}</select></div>
+    <div class="admin-field"><label>Availability</label>
+      <select name="availability">{AVAIL.map((a) => <option value={a} selected={a === w.availability}>{a}</option>)}</select></div>
+    <div class="admin-field"><label>Sort order</label><input name="sort_order" type="number" value={w.sort_order} /></div>
+    <div class="admin-field"><label><input type="checkbox" name="featured" checked={w.featured} /> Featured on home page</label></div>
+    <div class="admin-field"><label>Image</label>
+      <input type="file" data-kind="artworks" accept="image/*" />
+      <input type="hidden" name="image_url" value={w.image_url ?? ''} />
+      <small style="color:#8a8675;">{w.image_url ? 'Current image kept unless you upload a new one.' : 'No image → placeholder.'}</small>
+    </div>
+    <button class="admin-btn" type="submit">Save changes</button>
+  </form>
+  <script>import '../../../scripts/admin-upload.ts';</script>
+</AdminLayout>
