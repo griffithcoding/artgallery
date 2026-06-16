@@ -10,14 +10,14 @@ const exhibitions = await getExhibitions();
 const current = exhibitions.find((e) => e.status === 'On View') ?? exhibitions[0];
 const heroWork = (await getWorksByArtist(current.artistIds[0]))[0] ?? allWorks[0];
 
-const mapsSearch = 'https://www.google.com/maps/search/?api=1&query=312+Wythe+Avenue+Brooklyn+NY+11249';
-const mapsDir = 'https://www.google.com/maps/dir/?api=1&destination=312+Wythe+Avenue+Brooklyn+NY+11249';
+const mapsSearch = 'https://www.google.com/maps/search/?api=1&query=65-B+Pearl+Street+Brooklyn+NY+11201';
+const mapsDir = 'https://www.google.com/maps/dir/?api=1&destination=65-B+Pearl+Street+Brooklyn+NY+11201';
 
 // Visible FAQ — mirrored 1:1 into FAQPage schema below (local + answer-engine intent).
 const faqs = [
   {
     q: 'Where is Mazlish + Wright Contemporary located?',
-    a: 'Mazlish + Wright Contemporary is at 312 Wythe Avenue in Williamsburg, Brooklyn, NY 11249 — about two blocks from the Bedford Avenue (L) subway station and near the North Williamsburg NYC Ferry.',
+    a: 'Mazlish + Wright Contemporary is at 65-B Pearl Street in DUMBO, Brooklyn, NY 11201 — a short walk from the York Street (F) subway station and near the DUMBO/Fulton Ferry NYC Ferry landing.',
   },
   {
     q: 'What are Mazlish + Wright Contemporary’s opening hours?',
@@ -49,21 +49,21 @@ const jsonLd = {
       logo: `${BRAND.domain}/images/og-cover.svg`,
       image: `${BRAND.domain}/images/og-cover.svg`,
       description:
-        'Free contemporary art gallery in Williamsburg, Brooklyn, showing original work by emerging and mid-career artists. Current exhibitions and works available to view and acquire.',
+        'Free contemporary art gallery in DUMBO, Brooklyn, showing original work by emerging and mid-career artists. Current exhibitions and works available to view and acquire.',
       slogan: 'Contemporary art, in the open.',
       email: BRAND.email,
       telephone: '+1-718-555-0142',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: '312 Wythe Avenue',
+        streetAddress: '65-B Pearl Street',
         addressLocality: 'Brooklyn',
         addressRegion: 'NY',
-        postalCode: '11249',
+        postalCode: '11201',
         addressCountry: 'US',
       },
-      geo: { '@type': 'GeoCoordinates', latitude: 40.7188, longitude: -73.961 },
+      geo: { '@type': 'GeoCoordinates', latitude: 40.7026, longitude: -73.9874 },
       hasMap: mapsSearch,
-      areaServed: ['Williamsburg', 'Greenpoint', 'Brooklyn', 'Manhattan', 'New York City'],
+      areaServed: ['DUMBO', 'Brooklyn Heights', 'Downtown Brooklyn', 'Brooklyn', 'Manhattan', 'New York City'],
       openingHoursSpecification: [
         {
           '@type': 'OpeningHoursSpecification',
@@ -102,9 +102,9 @@ const jsonLd = {
 };
 ---
 <Layout
-  title="Contemporary Art Gallery in Williamsburg, Brooklyn | Mazlish + Wright Contemporary"
-  description="Mazlish + Wright Contemporary is a free contemporary art gallery in Williamsburg, Brooklyn — 312 Wythe Ave, open Tue–Sat 11–6. See current exhibitions and original contemporary art by emerging and mid-career artists."
-  keywords="contemporary art gallery Brooklyn, art gallery Williamsburg, art galleries Brooklyn NYC, contemporary art Brooklyn, free art gallery Brooklyn, art exhibitions Williamsburg, emerging artists Brooklyn, art gallery near me Brooklyn"
+  title="Contemporary Art Gallery in DUMBO, Brooklyn | Mazlish + Wright Contemporary"
+  description="Mazlish + Wright Contemporary is a free contemporary art gallery in DUMBO, Brooklyn — 65-B Pearl St, open Tue–Sat 11–6. See current exhibitions and original contemporary art by emerging and mid-career artists."
+  keywords="contemporary art gallery Brooklyn, art gallery DUMBO, art galleries Brooklyn NYC, contemporary art Brooklyn, free art gallery Brooklyn, art exhibitions DUMBO, emerging artists Brooklyn, art gallery near me Brooklyn"
   jsonLd={jsonLd}
 >
   <main>
@@ -112,13 +112,13 @@ const jsonLd = {
     <section class="hero wrap">
       <div class="hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow reveal"><span class="dot" aria-hidden="true"></span>Now on view · Williamsburg, Brooklyn</p>
-          <h1 class="display reveal">A contemporary art gallery in Williamsburg, Brooklyn.</h1>
-          <p class="lead reveal tldr-block">Mazlish + Wright Contemporary is a free contemporary art gallery at 312 Wythe Avenue in Williamsburg, Brooklyn. Walk in Tuesday–Saturday to see new exhibitions and original work by emerging and mid-career artists — or browse the full collection online and inquire about any piece.</p>
+          <p class="eyebrow reveal"><span class="dot" aria-hidden="true"></span>Now on view · DUMBO, Brooklyn</p>
+          <h1 class="display reveal">A contemporary art gallery in DUMBO, Brooklyn.</h1>
+          <p class="lead reveal tldr-block">Mazlish + Wright Contemporary is a free contemporary art gallery at 65-B Pearl Street in DUMBO, Brooklyn. Walk in Tuesday–Saturday to see new exhibitions and original work by emerging and mid-career artists — or browse the full collection online and inquire about any piece.</p>
           <dl class="hero-meta reveal">
             <div><dt>Now on view</dt><dd>{current.title}</dd></div>
             <div><dt>Hours</dt><dd>Tue–Sat, 11am–6pm · Free</dd></div>
-            <div><dt>Address</dt><dd>312 Wythe Ave, Brooklyn</dd></div>
+            <div><dt>Address</dt><dd>65-B Pearl St, Brooklyn</dd></div>
           </dl>
           <div class="flex gap-1 reveal" style="flex-wrap:wrap;">
             <a class="btn btn--solid" href="/visit">Plan your visit</a>
@@ -127,7 +127,7 @@ const jsonLd = {
         </div>
         <div class="reveal">
           <a href={`/exhibitions/${current.slug}`} class="frame frame--hover" data-ratio="portrait" aria-label={`Current exhibition: ${current.title}`}>
-            <img src={heroWork?.image ?? artSVG(current.slug, 'portrait')} alt={`Contemporary artwork from the exhibition ${current.title} at Mazlish + Wright Contemporary, Williamsburg, Brooklyn`} width="600" height="800" />
+            <img src={heroWork?.image ?? artSVG(current.slug, 'portrait')} alt={`Contemporary artwork from the exhibition ${current.title} at Mazlish + Wright Contemporary, DUMBO, Brooklyn`} width="600" height="800" />
           </a>
         </div>
       </div>
@@ -153,15 +153,15 @@ const jsonLd = {
       <div class="hero-grid">
         <div class="reveal">
           <p class="eyebrow">Visit the gallery</p>
-          <h2 class="display" style="margin:.5rem 0 1.2rem;">See it in person on Wythe Avenue.</h2>
-          <p class="prose">Mazlish + Wright Contemporary is in the heart of Williamsburg, Brooklyn — one of New York City’s best neighborhoods for seeing contemporary art. Admission is free and everyone’s welcome; no appointment needed.</p>
+          <h2 class="display" style="margin:.5rem 0 1.2rem;">See it in person on Pearl Street.</h2>
+          <p class="prose">Mazlish + Wright Contemporary is in the heart of DUMBO, Brooklyn — one of New York City’s best neighborhoods for seeing contemporary art. Admission is free and everyone’s welcome; no appointment needed.</p>
           <address class="visit-nap">
             <strong>Mazlish + Wright Contemporary</strong><br />
-            312 Wythe Avenue, Brooklyn, NY 11249<br />
+            65-B Pearl Street, Brooklyn, NY 11201<br />
             Tuesday–Saturday, 11am–6pm · Free admission<br />
             <a href="tel:+17185550142">+1 (718) 555-0142</a> · <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>
           </address>
-          <p class="muted" style="font-size:.9rem;margin-top:1rem;">Getting here: 2 blocks from the Bedford Avenue (L) station; near the North Williamsburg NYC Ferry; metered parking on Wythe &amp; Kent.</p>
+          <p class="muted" style="font-size:.9rem;margin-top:1rem;">Getting here: a short walk from the York Street (F) station; near the DUMBO NYC Ferry landing; metered street parking nearby.</p>
           <div class="flex gap-1 mt-2" style="flex-wrap:wrap;">
             <a class="btn btn--solid" href={mapsDir} rel="noopener" target="_blank">Get directions</a>
             <a class="btn" href="/visit">More visit info</a>
@@ -169,7 +169,7 @@ const jsonLd = {
         </div>
         <div class="reveal">
           <a href="/exhibitions" class="frame frame--hover" data-ratio="landscape" aria-label="Exhibitions at Mazlish + Wright Contemporary">
-            <img src={allWorks[12]?.image ?? artSVG('verso-visit', 'landscape')} alt="Inside Mazlish + Wright Contemporary, a contemporary art gallery in Williamsburg, Brooklyn" />
+            <img src={allWorks[12]?.image ?? artSVG('verso-visit', 'landscape')} alt="Inside Mazlish + Wright Contemporary, a contemporary art gallery in DUMBO, Brooklyn" />
           </a>
         </div>
       </div>

@@ -17,13 +17,13 @@ const jsonLd = {
   email: BRAND.email,
   address: {
     '@type': 'PostalAddress',
-    streetAddress: '312 Wythe Avenue',
+    streetAddress: '65-B Pearl Street',
     addressLocality: 'Brooklyn',
     addressRegion: 'NY',
-    postalCode: '11249',
+    postalCode: '11201',
     addressCountry: 'US',
   },
-  geo: { '@type': 'GeoCoordinates', latitude: 40.7188, longitude: -73.961 },
+  geo: { '@type': 'GeoCoordinates', latitude: 40.7026, longitude: -73.9874 },
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',
@@ -32,12 +32,12 @@ const jsonLd = {
       closes: '18:00',
     },
   ],
-  hasMap: 'https://www.google.com/maps/search/?api=1&query=312+Wythe+Avenue+Brooklyn+NY+11249',
+  hasMap: 'https://www.google.com/maps/search/?api=1&query=65-B+Pearl+Street+Brooklyn+NY+11201',
 };
 ---
 <Layout
   title="Visit — Mazlish + Wright Contemporary, Brooklyn"
-  description="Visit Mazlish + Wright Contemporary at 312 Wythe Avenue in Williamsburg, Brooklyn. Open Tuesday–Saturday, 11am–6pm. Free admission. Directions, hours, and contact details."
+  description="Visit Mazlish + Wright Contemporary at 65-B Pearl Street in DUMBO, Brooklyn. Open Tuesday–Saturday, 11am–6pm. Free admission. Directions, hours, and contact details."
   jsonLd={jsonLd}
 >
   <main class="wrap section--tight">
@@ -45,26 +45,26 @@ const jsonLd = {
       <a href="/">Home</a> &nbsp;/&nbsp; <span>Visit</span>
     </nav>
     <header style="margin-bottom:2.5rem;">
-      <p class="eyebrow">Williamsburg, Brooklyn</p>
+      <p class="eyebrow">DUMBO, Brooklyn</p>
       <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Visit</h1>
-      <p class="lead tldr-block" style="max-width:58ch;">Mazlish + Wright Contemporary is at 312 Wythe Avenue in Williamsburg, Brooklyn. We’re open Tuesday through Saturday, 11am–6pm, and admission is always free.</p>
+      <p class="lead tldr-block" style="max-width:58ch;">Mazlish + Wright Contemporary is at 65-B Pearl Street in DUMBO, Brooklyn. We’re open Tuesday through Saturday, 11am–6pm, and admission is always free.</p>
     </header>
 
     <div class="hero-grid" style="align-items:start;">
       <div>
         <dl class="spec-list" style="border-top:1px solid var(--line);">
-          <div><dt>Address</dt><dd>312 Wythe Avenue<br>Brooklyn, NY 11249</dd></div>
+          <div><dt>Address</dt><dd>65-B Pearl Street<br>Brooklyn, NY 11201</dd></div>
           <div><dt>Hours</dt><dd>Tuesday–Saturday<br>11am – 6pm</dd></div>
           <div><dt>Admission</dt><dd>Free</dd></div>
           <div><dt>Email</dt><dd><a class="link-underline" href="mailto:hello@versogallery.com">hello@versogallery.com</a></dd></div>
           <div><dt>Phone</dt><dd><a class="link-underline" href="tel:+17185550142">+1 (718) 555-0142</a></dd></div>
         </dl>
         <h3 class="display mt-3" style="font-size:1.4rem;margin-bottom:.6rem;">Getting here</h3>
-        <p class="prose">By subway: L to Bedford Avenue, or J/M/Z to Marcy Avenue, both a short walk. The NYC Ferry (East River route) stops at North Williamsburg, two blocks away. Metered street parking is available along Wythe and Kent Avenues.</p>
-        <a class="btn mt-2" href="https://www.google.com/maps/search/?api=1&query=312+Wythe+Avenue+Brooklyn+NY+11249" target="_blank" rel="noopener">Open in Maps →</a>
+        <p class="prose">By subway: F to York Street, or A/C to High Street, both a short walk. The NYC Ferry stops at the DUMBO/Fulton Ferry landing nearby. Metered street parking is available on the surrounding streets.</p>
+        <a class="btn mt-2" href="https://www.google.com/maps/search/?api=1&query=65-B+Pearl+Street+Brooklyn+NY+11201" target="_blank" rel="noopener">Open in Maps →</a>
       </div>
       <div class="frame" data-ratio="portrait">
-        <img src={visitImage} alt="Mazlish + Wright Contemporary interior, Williamsburg" />
+        <img src={visitImage} alt="Mazlish + Wright Contemporary interior, DUMBO" />
       </div>
     </div>
 

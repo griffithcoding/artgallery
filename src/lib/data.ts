@@ -163,7 +163,7 @@ const fairs: Fair[] = [
 /* ---- Press ---- */
 const press: PressItem[] = [
   { outlet: 'Artforum', headline: '“Mazlish + Wright Contemporary’s Soft Architecture finds tenderness in structure”', date: 'June 2026', kind: 'Review' },
-  { outlet: 'The New York Times', headline: 'A Williamsburg gallery puts its whole program in the open', date: 'May 2026', kind: 'Feature' },
+  { outlet: 'The New York Times', headline: 'A DUMBO gallery puts its whole program in the open', date: 'May 2026', kind: 'Feature' },
   { outlet: 'Hyperallergic', headline: 'The best gallery shows in Brooklyn this month', date: 'May 2026', kind: 'Listing' },
   { outlet: 'Cultured', headline: '15 emerging artists to watch, according to their dealers', date: 'Apr 2026', kind: 'Feature' },
   { outlet: 'ARTnews', headline: 'How small galleries are using open access to court collectors', date: 'Mar 2026', kind: 'Feature' },
