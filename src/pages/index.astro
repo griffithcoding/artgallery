@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: 'What are Mazlish + Wright Contemporary’s opening hours?',
-    a: 'The gallery is open Tuesday through Saturday, 11am to 6pm, and closed Sunday and Monday.',
+    a: 'The gallery is open Tuesday through Saturday, 1–6pm, with Sunday and Monday by appointment.',
   },
   {
     q: 'Is admission to Mazlish + Wright Contemporary free?',
@@ -68,7 +68,7 @@ const jsonLd = {
         {
           '@type': 'OpeningHoursSpecification',
           dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-          opens: '11:00',
+          opens: '13:00',
           closes: '18:00',
         },
       ],
@@ -103,7 +103,7 @@ const jsonLd = {
 ---
 <Layout
   title="Contemporary Art Gallery in DUMBO, Brooklyn | Mazlish + Wright Contemporary"
-  description="Mazlish + Wright Contemporary is a free contemporary art gallery in DUMBO, Brooklyn — 65-B Pearl St, open Tue–Sat 11–6. See current exhibitions and original contemporary art by emerging and mid-career artists."
+  description="Mazlish + Wright Contemporary is a free contemporary art gallery in DUMBO, Brooklyn — 65-B Pearl St, open Tue–Sat 1–6. See current exhibitions and original contemporary art by emerging and mid-career artists."
   keywords="contemporary art gallery Brooklyn, art gallery DUMBO, art galleries Brooklyn NYC, contemporary art Brooklyn, free art gallery Brooklyn, art exhibitions DUMBO, emerging artists Brooklyn, art gallery near me Brooklyn"
   jsonLd={jsonLd}
 >
@@ -117,7 +117,7 @@ const jsonLd = {
           <p class="lead reveal tldr-block">Mazlish + Wright Contemporary is a free contemporary art gallery at 65-B Pearl Street in DUMBO, Brooklyn. Walk in Tuesday–Saturday to see new exhibitions and original work by emerging and mid-career artists — or browse the full collection online and inquire about any piece.</p>
           <dl class="hero-meta reveal">
             <div><dt>Now on view</dt><dd>{current.title}</dd></div>
-            <div><dt>Hours</dt><dd>Tue–Sat, 11am–6pm · Free</dd></div>
+            <div><dt>Hours</dt><dd>Tue–Sat, 1–6pm · Free</dd></div>
             <div><dt>Address</dt><dd>65-B Pearl St, Brooklyn</dd></div>
           </dl>
           <div class="flex gap-1 reveal" style="flex-wrap:wrap;">
@@ -158,7 +158,7 @@ const jsonLd = {
           <address class="visit-nap">
             <strong>Mazlish + Wright Contemporary</strong><br />
             65-B Pearl Street, Brooklyn, NY 11201<br />
-            Tuesday–Saturday, 11am–6pm · Free admission<br />
+            Tuesday–Saturday, 1–6pm · Free admission<br />
             <a href="tel:+17185550142">+1 (718) 555-0142</a> · <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>
           </address>
           <p class="muted" style="font-size:.9rem;margin-top:1rem;">Getting here: a short walk from the York Street (F) station; near the DUMBO NYC Ferry landing; metered street parking nearby.</p>

@@ -8,3 +8,12 @@ dist/
 .vercel/
 
 .vercel
+
+# Local site-tour render + scratch (not for VCS)
+*.mp4
+/tour-raw/
+/intro.png
+/outro.png
+/frame_*.png
+/record-tour.mjs
+/make-cards.mjs

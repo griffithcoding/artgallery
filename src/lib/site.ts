@@ -8,7 +8,7 @@ export const BRAND = {
   addressLine: '65-B Pearl Street',
   addressCity: 'Brooklyn, NY 11201',
   neighborhood: 'DUMBO',
-  hours: 'Tue–Sat, 11am–6pm',
+  hours: 'Tue–Sat, 1–6pm',
   email: 'hello@versogallery.com',
   phone: '+1 (718) 555-0142',
   instagram: 'https://www.instagram.com/',
