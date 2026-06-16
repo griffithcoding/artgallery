@@ -1,5 +1,5 @@
 /* =========================================================================
-   VERSO — Collection browser (client)
+   Mazlish + Wright Contemporary — Collection browser (client)
    Client-side filtering, search, sort, and pagination over the catalogue.
    Filter/sort state is mirrored to the URL for shareable, back-button-safe
    results. Data is read from the page-embedded #works-data JSON blob (the

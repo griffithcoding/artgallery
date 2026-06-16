@@ -1,5 +1,5 @@
 /* =========================================================================
-   VERSO — Data-access seam
+   Mazlish + Wright Contemporary — Data-access seam
    The whole public site reads gallery data through this module.
 
    DUAL-MODE: when Supabase is configured (env vars present) artworks + artists

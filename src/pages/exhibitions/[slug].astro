@@ -27,7 +27,7 @@ for (const id of ex.artistIds) {
 if (!works.length) works = (await getArtworks()).slice(0, 6);
 const heroImage = works[0]?.image ?? '';
 
-const description = `${ex.title} (${ex.dates}) at VERSO Gallery, Brooklyn. ${ex.blurb}`;
+const description = `${ex.title} (${ex.dates}) at Mazlish + Wright Contemporary, Brooklyn. ${ex.blurb}`;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -38,7 +38,7 @@ const jsonLd = {
   eventStatus: 'https://schema.org/EventScheduled',
   location: {
     '@type': 'Place',
-    name: 'VERSO Gallery',
+    name: 'Mazlish + Wright Contemporary',
     address: {
       '@type': 'PostalAddress',
       streetAddress: '312 Wythe Avenue',
@@ -52,7 +52,7 @@ const jsonLd = {
   performer: names.map((n) => ({ '@type': 'Person', name: n })),
 };
 ---
-<Layout title={`${ex.title} — VERSO Gallery`} description={description} jsonLd={jsonLd}>
+<Layout title={`${ex.title} — Mazlish + Wright Contemporary`} description={description} jsonLd={jsonLd}>
   <main class="wrap section--tight">
     <nav aria-label="Breadcrumb" class="breadcrumb">
       <a href="/">Home</a> / <a href="/exhibitions">Exhibitions</a> / <span>{ex.title}</span>
@@ -81,7 +81,7 @@ const jsonLd = {
 
     <section class="prose" style="max-width:68ch;margin-bottom:3.5rem;">
       <p class="lead tldr-block">{ex.blurb}</p>
-      <p>The exhibition brings together recent work by {names.join(', ')}, on view at VERSO’s Wythe Avenue space and in a companion online viewing room. A printed checklist is available at the front desk and online — every work in the show can be reserved or inquired about directly from its page.</p>
+      <p>The exhibition brings together recent work by {names.join(', ')}, on view at Mazlish + Wright Contemporary’s Wythe Avenue space and in a companion online viewing room. A printed checklist is available at the front desk and online — every work in the show can be reserved or inquired about directly from its page.</p>
       <p>Gallery hours are Tuesday through Saturday, 11am–6pm. For a private viewing or press materials, contact <a class="link-underline" href="mailto:hello@versogallery.com">hello@versogallery.com</a>.</p>
     </section>
 

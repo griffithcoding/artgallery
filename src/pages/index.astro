@@ -16,23 +16,23 @@ const mapsDir = 'https://www.google.com/maps/dir/?api=1&destination=312+Wythe+Av
 // Visible FAQ — mirrored 1:1 into FAQPage schema below (local + answer-engine intent).
 const faqs = [
   {
-    q: 'Where is VERSO Gallery located?',
-    a: 'VERSO is at 312 Wythe Avenue in Williamsburg, Brooklyn, NY 11249 — about two blocks from the Bedford Avenue (L) subway station and near the North Williamsburg NYC Ferry.',
+    q: 'Where is Mazlish + Wright Contemporary located?',
+    a: 'Mazlish + Wright Contemporary is at 312 Wythe Avenue in Williamsburg, Brooklyn, NY 11249 — about two blocks from the Bedford Avenue (L) subway station and near the North Williamsburg NYC Ferry.',
   },
   {
-    q: 'What are VERSO’s opening hours?',
+    q: 'What are Mazlish + Wright Contemporary’s opening hours?',
     a: 'The gallery is open Tuesday through Saturday, 11am to 6pm, and closed Sunday and Monday.',
   },
   {
-    q: 'Is admission to VERSO free?',
-    a: 'Yes. VERSO is free and open to the public — no ticket or appointment needed to walk in during opening hours.',
+    q: 'Is admission to Mazlish + Wright Contemporary free?',
+    a: 'Yes. Mazlish + Wright Contemporary is free and open to the public — no ticket or appointment needed to walk in during opening hours.',
   },
   {
-    q: 'What kind of art does VERSO show?',
-    a: 'VERSO shows contemporary art by emerging and mid-career artists — painting, sculpture, photography, prints, and works on paper — with a new exhibition roughly every six weeks.',
+    q: 'What kind of art does Mazlish + Wright Contemporary show?',
+    a: 'Mazlish + Wright Contemporary shows contemporary art by emerging and mid-career artists — painting, sculpture, photography, prints, and works on paper — with a new exhibition roughly every six weeks.',
   },
   {
-    q: 'Can I buy art from VERSO?',
+    q: 'Can I buy art from Mazlish + Wright Contemporary?',
     a: 'Yes. Every available work has its own page with a clear status (Available, Inquire, or Sold) and an inquiry button. A gallery representative typically replies within one business day.',
   },
 ];
@@ -43,8 +43,8 @@ const jsonLd = {
     {
       '@type': ['ArtGallery', 'LocalBusiness'],
       '@id': `${BRAND.domain}/#organization`,
-      name: 'VERSO Gallery',
-      alternateName: 'VERSO',
+      name: 'Mazlish + Wright Contemporary',
+      alternateName: 'Mazlish + Wright Contemporary',
       url: `${BRAND.domain}/`,
       logo: `${BRAND.domain}/images/og-cover.svg`,
       image: `${BRAND.domain}/images/og-cover.svg`,
@@ -80,7 +80,7 @@ const jsonLd = {
       '@type': 'WebSite',
       '@id': `${BRAND.domain}/#website`,
       url: `${BRAND.domain}/`,
-      name: 'VERSO Gallery',
+      name: 'Mazlish + Wright Contemporary',
       publisher: { '@id': `${BRAND.domain}/#organization` },
       inLanguage: 'en-US',
       potentialAction: {
@@ -102,8 +102,8 @@ const jsonLd = {
 };
 ---
 <Layout
-  title="Contemporary Art Gallery in Williamsburg, Brooklyn | VERSO"
-  description="VERSO is a free contemporary art gallery in Williamsburg, Brooklyn — 312 Wythe Ave, open Tue–Sat 11–6. See current exhibitions and original contemporary art by emerging and mid-career artists."
+  title="Contemporary Art Gallery in Williamsburg, Brooklyn | Mazlish + Wright Contemporary"
+  description="Mazlish + Wright Contemporary is a free contemporary art gallery in Williamsburg, Brooklyn — 312 Wythe Ave, open Tue–Sat 11–6. See current exhibitions and original contemporary art by emerging and mid-career artists."
   keywords="contemporary art gallery Brooklyn, art gallery Williamsburg, art galleries Brooklyn NYC, contemporary art Brooklyn, free art gallery Brooklyn, art exhibitions Williamsburg, emerging artists Brooklyn, art gallery near me Brooklyn"
   jsonLd={jsonLd}
 >
@@ -114,7 +114,7 @@ const jsonLd = {
         <div class="hero-copy">
           <p class="eyebrow reveal"><span class="dot" aria-hidden="true"></span>Now on view · Williamsburg, Brooklyn</p>
           <h1 class="display reveal">A contemporary art gallery in Williamsburg, Brooklyn.</h1>
-          <p class="lead reveal tldr-block">VERSO is a free contemporary art gallery at 312 Wythe Avenue in Williamsburg, Brooklyn. Walk in Tuesday–Saturday to see new exhibitions and original work by emerging and mid-career artists — or browse the full collection online and inquire about any piece.</p>
+          <p class="lead reveal tldr-block">Mazlish + Wright Contemporary is a free contemporary art gallery at 312 Wythe Avenue in Williamsburg, Brooklyn. Walk in Tuesday–Saturday to see new exhibitions and original work by emerging and mid-career artists — or browse the full collection online and inquire about any piece.</p>
           <dl class="hero-meta reveal">
             <div><dt>Now on view</dt><dd>{current.title}</dd></div>
             <div><dt>Hours</dt><dd>Tue–Sat, 11am–6pm · Free</dd></div>
@@ -127,7 +127,7 @@ const jsonLd = {
         </div>
         <div class="reveal">
           <a href={`/exhibitions/${current.slug}`} class="frame frame--hover" data-ratio="portrait" aria-label={`Current exhibition: ${current.title}`}>
-            <img src={heroWork?.image ?? artSVG(current.slug, 'portrait')} alt={`Contemporary artwork from the exhibition ${current.title} at VERSO Gallery, Williamsburg, Brooklyn`} width="600" height="800" />
+            <img src={heroWork?.image ?? artSVG(current.slug, 'portrait')} alt={`Contemporary artwork from the exhibition ${current.title} at Mazlish + Wright Contemporary, Williamsburg, Brooklyn`} width="600" height="800" />
           </a>
         </div>
       </div>
@@ -154,9 +154,9 @@ const jsonLd = {
         <div class="reveal">
           <p class="eyebrow">Visit the gallery</p>
           <h2 class="display" style="margin:.5rem 0 1.2rem;">See it in person on Wythe Avenue.</h2>
-          <p class="prose">VERSO is in the heart of Williamsburg, Brooklyn — one of New York City’s best neighborhoods for seeing contemporary art. Admission is free and everyone’s welcome; no appointment needed.</p>
+          <p class="prose">Mazlish + Wright Contemporary is in the heart of Williamsburg, Brooklyn — one of New York City’s best neighborhoods for seeing contemporary art. Admission is free and everyone’s welcome; no appointment needed.</p>
           <address class="visit-nap">
-            <strong>VERSO Gallery</strong><br />
+            <strong>Mazlish + Wright Contemporary</strong><br />
             312 Wythe Avenue, Brooklyn, NY 11249<br />
             Tuesday–Saturday, 11am–6pm · Free admission<br />
             <a href="tel:+17185550142">+1 (718) 555-0142</a> · <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>
@@ -168,8 +168,8 @@ const jsonLd = {
           </div>
         </div>
         <div class="reveal">
-          <a href="/exhibitions" class="frame frame--hover" data-ratio="landscape" aria-label="Exhibitions at VERSO Gallery">
-            <img src={allWorks[12]?.image ?? artSVG('verso-visit', 'landscape')} alt="Inside VERSO Gallery, a contemporary art gallery in Williamsburg, Brooklyn" />
+          <a href="/exhibitions" class="frame frame--hover" data-ratio="landscape" aria-label="Exhibitions at Mazlish + Wright Contemporary">
+            <img src={allWorks[12]?.image ?? artSVG('verso-visit', 'landscape')} alt="Inside Mazlish + Wright Contemporary, a contemporary art gallery in Williamsburg, Brooklyn" />
           </a>
         </div>
       </div>
@@ -179,7 +179,7 @@ const jsonLd = {
 
     <!-- FAQ — local + answer-engine intent (mirrors FAQPage schema) -->
     <section class="section wrap">
-      <div class="section-head"><h2 class="display reveal">Visiting VERSO — quick answers</h2></div>
+      <div class="section-head"><h2 class="display reveal">Visiting Mazlish + Wright Contemporary — quick answers</h2></div>
       <div class="faq-list">
         {faqs.map((f, i) => (
           <details class="faq-item reveal" open={i === 0}>

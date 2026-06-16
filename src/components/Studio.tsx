@@ -8,7 +8,7 @@ interface Props {
 }
 
 /**
- * VERSO Design Studio — an in-portal infinite-canvas design tool (tldraw) for
+ * Mazlish + Wright Contemporary Design Studio — an in-portal infinite-canvas design tool (tldraw) for
  * the gallery's ARTISTS (creator/contributor roles) to do marketing and design
  * work: moodboards, layouts, wireframes, announcement mockups. Not for gallery
  * owners (super_admin). Renders client-only (tldraw cannot SSR).
@@ -34,8 +34,8 @@ export default function Studio({ userId, email }: Props) {
           flex: '0 0 auto',
         }}
       >
-        <strong style={{ letterSpacing: '0.14em', textTransform: 'uppercase', color: '#c0492f', fontSize: '0.72rem' }}>
-          VERSO
+        <strong style={{ letterSpacing: '0.14em', textTransform: 'uppercase', color: '#8fd6ef', fontSize: '0.72rem' }}>
+          Mazlish + Wright
         </strong>
         <span style={{ color: '#b8b3a2' }}>Design Studio</span>
         {email && <span style={{ color: '#6f6b5f', fontSize: '0.78rem' }}>{email}</span>}

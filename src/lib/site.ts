@@ -1,7 +1,8 @@
 // Brand + navigation constants. Ported from js/main.js (BRAND, NAV).
 // Nav hrefs are now clean Astro routes (no .html).
 export const BRAND = {
-  name: 'VERSO',
+  name: 'Mazlish + Wright Contemporary',
+  wordmark: 'Mazlish + Wright',
   tagline: 'Contemporary Art Gallery',
   city: 'Brooklyn, New York',
   addressLine: '312 Wythe Avenue',

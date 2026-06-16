@@ -14,7 +14,7 @@ const portrait = works[0]?.image ?? artSVG(artist.id, 'portrait');
 const shownWorks = works.slice(0, 12);
 const firstName = artist.name.split(' ')[0];
 
-const description = `${artist.name} (${artist.birth}), represented by VERSO Gallery, Brooklyn. ${artist.bio.slice(0, 120)}…`;
+const description = `${artist.name} (${artist.birth}), represented by Mazlish + Wright Contemporary, Brooklyn. ${artist.bio.slice(0, 120)}…`;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -28,7 +28,7 @@ const jsonLd = {
   worksFor: { '@id': `${BRAND.domain}/#organization` },
 };
 ---
-<Layout title={`${artist.name} — VERSO Gallery`} description={description} jsonLd={jsonLd}>
+<Layout title={`${artist.name} — Mazlish + Wright Contemporary`} description={description} jsonLd={jsonLd}>
   <main class="wrap section--tight">
     <nav aria-label="Breadcrumb" class="breadcrumb">
       <a href="/">Home</a> &nbsp;/&nbsp; <a href="/artists">Artists</a> &nbsp;/&nbsp; <span>{artist.name}</span>

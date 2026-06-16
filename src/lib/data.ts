@@ -1,5 +1,5 @@
 /* =========================================================================
-   VERSO — Placeholder data layer (ported from js/data.js)
+   Mazlish + Wright Contemporary — Placeholder data layer (ported from js/data.js)
    Deterministic catalogue of artists + artworks so the UI renders without a
    database. Artwork visuals are generated as inline SVG seeded from each id.
    This is the temporary backing for the gallery.ts data seam; the Artwork CMS
@@ -162,12 +162,12 @@ const fairs: Fair[] = [
 
 /* ---- Press ---- */
 const press: PressItem[] = [
-  { outlet: 'Artforum', headline: '“VERSO’s Soft Architecture finds tenderness in structure”', date: 'June 2026', kind: 'Review' },
+  { outlet: 'Artforum', headline: '“Mazlish + Wright Contemporary’s Soft Architecture finds tenderness in structure”', date: 'June 2026', kind: 'Review' },
   { outlet: 'The New York Times', headline: 'A Williamsburg gallery puts its whole program in the open', date: 'May 2026', kind: 'Feature' },
   { outlet: 'Hyperallergic', headline: 'The best gallery shows in Brooklyn this month', date: 'May 2026', kind: 'Listing' },
   { outlet: 'Cultured', headline: '15 emerging artists to watch, according to their dealers', date: 'Apr 2026', kind: 'Feature' },
   { outlet: 'ARTnews', headline: 'How small galleries are using open access to court collectors', date: 'Mar 2026', kind: 'Feature' },
-  { outlet: 'Brooklyn Magazine', headline: 'Inside VERSO, the gallery that put its back room in the open', date: 'Feb 2026', kind: 'Profile' },
+  { outlet: 'Brooklyn Magazine', headline: 'Inside Mazlish + Wright Contemporary, the gallery that put its back room in the open', date: 'Feb 2026', kind: 'Profile' },
 ];
 
 export { artists, artworks, exhibitions, fairs, press };

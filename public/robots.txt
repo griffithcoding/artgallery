@@ -1,4 +1,4 @@
-# VERSO Gallery — robots.txt
+# Mazlish + Wright Contemporary — robots.txt
 # Search engines and AI/LLM crawlers are explicitly welcome.
 
 User-agent: *

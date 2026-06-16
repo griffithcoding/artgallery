@@ -1,20 +1,127 @@
-/* VERSO admin — minimal dark shell, reusing the gallery ink palette. */
-.admin-shell { background: #16150f; color: #e9e6dc; min-height: 100vh; font-family: system-ui, -apple-system, Segoe UI, sans-serif; }
-.admin-wrap { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
-.admin-nav { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid #2c2a20; }
-.admin-nav a { color: #cfc9b8; text-decoration: none; font-size: .9rem; }
+/* =========================================================================
+   Mazlish + Wright Contemporary — Admin portal
+   "Liquid Glass" (2026) ice-blue theme: layered translucency, backdrop blur +
+   saturate vibrancy, specular highlights, soft ambient depth. Web-shippable
+   glassmorphism evoking Apple's Liquid Glass / Google's glass UI.
+   ========================================================================= */
+:root {
+  --mw-ink: #eaf4fd;
+  --mw-ice: #8fd6ef;
+  --mw-line: rgba(160, 210, 240, 0.22);
+  --mw-line-soft: rgba(160, 210, 240, 0.12);
+  --mw-glass: linear-gradient(165deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.025));
+  --mw-spec: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  --mw-blur: blur(18px) saturate(160%);
+}
+
+.admin-shell {
+  min-height: 100vh;
+  color: var(--mw-ink);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background:
+    radial-gradient(1100px 620px at 78% -12%, rgba(120, 205, 240, 0.22), transparent 60%),
+    radial-gradient(820px 520px at -5% 4%, rgba(96, 150, 224, 0.20), transparent 55%),
+    radial-gradient(700px 700px at 50% 120%, rgba(60, 200, 210, 0.12), transparent 60%),
+    linear-gradient(160deg, #081521 0%, #0b2030 52%, #081a28 100%);
+  background-attachment: fixed;
+}
+.admin-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+.admin-wrap h1 { font-weight: 500; letter-spacing: -0.01em; margin: 0 0 .25rem; }
+
+/* ---- Frosted glass top nav ---- */
+.admin-nav {
+  display: flex; gap: 1.1rem; flex-wrap: wrap; align-items: center;
+  padding: 0.85rem 1.5rem; position: sticky; top: 0; z-index: 20;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.03));
+  border-bottom: 1px solid var(--mw-line);
+  backdrop-filter: var(--mw-blur); -webkit-backdrop-filter: var(--mw-blur);
+  box-shadow: 0 10px 34px -18px rgba(0, 0, 0, 0.7), var(--mw-spec);
+}
+.admin-nav a { color: #a9c8de; text-decoration: none; font-size: .9rem; transition: color .2s, text-shadow .2s; }
 .admin-nav a:hover { color: #fff; }
-.admin-nav a[aria-current] { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
-.admin-brand { letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; color: #c0492f; font-weight: 600; margin-right: .5rem; }
-.admin-card { background: #1d1b13; border: 1px solid #2c2a20; padding: 1.25rem; border-radius: 4px; }
-.admin-field { margin-bottom: 1rem; display: flex; flex-direction: column; gap: .35rem; }
-.admin-field label { font-size: .8rem; color: #b8b3a2; }
-.admin-field input, .admin-field textarea, .admin-field select { background: #11100b; border: 1px solid #3a382b; color: #e9e6dc; padding: .6rem .75rem; font-size: 1rem; border-radius: 3px; max-width: 100%; }
-.admin-field input:focus, .admin-field textarea:focus, .admin-field select:focus { outline: none; border-color: #c0492f; }
-.admin-btn { background: #c0492f; color: #fff; border: none; padding: .65rem 1.1rem; font-size: .95rem; cursor: pointer; border-radius: 3px; }
-.admin-btn:hover { background: #d4583c; }
-.admin-status.err { color: #ff9b87; font-size: .9rem; margin-bottom: 1rem; }
+.admin-nav a[aria-current] { color: #cdeefb; text-shadow: 0 0 18px rgba(143, 214, 239, 0.6); }
+.admin-brand {
+  letter-spacing: .12em; text-transform: uppercase; font-size: .76rem; font-weight: 700; margin-right: .4rem;
+  background: linear-gradient(180deg, #e8f8ff, var(--mw-ice));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* ---- Liquid-glass cards ---- */
+.admin-card {
+  position: relative; isolation: isolate; overflow: hidden;
+  background: var(--mw-glass);
+  border: 1px solid var(--mw-line);
+  padding: 1.5rem; border-radius: 18px;
+  backdrop-filter: var(--mw-blur); -webkit-backdrop-filter: var(--mw-blur);
+  box-shadow: 0 24px 60px -26px rgba(2, 12, 24, 0.85), var(--mw-spec);
+}
+/* specular "lens" highlight */
+.admin-card::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(120% 80% at 12% -10%, rgba(255, 255, 255, 0.22), transparent 45%);
+}
+
+/* ---- Fields (inset glass) ---- */
+.admin-field { margin-bottom: 1.1rem; display: flex; flex-direction: column; gap: .4rem; }
+.admin-field label { font-size: .72rem; letter-spacing: .07em; text-transform: uppercase; color: #9bc1da; }
+.admin-field input, .admin-field textarea, .admin-field select {
+  background: rgba(7, 18, 30, 0.55); border: 1px solid var(--mw-line);
+  color: var(--mw-ink); padding: .72rem .9rem; font-size: 1rem; border-radius: 12px; max-width: 100%;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.admin-field input::placeholder, .admin-field textarea::placeholder { color: #6f8ca5; }
+.admin-field input:focus, .admin-field textarea:focus, .admin-field select:focus {
+  outline: none; border-color: var(--mw-ice); background: rgba(7, 18, 30, 0.72);
+  box-shadow: 0 0 0 4px rgba(126, 200, 227, 0.22), 0 0 26px -6px rgba(126, 200, 227, 0.5);
+}
+
+/* ---- Glossy liquid-glass buttons ---- */
+.admin-btn {
+  position: relative; overflow: hidden; isolation: isolate; border: none; cursor: pointer;
+  padding: .72rem 1.3rem; font-size: .92rem; font-weight: 650; border-radius: 13px; color: #042133;
+  background: linear-gradient(180deg, #f1fbff 0%, #b6e4f4 42%, #79c5e4 100%);
+  box-shadow:
+    0 10px 26px -10px rgba(110, 195, 228, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -3px 7px rgba(36, 104, 142, 0.28);
+  transition: transform .15s ease, box-shadow .25s ease, filter .2s;
+}
+/* drifting specular sheen */
+.admin-btn::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.55) 48%, transparent 62%);
+  transform: translateX(-120%); transition: transform .6s ease;
+}
+.admin-btn:hover { filter: brightness(1.05); transform: translateY(-1px);
+  box-shadow: 0 14px 32px -10px rgba(110, 195, 228, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -3px 7px rgba(36, 104, 142, 0.28); }
+.admin-btn:hover::after { transform: translateX(120%); }
+.admin-btn:active { transform: translateY(0); }
+.admin-btn.danger {
+  color: #fff; background: linear-gradient(180deg, #ffb3b8 0%, #e76a74 48%, #cf4854 100%);
+  box-shadow: 0 10px 26px -10px rgba(210, 90, 100, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -3px 7px rgba(120, 30, 40, 0.3);
+}
+
+.admin-status { font-size: .9rem; margin-bottom: 1rem; }
+.admin-status.err { color: #ffb0ad; }
+
+/* ---- Glass table ---- */
 table.admin-table { width: 100%; border-collapse: collapse; }
-table.admin-table th, table.admin-table td { text-align: left; padding: .55rem .6rem; border-bottom: 1px solid #2c2a20; font-size: .9rem; }
-.login-shell { display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
-.login-wrap { width: 100%; max-width: 400px; }
+table.admin-table th {
+  text-align: left; padding: .7rem .7rem; font-size: .7rem; letter-spacing: .07em;
+  text-transform: uppercase; color: #8fb6d0; border-bottom: 1px solid var(--mw-line);
+}
+table.admin-table td { text-align: left; padding: .72rem .7rem; border-bottom: 1px solid var(--mw-line-soft); font-size: .92rem; color: #d9e9f6; }
+table.admin-table tr { transition: background .18s; }
+table.admin-table tbody tr:hover td { background: rgba(143, 214, 239, 0.06); }
+table.admin-table a { color: #eaf4fd; text-decoration: none; }
+table.admin-table a:hover { color: var(--mw-ice); }
+
+/* ---- Login ---- */
+.login-shell { display: flex; align-items: center; justify-content: center; padding: 1.5rem; min-height: 100vh; }
+.login-wrap { width: 100%; max-width: 420px; }
+.login-wrap .admin-card { padding: 2rem 1.8rem; border-radius: 22px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-btn, .admin-btn::after { transition: none; }
+}

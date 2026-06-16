@@ -19,19 +19,19 @@ const saved = Astro.url.searchParams.get('saved');
       <tbody>
         {(works ?? []).map((w: any) => (
           <tr>
-            <td><a href={`/admin/artworks/${w.id}`} style="color:#e9e6dc;">{w.title}</a></td>
-            <td style="color:#cfc9b8;">{w.artist?.name ?? '—'}</td>
-            <td style="color:#cfc9b8;">{w.availability}</td>
+            <td><a href={`/admin/artworks/${w.id}`} style="color:#eaf4fd;">{w.title}</a></td>
+            <td style="color:#aecadf;">{w.artist?.name ?? '—'}</td>
+            <td style="color:#aecadf;">{w.availability}</td>
             <td style="text-align:right;">
               <form method="POST" action="/admin/artworks/action" onsubmit="return confirm('Delete this artwork?')">
                 <input type="hidden" name="id" value={w.id} />
-                <button class="admin-btn" style="background:#7a2418;" type="submit">Delete</button>
+                <button class="admin-btn danger" type="submit">Delete</button>
               </form>
             </td>
           </tr>
         ))}
       </tbody>
     </table>
-    {(works ?? []).length === 0 && <p style="padding:1rem .4rem;color:#8a8675;">No artworks yet.</p>}
+    {(works ?? []).length === 0 && <p style="padding:1rem .4rem;color:#7f9cb3;">No artworks yet.</p>}
   </div>
 </AdminLayout>
