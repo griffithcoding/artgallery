@@ -6,3 +6,5 @@ dist/
 .astro/
 .env
 .vercel/
+
+.vercel
