@@ -2,36 +2,45 @@
 export const prerender = false;
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { createSupabaseAdmin } from '../../../lib/supabase/server';
+import { artSVG } from '../../../lib/gallery';
 const { data: works } = await createSupabaseAdmin()
-  .from('artworks').select('id, title, availability, artist:artists(name)')
+  .from('artworks')
+  .select('id, title, availability, image_url, ratio, artist:artists(name)')
   .order('created_at', { ascending: false });
 const saved = Astro.url.searchParams.get('saved');
+const list = (works ?? []) as any[];
 ---
 <AdminLayout title="Artworks">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-    <h1 style="font-weight:400;">Artworks</h1>
-    <a class="admin-btn" href="/admin/artworks/new">New artwork</a>
+  <div class="admin-toolbar">
+    <div>
+      <h1 style="font-weight:500;">Artworks</h1>
+      <span class="admin-count">{list.length} {list.length === 1 ? 'work' : 'works'}</span>
+    </div>
+    <a class="admin-btn" href="/admin/artworks/new">+ New artwork</a>
   </div>
-  {saved && <p class="admin-status" style="color:#9fdca0;">Saved.</p>}
-  <div class="admin-card" style="padding:.4rem 1rem;">
-    <table class="admin-table">
-      <thead><tr><th>Title</th><th>Artist</th><th>Availability</th><th style="text-align:right;">Actions</th></tr></thead>
-      <tbody>
-        {(works ?? []).map((w: any) => (
-          <tr>
-            <td><a href={`/admin/artworks/${w.id}`} style="color:#eaf4fd;">{w.title}</a></td>
-            <td style="color:#aecadf;">{w.artist?.name ?? '—'}</td>
-            <td style="color:#aecadf;">{w.availability}</td>
-            <td style="text-align:right;">
-              <form method="POST" action="/admin/artworks/action" onsubmit="return confirm('Delete this artwork?')">
-                <input type="hidden" name="id" value={w.id} />
-                <button class="admin-btn danger" type="submit">Delete</button>
-              </form>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-    {(works ?? []).length === 0 && <p style="padding:1rem .4rem;color:#7f9cb3;">No artworks yet.</p>}
+  {saved && <p class="admin-status" style="color:#86e7b0;">Saved.</p>}
+  {list.length === 0 && (
+    <p style="color:#7f9cb3;">No artworks yet. <a href="/admin/artworks/new" style="color:var(--mw-ice);">Add the first →</a></p>
+  )}
+  <div class="admin-grid">
+    {list.map((w) => (
+      <div class="admin-tile">
+        <a class="thumb" href={`/admin/artworks/${w.id}`}>
+          <span class={`badge ${String(w.availability).toLowerCase()}`}>{w.availability}</span>
+          <img src={w.image_url || artSVG(w.id, w.ratio || 'square')} alt={w.title} loading="lazy" />
+        </a>
+        <div class="tmeta">
+          <a class="ttitle" href={`/admin/artworks/${w.id}`}>{w.title}</a>
+          <div class="tartist">{w.artist?.name ?? '—'}</div>
+          <div class="tactions">
+            <a href={`/admin/artworks/${w.id}`}>Edit</a>
+            <form method="POST" action="/admin/artworks/action" onsubmit="return confirm('Delete this artwork?')">
+              <input type="hidden" name="id" value={w.id} />
+              <button class="tdel" type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    ))}
   </div>
 </AdminLayout>
