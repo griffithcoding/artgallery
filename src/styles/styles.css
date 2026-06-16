@@ -4,25 +4,25 @@
    Minimalist, art-forward, white-space heavy. Serif display + grotesk UI.
    ========================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap');
 
 /* ---------- Design tokens ---------- */
 :root {
   /* Palette — near-monochrome, gallery white-cube */
-  --paper:      #f7f6f3;   /* warm off-white background */
+  --paper:      #ffffff;   /* white background (clean gallery) */
   --paper-pure: #ffffff;
-  --ink:        #16150f;   /* near-black text */
-  --ink-soft:   #54514a;   /* secondary text */
-  --line:       #e3e1da;   /* hairline borders */
-  --line-soft:  #efeee9;
-  --accent:     #8a2b1f;   /* deep terracotta/oxblood accent */
-  --accent-2:   #1c3a3a;   /* deep teal, sparing use */
+  --ink:        #333333;   /* soft dark-grey text */
+  --ink-soft:   #8a8a8a;   /* secondary grey */
+  --line:       #e6e6e6;   /* hairline borders */
+  --line-soft:  #f0f0f0;
+  --accent:     #333333;   /* monochrome — no color accent */
+  --accent-2:   #333333;
   --placeholder-a: #d9d6cd;
   --placeholder-b: #c7c3b8;
 
   /* Type */
-  --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-  --sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --serif: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --sans:  'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
 
   /* Spacing scale */
   --gutter: clamp(1.25rem, 4vw, 4rem);
@@ -54,7 +54,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 h1, h2, h3, h4 { margin: 0; font-weight: 400; }
 
 /* ---------- Typography ---------- */
-.display { font-family: var(--serif); font-weight: 300; line-height: 1.04; letter-spacing: -0.01em; }
+.display { font-family: var(--serif); font-weight: 300; line-height: 1.16; letter-spacing: 0; }
 .eyebrow {
   font-family: var(--sans);
   font-size: 0.72rem;
@@ -63,11 +63,11 @@ h1, h2, h3, h4 { margin: 0; font-weight: 400; }
   color: var(--ink-soft);
   font-weight: 500;
 }
-.lead { font-family: var(--serif); font-size: clamp(1.35rem, 2.6vw, 2rem); line-height: 1.35; color: var(--ink); font-weight: 300; }
+.lead { font-family: var(--serif); font-size: clamp(1.1rem, 2vw, 1.5rem); line-height: 1.5; color: var(--ink); font-weight: 300; }
 
-h1.display { font-size: clamp(2.8rem, 8vw, 6.5rem); }
-h2.display { font-size: clamp(2rem, 5vw, 3.75rem); }
-h3.display { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+h1.display { font-size: clamp(2rem, 5vw, 3.6rem); }
+h2.display { font-size: clamp(1.5rem, 3.5vw, 2.4rem); }
+h3.display { font-size: clamp(1.25rem, 2.5vw, 1.6rem); }
 
 /* ---------- Layout helpers ---------- */
 .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
