@@ -1,0 +1,64 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArtworkCard from '../../components/ArtworkCard.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
+import { getArtist, getWorksByArtist, artSVG } from '../../lib/gallery';
+import { BRAND } from '../../lib/site';
+
+const { slug } = Astro.params;
+const artist = await getArtist(slug!);
+if (!artist) return new Response(null, { status: 404 });
+
+const works = await getWorksByArtist(artist.id);
+const portrait = works[0]?.image ?? artSVG(artist.id, 'portrait');
+const shownWorks = works.slice(0, 12);
+const firstName = artist.name.split(' ')[0];
+
+const description = `${artist.name} (${artist.birth}), represented by VERSO Gallery, Brooklyn. ${artist.bio.slice(0, 120)}…`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${BRAND.domain}/artists/${artist.slug}#person`,
+  name: artist.name,
+  jobTitle: 'Artist',
+  description: artist.bio,
+  image: `${BRAND.domain}/images/og-cover.svg`,
+  knowsAbout: [artist.discipline, 'Contemporary art'],
+  worksFor: { '@id': `${BRAND.domain}/#organization` },
+};
+---
+<Layout title={`${artist.name} — VERSO Gallery`} description={description} jsonLd={jsonLd}>
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a> &nbsp;/&nbsp; <a href="/artists">Artists</a> &nbsp;/&nbsp; <span>{artist.name}</span>
+    </nav>
+
+    <section class="artist-hero" style="margin-bottom:3.5rem;">
+      <div>
+        <span class="frame" data-ratio="portrait"><img src={portrait} alt={`Work by ${artist.name}`} /></span>
+      </div>
+      <div>
+        <p class="eyebrow">{artist.birth}</p>
+        <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 1.2rem;">{artist.name}</h1>
+        <p class="prose lead" style="margin-bottom:1.4rem;">{artist.discipline}</p>
+        <div class="prose" set:html={artist.bio} />
+        <div class="flex gap-1 mt-2" style="flex-wrap:wrap;">
+          <a class="btn" href={`/works?artist=${encodeURIComponent(artist.name)}`}>All works by {firstName}</a>
+          <button class="btn btn--solid" onclick={`openInquiry('Works by ${artist.name.replace(/'/g, "\\'")}')`}>Inquire</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="border-top:1px solid var(--line);padding-top:2.5rem;">
+      <div class="section-head">
+        <h2 class="display">Available works</h2>
+        <span class="result-count">{works.length} works</span>
+      </div>
+      <div class="grid grid--4">
+        {shownWorks.map((w) => <ArtworkCard work={w} />)}
+      </div>
+    </section>
+  </main>
+  <InquiryModal />
+</Layout>

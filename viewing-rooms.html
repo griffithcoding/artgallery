@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Viewing Rooms — Curated Collections | VERSO Gallery Brooklyn</title>
-  <meta name="description" content="Online viewing rooms from VERSO Gallery — curated, themed selections from our 20,000-work archive, including sculpture and object, Brooklyn abstraction, and new acquisitions." />
+  <meta name="description" content="Online viewing rooms from VERSO Gallery — curated, themed selections from the gallery's collection, including sculpture and object, Brooklyn abstraction, and new acquisitions." />
   <link rel="canonical" href="https://www.versogallery.com/viewing-rooms.html" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="theme-color" content="#16150f" />
@@ -40,7 +40,7 @@
     <header style="margin-bottom:2.5rem;">
       <p class="eyebrow">Curated online</p>
       <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Viewing Rooms</h1>
-      <p class="lead" style="max-width:62ch;">Twenty thousand works is a lot to browse. These curated rooms are our way of editing the archive down to a single idea, medium, or moment — each one a short exhibition you can walk through from anywhere.</p>
+      <p class="lead" style="max-width:62ch;">These curated rooms are our way of editing the collection down to a single idea, medium, or moment — each one a short exhibition you can walk through from anywhere.</p>
     </header>
     <div id="rooms"></div>
   </main>
@@ -55,7 +55,7 @@
       var rooms = [
         { title: 'Sculpture & Object', desc: 'A standing room of three-dimensional work — bronze, ceramic, cast resin, and welded steel from across our program.', link: 'collection.html?category=Sculpture', filter: function (w) { return w.category === 'Sculpture' || w.category === 'Ceramic'; } },
         { title: 'Brooklyn Abstraction', desc: 'Color, gesture, and structure from the painters in our program working in a non-representational mode.', link: 'collection.html?subject=Abstraction', filter: function (w) { return w.subject === 'Abstraction' || w.subject === 'Color Field' || w.subject === 'Geometric'; } },
-        { title: 'New This Month', desc: 'The most recent additions to the archive — fresh from the studio and the framer.', link: 'collection.html?sort=year-desc', filter: function (w) { return w.year >= 2024; } },
+        { title: 'New This Month', desc: 'The most recent additions to the collection — fresh from the studio and the framer.', link: 'collection.html?sort=year-desc', filter: function (w) { return w.year >= 2024; } },
         { title: 'Works on Paper', desc: 'Drawings, prints, and studies — the most intimate way into an artist’s practice.', link: 'collection.html?category=Works%20on%20Paper', filter: function (w) { return w.category === 'Works on Paper' || w.category === 'Prints'; } },
       ];
       document.getElementById('rooms').innerHTML = rooms.map(function (r, i) {

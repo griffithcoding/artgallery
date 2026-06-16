@@ -1,0 +1,90 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArtworkCard from '../../components/ArtworkCard.astro';
+import { getArtworks } from '../../lib/gallery';
+import type { Artwork } from '../../lib/gallery';
+import { BRAND } from '../../lib/site';
+
+const all = await getArtworks();
+
+interface Room {
+  title: string;
+  desc: string;
+  link: string;
+  filter: (w: Artwork) => boolean;
+}
+
+const rooms: Room[] = [
+  {
+    title: 'Sculpture & Object',
+    desc: 'A standing room of three-dimensional work — bronze, ceramic, cast resin, and welded steel from across our program.',
+    link: '/works?category=Sculpture',
+    filter: (w) => w.category === 'Sculpture' || w.category === 'Ceramic',
+  },
+  {
+    title: 'Brooklyn Abstraction',
+    desc: 'Color, gesture, and structure from the painters in our program working in a non-representational mode.',
+    link: '/works?subject=Abstraction',
+    filter: (w) => w.subject === 'Abstraction' || w.subject === 'Color Field' || w.subject === 'Geometric',
+  },
+  {
+    title: 'New This Month',
+    desc: 'The most recent additions to the collection — fresh from the studio and the framer.',
+    link: '/works?sort=year-desc',
+    filter: (w) => w.year >= 2024,
+  },
+  {
+    title: 'Works on Paper',
+    desc: 'Drawings, prints, and studies — the most intimate way into an artist’s practice.',
+    link: '/works?category=Works%20on%20Paper',
+    filter: (w) => w.category === 'Works on Paper' || w.category === 'Prints',
+  },
+];
+
+const roomViews = rooms.map((r, i) => {
+  let works = all.filter(r.filter).slice(0, 4);
+  if (!works.length) works = all.slice(i * 4, i * 4 + 4);
+  return { ...r, works };
+});
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${BRAND.domain}/` },
+    { '@type': 'ListItem', position: 2, name: 'Viewing Rooms', item: `${BRAND.domain}/viewing-rooms` },
+  ],
+};
+---
+<Layout
+  title="Viewing Rooms — Curated Collections | VERSO Gallery Brooklyn"
+  description="Online viewing rooms from VERSO Gallery — curated, themed selections from the gallery's collection, including sculpture and object, Brooklyn abstraction, and new acquisitions."
+  jsonLd={jsonLd}
+>
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a> &nbsp;/&nbsp; <span>Viewing Rooms</span>
+    </nav>
+    <header style="margin-bottom:2.5rem;">
+      <p class="eyebrow">Curated online</p>
+      <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Viewing Rooms</h1>
+      <p class="lead" style="max-width:62ch;">These curated rooms are our way of editing the collection down to a single idea, medium, or moment — each one a short exhibition you can walk through from anywhere.</p>
+    </header>
+    <div id="rooms">
+      {roomViews.map((r) => (
+        <section style="border-top:1px solid var(--line);padding-block:clamp(2rem,5vw,3.5rem);">
+          <div class="section-head">
+            <div style="max-width:50ch;">
+              <h2 class="display" style="font-size:clamp(1.6rem,4vw,2.4rem);">{r.title}</h2>
+              <p class="muted" style="margin-top:.5rem;">{r.desc}</p>
+            </div>
+            <a class="link-underline" href={r.link}>Enter room →</a>
+          </div>
+          <div class="grid grid--4">
+            {r.works.map((w) => <ArtworkCard work={w} />)}
+          </div>
+        </section>
+      ))}
+    </div>
+  </main>
+</Layout>

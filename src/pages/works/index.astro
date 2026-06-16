@@ -1,52 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Works — Browse Contemporary Artworks | VERSO Gallery Brooklyn</title>
-  <meta name="description" content="Browse VERSO’s curated collection of contemporary artworks. Filter by medium, category, artist, year, and availability. Painting, sculpture, photography, prints, and works on paper." />
-  <link rel="canonical" href="https://www.versogallery.com/collection.html" />
-  <meta name="robots" content="index, follow, max-image-preview:large" />
-  <meta name="theme-color" content="#16150f" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="VERSO Gallery" />
-  <meta property="og:title" content="Browse Contemporary Artworks | VERSO Gallery" />
-  <meta property="og:description" content="Browse VERSO’s curated collection of contemporary art — filter by medium, artist, year, and availability." />
-  <meta property="og:url" content="https://www.versogallery.com/collection.html" />
-  <meta property="og:image" content="https://www.versogallery.com/images/og-cover.svg" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="css/styles.css" />
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "Works — VERSO Gallery",
-    "description": "A curated collection of contemporary artworks, each shown openly with a clear availability status.",
-    "url": "https://www.versogallery.com/collection.html",
-    "isPartOf": { "@id": "https://www.versogallery.com/#website" },
-    "about": { "@type": "Thing", "name": "Contemporary art for sale in Brooklyn" }
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.versogallery.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Works", "item": "https://www.versogallery.com/collection.html" }
-    ]
-  }
-  </script>
-</head>
-<body>
-  <header id="site-header"></header>
+---
+import Layout from '../../layouts/Layout.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
+import { getArtworks } from '../../lib/gallery';
+import { BRAND } from '../../lib/site';
 
+const artworks = await getArtworks();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Works — VERSO Gallery',
+  description: 'A curated collection of contemporary artworks.',
+  url: `${BRAND.domain}/works`,
+  isPartOf: { '@id': `${BRAND.domain}/#website` },
+  about: { '@type': 'Thing', name: 'Contemporary art in Brooklyn' },
+};
+---
+<Layout
+  title="Works — Browse Contemporary Artworks | VERSO Gallery Brooklyn"
+  description="Browse VERSO’s curated collection of contemporary artworks. Filter by medium, category, artist, year, and availability. Painting, sculpture, photography, prints, and works on paper."
+  keywords="contemporary artworks Brooklyn, browse art Brooklyn, contemporary paintings NYC, art for sale Williamsburg, VERSO Gallery works"
+  jsonLd={jsonLd}
+>
   <main class="wrap section--tight">
-    <nav aria-label="Breadcrumb" style="font-size:.78rem;color:var(--ink-soft);margin-bottom:1.2rem;">
-      <a href="index.html">Home</a> &nbsp;/&nbsp; <span>Works</span>
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a> &nbsp;/&nbsp; <span>Works</span>
     </nav>
     <header style="margin-bottom:2rem;">
       <p class="eyebrow">The collection</p>
@@ -105,10 +83,7 @@
     </div>
   </main>
 
-  <footer id="site-footer"></footer>
-
-  <script src="js/data.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/collection.js"></script>
-</body>
-</html>
+  <script id="works-data" type="application/json" set:html={JSON.stringify(artworks)}></script>
+  <InquiryModal />
+  <script>import '../../scripts/collection.ts';</script>
+</Layout>

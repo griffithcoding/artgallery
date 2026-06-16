@@ -26,7 +26,9 @@
     { href: 'exhibitions.html', label: 'Exhibitions' },
     { href: 'artists.html', label: 'Artists' },
     { href: 'collection.html', label: 'Works' },
-    { href: 'viewing-rooms.html', label: 'Viewing Rooms' },
+    { href: 'events.html', label: 'Events' },
+    { href: 'press.html', label: 'Press' },
+    { href: 'resources.html', label: 'Resources' },
     { href: 'about.html', label: 'About' },
     { href: 'visit.html', label: 'Visit' },
   ];
@@ -81,7 +83,7 @@
           <div>
             <div class="footer-brand">${BRAND.name}</div>
             <p style="color:#b7b3a9;margin-top:1rem;max-width:34ch;font-size:.9rem;">
-              An independent contemporary art gallery in ${BRAND.neighborhood}, ${BRAND.city}, with an open archive of more than 20,000 works.
+              An independent contemporary art gallery in ${BRAND.neighborhood}, ${BRAND.city}, representing emerging and mid-career artists.
             </p>
             <form class="newsletter mt-2" onsubmit="return VERSO.onNewsletter(event)">
               <input type="email" required placeholder="Email for openings & new works" aria-label="Email address" />
@@ -104,6 +106,8 @@
               <li><a href="artists.html">Artists</a></li>
               <li><a href="collection.html">Works</a></li>
               <li><a href="viewing-rooms.html">Viewing Rooms</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="resources.html">Resources</a></li>
               <li><a href="press.html">Press</a></li>
             </ul>
           </div>

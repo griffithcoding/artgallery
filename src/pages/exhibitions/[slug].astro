@@ -1,0 +1,97 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArtworkCard from '../../components/ArtworkCard.astro';
+import {
+  getExhibition,
+  getArtistById,
+  getWorksByArtist,
+  getArtworks,
+} from '../../lib/gallery';
+import type { Artist, Artwork } from '../../lib/gallery';
+import { BRAND } from '../../lib/site';
+
+const { slug } = Astro.params;
+const ex = await getExhibition(slug!);
+if (!ex) return new Response(null, { status: 404 });
+
+const artists = (
+  await Promise.all(ex.artistIds.map((id) => getArtistById(id)))
+).filter((a): a is Artist => Boolean(a));
+const names = artists.map((a) => a.name);
+
+// Works in the show — up to 3 per participating artist, falling back to a few works.
+let works: Artwork[] = [];
+for (const id of ex.artistIds) {
+  works = works.concat((await getWorksByArtist(id)).slice(0, 3));
+}
+if (!works.length) works = (await getArtworks()).slice(0, 6);
+const heroImage = works[0]?.image ?? '';
+
+const description = `${ex.title} (${ex.dates}) at VERSO Gallery, Brooklyn. ${ex.blurb}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ExhibitionEvent',
+  name: ex.title,
+  description: ex.blurb,
+  startDate: ex.dates,
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: {
+    '@type': 'Place',
+    name: 'VERSO Gallery',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '312 Wythe Avenue',
+      addressLocality: 'Brooklyn',
+      addressRegion: 'NY',
+      postalCode: '11249',
+      addressCountry: 'US',
+    },
+  },
+  organizer: { '@id': `${BRAND.domain}/#organization` },
+  performer: names.map((n) => ({ '@type': 'Person', name: n })),
+};
+---
+<Layout title={`${ex.title} — VERSO Gallery`} description={description} jsonLd={jsonLd}>
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a> / <a href="/exhibitions">Exhibitions</a> / <span>{ex.title}</span>
+    </nav>
+
+    <header style="max-width:72ch;margin-bottom:2.5rem;">
+      <span class="exhibition-status">{ex.status} · {ex.dates}</span>
+      <h1 class="display" style="font-size:clamp(2.4rem,6vw,4rem);margin:.4rem 0 .6rem;">{ex.title}</h1>
+      <p class="lead">{ex.subtitle}</p>
+      {artists.length > 0 && (
+        <p class="muted" style="margin-top:.6rem;">
+          Featuring {artists.map((a, i) => (
+            <>
+              <a class="link-underline" href={`/artists/${a.slug}`}>{a.name}</a>{i < artists.length - 1 ? ', ' : ''}
+            </>
+          ))}
+        </p>
+      )}
+    </header>
+
+    {heroImage && (
+      <div class="frame" data-ratio="landscape" style="margin-bottom:3rem;">
+        <img src={heroImage} alt={`Installation view, ${ex.title}`} />
+      </div>
+    )}
+
+    <section class="prose" style="max-width:68ch;margin-bottom:3.5rem;">
+      <p class="lead tldr-block">{ex.blurb}</p>
+      <p>The exhibition brings together recent work by {names.join(', ')}, on view at VERSO’s Wythe Avenue space and in a companion online viewing room. A printed checklist is available at the front desk and online — every work in the show can be reserved or inquired about directly from its page.</p>
+      <p>Gallery hours are Tuesday through Saturday, 11am–6pm. For a private viewing or press materials, contact <a class="link-underline" href="mailto:hello@versogallery.com">hello@versogallery.com</a>.</p>
+    </section>
+
+    {works.length > 0 && (
+      <section style="border-top:1px solid var(--line);padding-top:2.5rem;">
+        <h2 class="display" style="margin-bottom:2rem;">Works in the exhibition</h2>
+        <div class="grid grid--3">
+          {works.map((w) => <ArtworkCard work={w} />)}
+        </div>
+      </section>
+    )}
+  </main>
+</Layout>

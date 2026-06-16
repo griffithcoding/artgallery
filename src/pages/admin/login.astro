@@ -1,0 +1,53 @@
+---
+export const prerender = false;
+import '../../styles/admin.css';
+import { createSupabaseServer } from '../../lib/supabase/server';
+let error = '';
+if (Astro.request.method === 'POST') {
+  try {
+    const form = await Astro.request.formData();
+    const email = String(form.get('email') ?? '');
+    const password = String(form.get('password') ?? '');
+    const supabase = createSupabaseServer(Astro.cookies, Astro.request.headers);
+    const { data, error: e } = await supabase.auth.signInWithPassword({ email, password });
+    if (e) error = e.message;
+    else {
+      // Route by role: artists (creator/contributor) → /studio; owners → /admin.
+      const role = (data.user?.app_metadata as Record<string, unknown> | undefined)?.role;
+      const dest = role === 'creator' || role === 'contributor' ? '/studio' : '/admin';
+      return Astro.redirect(dest, 303);
+    }
+  } catch {
+    error = 'Sign-in is not configured yet. Add the Supabase environment variables.';
+  }
+}
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>VERSO portal sign in</title>
+</head>
+<body class="admin-shell login-shell">
+  <main class="login-wrap">
+    <div class="admin-card">
+      <p style="letter-spacing:.16em;text-transform:uppercase;font-size:.72rem;color:#c0492f;">VERSO</p>
+      <h1 style="font-weight:400;margin:.3rem 0 1.2rem;">Sign in</h1>
+      {error && <p class="admin-status err">{error}</p>}
+      <form method="POST">
+        <div class="admin-field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required autocomplete="username" />
+        </div>
+        <div class="admin-field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" required autocomplete="current-password" />
+        </div>
+        <button class="admin-btn" type="submit" style="width:100%;">Sign in</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

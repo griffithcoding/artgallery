@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getArtworks } from '../lib/gallery';
+import { BRAND } from '../lib/site';
+
+const works = await getArtworks();
+const visitImage = works[3]?.image ?? '';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': ['ArtGallery', 'LocalBusiness'],
+  '@id': `${BRAND.domain}/#organization`,
+  name: 'VERSO Gallery',
+  url: `${BRAND.domain}/`,
+  image: `${BRAND.domain}/images/og-cover.svg`,
+  telephone: '+1-718-555-0142',
+  email: BRAND.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '312 Wythe Avenue',
+    addressLocality: 'Brooklyn',
+    addressRegion: 'NY',
+    postalCode: '11249',
+    addressCountry: 'US',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: 40.7188, longitude: -73.961 },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '11:00',
+      closes: '18:00',
+    },
+  ],
+  hasMap: 'https://www.google.com/maps/search/?api=1&query=312+Wythe+Avenue+Brooklyn+NY+11249',
+};
+---
+<Layout
+  title="Visit — VERSO Gallery, Brooklyn"
+  description="Visit VERSO Gallery at 312 Wythe Avenue in Williamsburg, Brooklyn. Open Tuesday–Saturday, 11am–6pm. Free admission. Directions, hours, and contact details."
+  jsonLd={jsonLd}
+>
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a> &nbsp;/&nbsp; <span>Visit</span>
+    </nav>
+    <header style="margin-bottom:2.5rem;">
+      <p class="eyebrow">Williamsburg, Brooklyn</p>
+      <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Visit</h1>
+      <p class="lead tldr-block" style="max-width:58ch;">VERSO is at 312 Wythe Avenue in Williamsburg, Brooklyn. We’re open Tuesday through Saturday, 11am–6pm, and admission is always free.</p>
+    </header>
+
+    <div class="hero-grid" style="align-items:start;">
+      <div>
+        <dl class="spec-list" style="border-top:1px solid var(--line);">
+          <div><dt>Address</dt><dd>312 Wythe Avenue<br>Brooklyn, NY 11249</dd></div>
+          <div><dt>Hours</dt><dd>Tuesday–Saturday<br>11am – 6pm</dd></div>
+          <div><dt>Admission</dt><dd>Free</dd></div>
+          <div><dt>Email</dt><dd><a class="link-underline" href="mailto:hello@versogallery.com">hello@versogallery.com</a></dd></div>
+          <div><dt>Phone</dt><dd><a class="link-underline" href="tel:+17185550142">+1 (718) 555-0142</a></dd></div>
+        </dl>
+        <h3 class="display mt-3" style="font-size:1.4rem;margin-bottom:.6rem;">Getting here</h3>
+        <p class="prose">By subway: L to Bedford Avenue, or J/M/Z to Marcy Avenue, both a short walk. The NYC Ferry (East River route) stops at North Williamsburg, two blocks away. Metered street parking is available along Wythe and Kent Avenues.</p>
+        <a class="btn mt-2" href="https://www.google.com/maps/search/?api=1&query=312+Wythe+Avenue+Brooklyn+NY+11249" target="_blank" rel="noopener">Open in Maps →</a>
+      </div>
+      <div class="frame" data-ratio="portrait">
+        <img src={visitImage} alt="VERSO Gallery interior, Williamsburg" />
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-head"><h2 class="display">Private viewings</h2></div>
+      <p class="prose">Prefer to see specific works in person, or browse outside public hours? We arrange private and after-hours viewings for collectors and advisors. Tell us which artists or works you’d like to see and we’ll pull them from the curated collection. <a class="link-underline" href="/contact">Request a viewing →</a></p>
+    </section>
+  </main>
+</Layout>

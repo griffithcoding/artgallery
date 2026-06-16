@@ -1,0 +1,97 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArtworkCard from '../../components/ArtworkCard.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
+import { getArtwork, getWorksByArtist, getArtworks } from '../../lib/gallery';
+import { BRAND } from '../../lib/site';
+
+const { slug } = Astro.params;
+const work = await getArtwork(slug!);
+if (!work) return new Response(null, { status: 404 });
+
+let more = (await getWorksByArtist(work.artistId)).filter((x) => x.id !== work.id).slice(0, 4);
+if (!more.length) more = (await getArtworks()).filter((x) => x.id !== work.id).slice(0, 4);
+
+const dimParts = work.dimensions.split('×');
+const height = dimParts[0] ? dimParts[0].trim() : undefined;
+const width = dimParts[1] ? dimParts[1].trim() : undefined;
+
+const offer =
+  work.availability === 'Sold'
+    ? {
+        '@type': 'Offer',
+        availability: 'https://schema.org/SoldOut',
+        seller: { '@id': `${BRAND.domain}/#organization` },
+      }
+    : {
+        '@type': 'Offer',
+        availability: 'https://schema.org/InStock',
+        seller: { '@id': `${BRAND.domain}/#organization` },
+      };
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VisualArtwork',
+  name: work.title,
+  image: `${BRAND.domain}/${work.image.startsWith('data:') ? 'images/og-cover.svg' : work.image}`,
+  dateCreated: String(work.year),
+  artform: work.category,
+  artMedium: work.medium,
+  creator: {
+    '@type': 'Person',
+    name: work.artistName,
+    '@id': `${BRAND.domain}/artists/${work.artistSlug}#person`,
+  },
+  ...(width ? { width } : {}),
+  ...(height ? { height } : {}),
+  offers: offer,
+  isPartOf: { '@id': `${BRAND.domain}/#website` },
+};
+---
+<Layout
+  title={`${work.title} (${work.year}) — ${work.artistName} | VERSO Gallery`}
+  description={`${work.title} by ${work.artistName}, ${work.year}. ${work.medium}, ${work.dimensions}. ${work.availability} at VERSO Gallery, Brooklyn.`}
+  jsonLd={jsonLd}
+>
+  <main class="wrap section--tight" id="artworkMain">
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a> / <a href="/works">Works</a> / <a href={`/artists/${work.artistSlug}`}>{work.artistName}</a> / <span>{work.title}</span>
+    </nav>
+
+    <div class="artwork-detail" id="detail">
+      <div class="artwork-stage">
+        <span class="frame" data-ratio={work.ratio} style="width:100%;max-width:560px;">
+          <img src={work.image} alt={`${work.title} (${work.year}), ${work.medium}, by ${work.artistName}`} />
+        </span>
+      </div>
+      <div class="artwork-info">
+        <a class="link-underline" href={`/artists/${work.artistSlug}`} style="border:none;padding:0;color:var(--ink-soft);">{work.artistName}</a>
+        <h1 class="art-title" style="margin:.4rem 0 1.4rem;">{work.title}, <span style="font-style:normal;">{work.year}</span></h1>
+        <dl class="spec-list">
+          <div><dt>Medium</dt><dd>{work.medium}</dd></div>
+          <div><dt>Category</dt><dd>{work.category}</dd></div>
+          <div><dt>Dimensions</dt><dd>{work.dimensions}</dd></div>
+          <div><dt>Year</dt><dd>{work.year}</dd></div>
+          <div><dt>Availability</dt><dd>{work.availability}</dd></div>
+        </dl>
+        {work.availability === 'Sold' ? (
+          <button class="btn" disabled style="opacity:.5;width:100%;justify-content:center;">Sold</button>
+        ) : (
+          <button class="btn btn--solid" style="width:100%;justify-content:center;" onclick={`openInquiry('${work.title} — ${work.artistName}')`}>Inquire about this work</button>
+        )}
+        <p class="muted" style="font-size:.8rem;margin-top:1rem;">Questions about condition, framing, shipping, or studio visits? Email <a class="link-underline" href="mailto:hello@versogallery.com">hello@versogallery.com</a>.</p>
+      </div>
+    </div>
+
+    <section class="section" id="moreSection" style="border-top:1px solid var(--line);margin-top:4rem;">
+      <div class="section-head">
+        <h2 class="display">More from <span id="moreArtist">{work.artistName}</span></h2>
+        <a class="link-underline" id="moreLink" href={`/artists/${work.artistSlug}`}>View artist →</a>
+      </div>
+      <div class="grid grid--4" id="moreWorks">
+        {more.map((w) => <ArtworkCard work={w} />)}
+      </div>
+    </section>
+  </main>
+  <InquiryModal />
+</Layout>

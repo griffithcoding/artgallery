@@ -1,0 +1,55 @@
+---
+import { BRAND } from '../lib/site';
+const year = new Date().getFullYear();
+const tel = BRAND.phone.replace(/[^+\d]/g, '');
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">{BRAND.name}</div>
+        <p style="color:#b7b3a9;margin-top:1rem;max-width:34ch;font-size:.9rem;">
+          An independent contemporary art gallery in {BRAND.neighborhood}, {BRAND.city}, representing emerging and mid-career artists.
+        </p>
+        <form class="newsletter mt-2">
+          <input type="email" required placeholder="Email for openings & new works" aria-label="Email address" />
+          <button type="submit">Join</button>
+        </form>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li>{BRAND.addressLine}</li>
+          <li>{BRAND.addressCity}</li>
+          <li>{BRAND.hours}</li>
+          <li><a href="/visit">Directions →</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="/exhibitions">Exhibitions</a></li>
+          <li><a href="/artists">Artists</a></li>
+          <li><a href="/works">Works</a></li>
+          <li><a href="/viewing-rooms">Viewing Rooms</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/resources">Resources</a></li>
+          <li><a href="/press">Press</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <ul>
+          <li><a href={`mailto:${BRAND.email}`}>{BRAND.email}</a></li>
+          <li><a href={`tel:${tel}`}>{BRAND.phone}</a></li>
+          <li><a href={BRAND.instagram} rel="noopener" target="_blank">Instagram</a></li>
+          <li><a href="/contact">Contact & advisory</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} {BRAND.name}. All artworks © the respective artists.</span>
+      <span>{BRAND.addressLine}, {BRAND.addressCity}</span>
+    </div>
+  </div>
+</footer>

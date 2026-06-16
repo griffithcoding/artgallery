@@ -1,0 +1,66 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { BRAND } from '../lib/site';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact VERSO Gallery',
+  url: `${BRAND.domain}/contact`,
+  isPartOf: { '@id': `${BRAND.domain}/#website` },
+};
+---
+<Layout
+  title="Contact — VERSO Gallery, Brooklyn"
+  description="Contact VERSO Gallery in Brooklyn for sales, private viewings, art advisory, consignment, and press. We typically reply within one business day."
+  jsonLd={jsonLd}
+>
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a> &nbsp;/&nbsp; <span>Contact</span>
+    </nav>
+
+    <div class="hero-grid" style="align-items:start;">
+      <div>
+        <p class="eyebrow">Get in touch</p>
+        <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 1rem;">Contact &amp; advisory</h1>
+        <p class="prose">Whether you’re asking about a specific work, starting a collection, consigning, or writing about the gallery, we’d love to hear from you. A representative typically replies within one business day.</p>
+        <dl class="spec-list mt-2" style="border-top:1px solid var(--line);">
+          <div><dt>Sales & viewings</dt><dd><a class="link-underline" href="mailto:hello@versogallery.com">hello@versogallery.com</a></dd></div>
+          <div><dt>Press</dt><dd><a class="link-underline" href="mailto:press@versogallery.com">press@versogallery.com</a></dd></div>
+          <div><dt>Phone</dt><dd><a class="link-underline" href="tel:+17185550142">+1 (718) 555-0142</a></dd></div>
+          <div><dt>Visit</dt><dd>312 Wythe Avenue, Brooklyn</dd></div>
+        </dl>
+      </div>
+
+      <div>
+        <form id="contactForm" style="border:1px solid var(--line);padding:clamp(1.5rem,4vw,2.5rem);background:var(--paper-pure);">
+          <div class="form-grid">
+            <div class="field"><label>Name</label><input name="name" required /></div>
+            <div class="field"><label>Email</label><input type="email" name="email" required /></div>
+            <div class="field full"><label>Reason for contact</label>
+              <select name="topic">
+                <option>A specific artwork</option>
+                <option>Building a collection / advisory</option>
+                <option>Private or after-hours viewing</option>
+                <option>Consignment</option>
+                <option>Press / media</option>
+                <option>Something else</option>
+              </select>
+            </div>
+            <div class="field full"><label>Message</label><textarea name="message" rows="5" placeholder="Tell us what you’re looking for…"></textarea></div>
+          </div>
+          <button class="btn btn--solid mt-2" type="submit" style="width:100%;justify-content:center;">Send message</button>
+          <p class="muted" style="font-size:.74rem;margin-top:1rem;">By submitting you agree to be contacted by VERSO Gallery. We never share your details.</p>
+        </form>
+      </div>
+    </div>
+  </main>
+  <script>
+    document.getElementById('contactForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      (e.currentTarget as HTMLElement).innerHTML =
+        '<p class="lead">Thank you. We\'ll be in touch shortly.</p>';
+    });
+  </script>
+</Layout>

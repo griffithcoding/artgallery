@@ -1,0 +1,93 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getExhibitions, getFairs, getWorksByArtist, getArtworks } from '../../lib/gallery';
+import type { Exhibition } from '../../lib/gallery';
+import { BRAND } from '../../lib/site';
+
+const exhibitions = await getExhibitions();
+const fairs = await getFairs();
+const allWorks = await getArtworks();
+
+// Group exhibitions by status, in display order.
+const groups: { status: Exhibition['status']; label: string; rows: Exhibition[] }[] = [
+  { status: 'On View', label: 'Current', rows: exhibitions.filter((e) => e.status === 'On View') },
+  { status: 'Upcoming', label: 'Upcoming', rows: exhibitions.filter((e) => e.status === 'Upcoming') },
+  { status: 'Past', label: 'Past', rows: exhibitions.filter((e) => e.status === 'Past') },
+];
+
+// Resolve a lead image per exhibition (first work by the first artist, falling back to first work).
+async function leadImage(e: Exhibition): Promise<string> {
+  const works = await getWorksByArtist(e.artistIds[0]);
+  return (works[0] ?? allWorks[0]).image;
+}
+const rowImages = new Map<string, string>();
+await Promise.all(
+  exhibitions.map(async (e) => {
+    rowImages.set(e.id, await leadImage(e));
+  })
+);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${BRAND.domain}/` },
+    { '@type': 'ListItem', position: 2, name: 'Exhibitions', item: `${BRAND.domain}/exhibitions` },
+  ],
+};
+---
+<Layout
+  title="Exhibitions — VERSO Gallery Brooklyn"
+  description="Current, upcoming, and past exhibitions at VERSO Gallery in Williamsburg, Brooklyn. A new contemporary art exhibition opens roughly every six weeks."
+  keywords="art exhibitions Brooklyn, contemporary art shows Williamsburg, VERSO Gallery exhibitions, art fairs Brooklyn"
+  jsonLd={jsonLd}
+>
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a> &nbsp;/&nbsp; <span>Exhibitions</span>
+    </nav>
+    <header style="margin-bottom:2rem;">
+      <p class="eyebrow">The program</p>
+      <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Exhibitions</h1>
+      <p class="lead" style="max-width:60ch;">A new exhibition opens roughly every six weeks, alongside rotating online viewing rooms and art-fair presentations.</p>
+    </header>
+
+    {groups.map((g) => g.rows.length > 0 && (
+      <section class="section--tight" style="padding-top:0;">
+        <h2 class="eyebrow" style="margin-bottom:1.4rem;">{g.label}</h2>
+        <div>
+          {g.rows.map((e) => (
+            <a class="exhibition-row reveal" href={`/exhibitions/${e.slug}`}>
+              <span class="frame frame--hover" data-ratio="landscape"><img src={rowImages.get(e.id)} alt={e.title} /></span>
+              <div>
+                <span class="exhibition-status">{e.status} · {e.dates}</span>
+                <h3 class="display" style="font-size:clamp(1.6rem,4vw,2.6rem);">{e.title}</h3>
+                <p class="muted" style="margin:.4rem 0 1rem;">{e.subtitle}</p>
+                <p class="prose">{e.blurb}</p>
+                <span class="link-underline" style="display:inline-block;margin-top:1.2rem;">View exhibition →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    {fairs.length > 0 && (
+      <section class="section--tight" style="border-top:1px solid var(--line);">
+        <h2 class="eyebrow" style="margin-bottom:1.4rem;">Art Fairs</h2>
+        <div>
+          {fairs.map((f) => (
+            <div class="press-item reveal">
+              <div><span class="exhibition-status">{f.status}</span></div>
+              <div>
+                <span class="outlet">{f.name}</span> — {f.city}
+                <div class="muted" style="font-size:.85rem;">{f.booth}</div>
+              </div>
+              <div class="date">{f.dates}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+</Layout>

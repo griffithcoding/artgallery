@@ -164,11 +164,11 @@
   /* ---- Press ---- */
   const press = [
     { outlet: 'Artforum', headline: '“VERSO’s Soft Architecture finds tenderness in structure”', date: 'June 2026', kind: 'Review' },
-    { outlet: 'The New York Times', headline: 'A Williamsburg gallery bets on a 20,000-work open archive', date: 'May 2026', kind: 'Feature' },
+    { outlet: 'The New York Times', headline: 'A Williamsburg gallery puts its whole program in the open', date: 'May 2026', kind: 'Feature' },
     { outlet: 'Hyperallergic', headline: 'The best gallery shows in Brooklyn this month', date: 'May 2026', kind: 'Listing' },
     { outlet: 'Cultured', headline: '15 emerging artists to watch, according to their dealers', date: 'Apr 2026', kind: 'Feature' },
-    { outlet: 'ARTnews', headline: 'How small galleries are using open archives to court collectors', date: 'Mar 2026', kind: 'Feature' },
-    { outlet: 'Brooklyn Magazine', headline: 'Inside VERSO, the gallery turning its back room into a public archive', date: 'Feb 2026', kind: 'Profile' },
+    { outlet: 'ARTnews', headline: 'How small galleries are using open access to court collectors', date: 'Mar 2026', kind: 'Feature' },
+    { outlet: 'Brooklyn Magazine', headline: 'Inside VERSO, the gallery that put its back room in the open', date: 'Feb 2026', kind: 'Profile' },
   ];
 
   /* ---- Public API ---- */

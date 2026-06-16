@@ -1,0 +1,12 @@
+---
+import type { Artist } from '../lib/gallery';
+interface Props { artist: Artist; image: string; }
+const { artist, image } = Astro.props;
+---
+<a class="artist-card reveal is-visible" href={`/artists/${artist.slug}`}>
+  <span class="frame frame--hover" data-ratio="portrait">
+    <img src={image} alt={`Work by ${artist.name}`} loading="lazy" />
+  </span>
+  <h3 class="display">{artist.name}</h3>
+  <p>{artist.birth} · {artist.discipline}</p>
+</a>

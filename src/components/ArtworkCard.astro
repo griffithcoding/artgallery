@@ -1,0 +1,14 @@
+---
+import type { Artwork } from '../lib/gallery';
+interface Props { work: Artwork; }
+const { work } = Astro.props;
+---
+<a class="art-card reveal is-visible" href={`/works/${work.slug}`}>
+  <span class="frame frame--hover" data-ratio={work.ratio}>
+    <img src={work.image} alt={`${work.title} (${work.year}), ${work.medium}, by ${work.artistName}`} loading="lazy" width="700" height="700" />
+  </span>
+  <span class="artist-name">{work.artistName}</span>
+  <span class="art-title">{work.title}</span><span class="art-meta">, {work.year}</span>
+  <div class="art-meta">{work.medium}</div>
+  <div class="art-status">{work.availability}</div>
+</a>

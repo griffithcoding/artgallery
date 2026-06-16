@@ -1,0 +1,33 @@
+---
+import { BRAND, NAV } from '../lib/site';
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<header class="site-header">
+  <div class="wrap">
+    <nav class="nav" id="nav">
+      <a class="brand" href="/" aria-label={`${BRAND.name} home`}>
+        {BRAND.name}<small>{BRAND.city}</small>
+      </a>
+      <div class="nav-links">
+        {NAV.map((n) => (
+          <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+        ))}
+      </div>
+      <div class="nav-actions">
+        <a class="link-underline" href="/contact">Inquire</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+<script>
+  const toggle = document.getElementById('navToggle');
+  const nav = document.getElementById('nav');
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(!!open));
+  });
+</script>

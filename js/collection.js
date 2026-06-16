@@ -180,7 +180,6 @@
     const shownTo = Math.min(start + PER_PAGE, total);
     els.count.innerHTML = total
       ? `Showing <strong>${shownFrom}–${shownTo}</strong> of <strong>${total.toLocaleString()}</strong> works`
-        + ` <span style="opacity:.6;">· ${D.totalInventory.toLocaleString()} in full archive</span>`
       : '';
     renderChips();
     renderPagination(total);

@@ -1,0 +1,211 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArtworkCard from '../components/ArtworkCard.astro';
+import { getArtworks, getExhibitions, getWorksByArtist } from '../lib/gallery';
+import { BRAND } from '../lib/site';
+
+const allWorks = await getArtworks();
+const works = allWorks.slice(0, 8);
+const exhibitions = await getExhibitions();
+const current = exhibitions.find((e) => e.status === 'On View') ?? exhibitions[0];
+const heroWork = (await getWorksByArtist(current.artistIds[0]))[0] ?? allWorks[0];
+
+const mapsSearch = 'https://www.google.com/maps/search/?api=1&query=312+Wythe+Avenue+Brooklyn+NY+11249';
+const mapsDir = 'https://www.google.com/maps/dir/?api=1&destination=312+Wythe+Avenue+Brooklyn+NY+11249';
+
+// Visible FAQ — mirrored 1:1 into FAQPage schema below (local + answer-engine intent).
+const faqs = [
+  {
+    q: 'Where is VERSO Gallery located?',
+    a: 'VERSO is at 312 Wythe Avenue in Williamsburg, Brooklyn, NY 11249 — about two blocks from the Bedford Avenue (L) subway station and near the North Williamsburg NYC Ferry.',
+  },
+  {
+    q: 'What are VERSO’s opening hours?',
+    a: 'The gallery is open Tuesday through Saturday, 11am to 6pm, and closed Sunday and Monday.',
+  },
+  {
+    q: 'Is admission to VERSO free?',
+    a: 'Yes. VERSO is free and open to the public — no ticket or appointment needed to walk in during opening hours.',
+  },
+  {
+    q: 'What kind of art does VERSO show?',
+    a: 'VERSO shows contemporary art by emerging and mid-career artists — painting, sculpture, photography, prints, and works on paper — with a new exhibition roughly every six weeks.',
+  },
+  {
+    q: 'Can I buy art from VERSO?',
+    a: 'Yes. Every available work has its own page with a clear status (Available, Inquire, or Sold) and an inquiry button. A gallery representative typically replies within one business day.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['ArtGallery', 'LocalBusiness'],
+      '@id': `${BRAND.domain}/#organization`,
+      name: 'VERSO Gallery',
+      alternateName: 'VERSO',
+      url: `${BRAND.domain}/`,
+      logo: `${BRAND.domain}/images/og-cover.svg`,
+      image: `${BRAND.domain}/images/og-cover.svg`,
+      description:
+        'Free contemporary art gallery in Williamsburg, Brooklyn, showing original work by emerging and mid-career artists. Current exhibitions and works available to view and acquire.',
+      slogan: 'Contemporary art, in the open.',
+      email: BRAND.email,
+      telephone: '+1-718-555-0142',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: '312 Wythe Avenue',
+        addressLocality: 'Brooklyn',
+        addressRegion: 'NY',
+        postalCode: '11249',
+        addressCountry: 'US',
+      },
+      geo: { '@type': 'GeoCoordinates', latitude: 40.7188, longitude: -73.961 },
+      hasMap: mapsSearch,
+      areaServed: ['Williamsburg', 'Greenpoint', 'Brooklyn', 'Manhattan', 'New York City'],
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+          opens: '11:00',
+          closes: '18:00',
+        },
+      ],
+      isAccessibleForFree: true,
+      publicAccess: true,
+      sameAs: ['https://www.instagram.com/', 'https://www.artsy.net/'],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${BRAND.domain}/#website`,
+      url: `${BRAND.domain}/`,
+      name: 'VERSO Gallery',
+      publisher: { '@id': `${BRAND.domain}/#organization` },
+      inLanguage: 'en-US',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: { '@type': 'EntryPoint', urlTemplate: `${BRAND.domain}/works?q={search_term_string}` },
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${BRAND.domain}/#faq`,
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+<Layout
+  title="Contemporary Art Gallery in Williamsburg, Brooklyn | VERSO"
+  description="VERSO is a free contemporary art gallery in Williamsburg, Brooklyn — 312 Wythe Ave, open Tue–Sat 11–6. See current exhibitions and original contemporary art by emerging and mid-career artists."
+  keywords="contemporary art gallery Brooklyn, art gallery Williamsburg, art galleries Brooklyn NYC, contemporary art Brooklyn, free art gallery Brooklyn, art exhibitions Williamsburg, emerging artists Brooklyn, art gallery near me Brooklyn"
+  jsonLd={jsonLd}
+>
+  <main>
+    <!-- Hero — local, plain-language, answer-ready -->
+    <section class="hero wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow reveal"><span class="dot" aria-hidden="true"></span>Now on view · Williamsburg, Brooklyn</p>
+          <h1 class="display reveal">A contemporary art gallery in Williamsburg, Brooklyn.</h1>
+          <p class="lead reveal tldr-block">VERSO is a free contemporary art gallery at 312 Wythe Avenue in Williamsburg, Brooklyn. Walk in Tuesday–Saturday to see new exhibitions and original work by emerging and mid-career artists — or browse the full collection online and inquire about any piece.</p>
+          <dl class="hero-meta reveal">
+            <div><dt>Now on view</dt><dd>{current.title}</dd></div>
+            <div><dt>Hours</dt><dd>Tue–Sat, 11am–6pm · Free</dd></div>
+            <div><dt>Address</dt><dd>312 Wythe Ave, Brooklyn</dd></div>
+          </dl>
+          <div class="flex gap-1 reveal" style="flex-wrap:wrap;">
+            <a class="btn btn--solid" href="/visit">Plan your visit</a>
+            <a class="btn" href="/works">Browse works</a>
+          </div>
+        </div>
+        <div class="reveal">
+          <a href={`/exhibitions/${current.slug}`} class="frame frame--hover" data-ratio="portrait" aria-label={`Current exhibition: ${current.title}`}>
+            <img src={heroWork.image} alt={`Contemporary artwork from the exhibition ${current.title} at VERSO Gallery, Williamsburg, Brooklyn`} width="600" height="800" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Selected works -->
+    <section class="section wrap">
+      <div class="section-head">
+        <h2 class="display reveal">Contemporary art, available now</h2>
+        <a class="link-underline reveal" href="/works">View all works →</a>
+      </div>
+      <div class="grid grid--4">
+        {works.map((w) => <ArtworkCard work={w} />)}
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Visit / local NAP block -->
+    <section class="section wrap">
+      <div class="hero-grid">
+        <div class="reveal">
+          <p class="eyebrow">Visit the gallery</p>
+          <h2 class="display" style="margin:.5rem 0 1.2rem;">See it in person on Wythe Avenue.</h2>
+          <p class="prose">VERSO is in the heart of Williamsburg, Brooklyn — one of New York City’s best neighborhoods for seeing contemporary art. Admission is free and everyone’s welcome; no appointment needed.</p>
+          <address class="visit-nap">
+            <strong>VERSO Gallery</strong><br />
+            312 Wythe Avenue, Brooklyn, NY 11249<br />
+            Tuesday–Saturday, 11am–6pm · Free admission<br />
+            <a href="tel:+17185550142">+1 (718) 555-0142</a> · <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>
+          </address>
+          <p class="muted" style="font-size:.9rem;margin-top:1rem;">Getting here: 2 blocks from the Bedford Avenue (L) station; near the North Williamsburg NYC Ferry; metered parking on Wythe &amp; Kent.</p>
+          <div class="flex gap-1 mt-2" style="flex-wrap:wrap;">
+            <a class="btn btn--solid" href={mapsDir} rel="noopener" target="_blank">Get directions</a>
+            <a class="btn" href="/visit">More visit info</a>
+          </div>
+        </div>
+        <div class="reveal">
+          <a href="/exhibitions" class="frame frame--hover" data-ratio="landscape" aria-label="Exhibitions at VERSO Gallery">
+            <img src={allWorks[12]?.image} alt="Inside VERSO Gallery, a contemporary art gallery in Williamsburg, Brooklyn" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- FAQ — local + answer-engine intent (mirrors FAQPage schema) -->
+    <section class="section wrap">
+      <div class="section-head"><h2 class="display reveal">Visiting VERSO — quick answers</h2></div>
+      <div class="faq-list">
+        {faqs.map((f, i) => (
+          <details class="faq-item reveal" open={i === 0}>
+            <summary>{f.q}</summary>
+            <p class="muted">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Newsletter -->
+    <section class="section--tight wrap center">
+      <p class="eyebrow reveal">Stay in the loop</p>
+      <h2 class="display reveal" style="max-width:20ch;margin:.6rem auto 1.4rem;">New exhibitions and openings, first.</h2>
+      <form class="newsletter reveal" style="margin-inline:auto;border-color:var(--line);">
+        <input type="email" required placeholder="Your email" aria-label="Email address" style="color:var(--ink);" />
+        <button type="submit" style="color:var(--ink);">Join</button>
+      </form>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .visit-nap { font-style: normal; line-height: 1.85; font-size: 0.95rem; margin: 1.2rem 0; color: var(--ink); }
+  .visit-nap a { border-bottom: 1px solid var(--line); }
+  .visit-nap a:hover { border-color: var(--ink); }
+</style>

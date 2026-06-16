@@ -1,0 +1,46 @@
+---
+// Public inquiry modal. Ported from js/main.js ensureModal/openInquiry.
+// Exposes a global openInquiry(title?) used by inquire buttons and event RSVPs.
+// The real POST to /api/inquire is added by the Inquiry-inbox plan; until then
+// it shows a thank-you, so this is safe to ship now.
+---
+<div
+  id="inquireModal"
+  style="position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;background:rgba(20,18,12,.55);padding:1.5rem;"
+>
+  <div style="background:var(--paper);max-width:520px;width:100%;padding:clamp(1.5rem,4vw,3rem);position:relative;">
+    <button id="inqClose" aria-label="Close" style="position:absolute;top:1rem;right:1.2rem;background:none;border:none;font-size:1.5rem;">×</button>
+    <p class="eyebrow">Inquire</p>
+    <h3 class="display" style="margin:.4rem 0 .3rem;" id="inqTitle">Request information</h3>
+    <p class="muted" id="inqSub" style="font-size:.9rem;margin-bottom:1.4rem;"></p>
+    <form id="inquireForm">
+      <div class="form-grid">
+        <div class="field"><label>Name</label><input name="name" required /></div>
+        <div class="field"><label>Email</label><input type="email" name="email" required /></div>
+        <div class="field full"><label>Message</label><textarea name="message" rows="3" placeholder="I'd like to learn more about this work, including availability."></textarea></div>
+      </div>
+      <button class="btn btn--solid mt-2" type="submit" style="width:100%;justify-content:center;">Send inquiry</button>
+      <p class="muted" style="font-size:.74rem;margin-top:1rem;">A gallery representative typically replies within one business day.</p>
+    </form>
+  </div>
+</div>
+<script>
+  const modal = document.getElementById('inquireModal');
+  (window as any).openInquiry = (title?: string) => {
+    if (!modal) return;
+    const sub = modal.querySelector('#inqSub') as HTMLElement | null;
+    if (sub) sub.textContent = title ? 'Regarding: ' + title : 'Tell us what you are looking for.';
+    (modal as HTMLElement).style.display = 'flex';
+  };
+  modal?.querySelector('#inqClose')?.addEventListener('click', () => {
+    (modal as HTMLElement).style.display = 'none';
+  });
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) (modal as HTMLElement).style.display = 'none';
+  });
+  modal?.querySelector('#inquireForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    (e.currentTarget as HTMLElement).innerHTML =
+      '<p class="lead" style="font-size:1.2rem;">Thank you. Your inquiry has been received — we’ll be in touch shortly.</p>';
+  });
+</script>
