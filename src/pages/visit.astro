@@ -1,10 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getArtworks } from '../lib/gallery';
 import { BRAND } from '../lib/site';
 
-const works = await getArtworks();
-const visitImage = works[3]?.image ?? '';
+// Direct Google Maps embed endpoint (skips the ?output=embed 301 redirect, which
+// carries X-Frame-Options: SAMEORIGIN and gets blocked inside an iframe).
+const mapEmbed = 'https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1s65-B+Pearl+Street,+Brooklyn,+NY+11201!6i15';
+const mapLink = 'https://www.google.com/maps/search/?api=1&query=65-B+Pearl+Street+Brooklyn+NY+11201';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -32,7 +33,7 @@ const jsonLd = {
       closes: '18:00',
     },
   ],
-  hasMap: 'https://www.google.com/maps/search/?api=1&query=65-B+Pearl+Street+Brooklyn+NY+11201',
+  hasMap: mapLink,
 };
 ---
 <Layout
@@ -53,7 +54,7 @@ const jsonLd = {
     <div class="hero-grid" style="align-items:start;">
       <div>
         <dl class="spec-list" style="border-top:1px solid var(--line);">
-          <div><dt>Address</dt><dd>65-B Pearl Street<br>Brooklyn, NY 11201</dd></div>
+          <div><dt>Address</dt><dd>65-B Pearl Street<br>DUMBO, Brooklyn, NY 11201</dd></div>
           <div><dt>Hours</dt><dd>Tuesday–Saturday, 1–6pm<br>Sun–Mon by appointment</dd></div>
           <div><dt>Admission</dt><dd>Free</dd></div>
           <div><dt>Email</dt><dd><a class="link-underline" href="mailto:hello@versogallery.com">hello@versogallery.com</a></dd></div>
@@ -61,10 +62,15 @@ const jsonLd = {
         </dl>
         <h3 class="display mt-3" style="font-size:1.4rem;margin-bottom:.6rem;">Getting here</h3>
         <p class="prose">By subway: F to York Street, or A/C to High Street, both a short walk. The NYC Ferry stops at the DUMBO/Fulton Ferry landing nearby. Metered street parking is available on the surrounding streets.</p>
-        <a class="btn mt-2" href="https://www.google.com/maps/search/?api=1&query=65-B+Pearl+Street+Brooklyn+NY+11201" target="_blank" rel="noopener">Open in Maps →</a>
+        <a class="btn mt-2" href={mapLink} target="_blank" rel="noopener">Open in Maps →</a>
       </div>
-      <div class="frame" data-ratio="portrait">
-        <img src={visitImage} alt="Mazlish + Wright Contemporary interior, DUMBO" />
+      <div class="visit-map">
+        <iframe
+          title="Map to Mazlish + Wright Contemporary — 65-B Pearl Street, DUMBO, Brooklyn"
+          src={mapEmbed}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
       </div>
     </div>
 
@@ -74,3 +80,23 @@ const jsonLd = {
     </section>
   </main>
 </Layout>
+
+<style>
+  .visit-map {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    background: var(--line-soft, #f0f0f0);
+  }
+  .visit-map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    filter: grayscale(0.15);
+  }
+  @media (max-width: 900px) {
+    .visit-map { aspect-ratio: 4 / 3; }
+  }
+</style>

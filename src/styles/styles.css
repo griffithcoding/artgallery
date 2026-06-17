@@ -105,7 +105,7 @@ h3.display { font-size: clamp(1.25rem, 2.5vw, 1.6rem); }
   position: sticky; top: 0; z-index: 100;
   background: color-mix(in srgb, var(--paper) 88%, transparent);
   backdrop-filter: saturate(140%) blur(10px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 2px solid #1b2a4a;
 }
 .nav {
   display: flex; align-items: center; justify-content: space-between;
