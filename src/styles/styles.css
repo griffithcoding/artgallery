@@ -86,7 +86,7 @@ h3.display { font-size: clamp(1.25rem, 2.5vw, 1.6rem); }
   display: inline-flex; align-items: center; gap: 0.6em;
   font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;
   padding: 0.95em 1.8em; border: 1px solid var(--ink); color: var(--ink);
-  background: transparent; border-radius: 6px;
+  background: transparent; border-radius: 999px;
   transition: background .4s var(--ease), color .4s var(--ease);
 }
 .btn:hover { background: var(--ink); color: var(--paper); }
