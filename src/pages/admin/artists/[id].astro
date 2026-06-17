@@ -2,9 +2,13 @@
 export const prerender = false;
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { createSupabaseAdmin } from '../../../lib/supabase/server';
+import { getLinkedCreatorEmail } from '../../../lib/creator';
 const { id } = Astro.params;
 const { data: a } = await createSupabaseAdmin().from('artists').select('*').eq('id', id).maybeSingle();
 if (!a) return Astro.redirect('/admin/artists', 303);
+const currentCreator = await getLinkedCreatorEmail(a.id);
+const creatorStatus = Astro.url.searchParams.get('creator');
+const creatorError = Astro.url.searchParams.get('creator_error');
 ---
 <AdminLayout title={`Edit ${a.name}`}>
   <h1 style="font-weight:400;">Edit artist</h1>
@@ -22,5 +26,32 @@ if (!a) return Astro.redirect('/admin/artists', 303);
     </div>
     <button class="admin-btn" type="submit">Save changes</button>
   </form>
+
+  <section class="admin-card" style="max-width:640px;margin-top:1.5rem;">
+    <h2 style="font-weight:500;font-size:1.1rem;margin:0 0 .3rem;">Creator access</h2>
+    <p style="color:#6b6860;font-size:.88rem;margin:0 0 1rem;">Give this artist their own login to manage this page and their works from the Studio.</p>
+    {creatorStatus === 'linked' && <p class="admin-status" style="color:#5b7a4f;">Creator linked.</p>}
+    {creatorStatus === 'unlinked' && <p class="admin-status" style="color:#6b6860;">Creator unlinked.</p>}
+    {creatorError && <p class="admin-status err">{creatorError}</p>}
+    {currentCreator
+      ? <p style="margin:0 0 1rem;">Current creator: <strong>{currentCreator}</strong></p>
+      : <p style="margin:0 0 1rem;color:#6b6860;">No creator linked yet.</p>}
+    <form method="POST" action="/admin/artists/creator">
+      <input type="hidden" name="artist_id" value={a.id} />
+      <input type="hidden" name="action" value="link" />
+      <div class="admin-field"><label>Creator email</label><input name="email" type="email" value={currentCreator ?? ''} required /></div>
+      <div class="admin-field"><label>Password {currentCreator ? '(leave blank to keep current)' : '(set one for a new account)'}</label><input name="password" type="password" autocomplete="new-password" /></div>
+      <button class="admin-btn" type="submit">{currentCreator ? 'Update creator' : 'Link creator'}</button>
+    </form>
+    {currentCreator && (
+      <form method="POST" action="/admin/artists/creator" style="margin-top:.6rem;" onsubmit="return confirm('Unlink this creator from the artist?')">
+        <input type="hidden" name="artist_id" value={a.id} />
+        <input type="hidden" name="action" value="unlink" />
+        <input type="hidden" name="email" value={currentCreator} />
+        <button class="admin-btn danger" type="submit">Unlink creator</button>
+      </form>
+    )}
+  </section>
+
   <script>import '../../../scripts/admin-upload.ts';</script>
 </AdminLayout>
