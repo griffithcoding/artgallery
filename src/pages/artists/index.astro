@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import ArtistCard from '../../components/ArtistCard.astro';
 import { getArtists, getWorksByArtist, artSVG } from '../../lib/gallery';
 import { BRAND } from '../../lib/site';
 
@@ -9,11 +8,9 @@ const cards = await Promise.all(
   allArtists.map(async (a) => {
     const works = await getWorksByArtist(a.id);
     const image = works[0]?.image ?? artSVG(a.id, 'portrait');
-    const letter = a.name.split(' ').pop()![0].toUpperCase();
-    return { artist: a, image, letter };
+    return { artist: a, image };
   })
 );
-const letters = [...new Set(cards.map((c) => c.letter))].sort();
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -33,7 +30,7 @@ const jsonLd = {
     <nav aria-label="Breadcrumb" class="breadcrumb">
       <a href="/">Home</a> &nbsp;/&nbsp; <span>Artists</span>
     </nav>
-    <header style="margin-bottom:2rem;">
+    <header style="margin-bottom:2.5rem;">
       <p class="eyebrow">Represented</p>
       <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Artists</h1>
       <p class="lead" style="max-width:60ch;">Mazlish + Wright Contemporary works with emerging and mid-career artists across painting, sculpture, photography, and works on paper. Each artist’s page links to their full set of available works.</p>
@@ -42,31 +39,62 @@ const jsonLd = {
     {allArtists.length === 0 ? (
       <p class="lead" style="max-width:60ch;">Artist profiles are coming soon.</p>
     ) : (
-      <>
-        <div class="artist-letter-nav" id="letterNav">
-          <button data-l="all">All</button>
-          {letters.map((l) => <button data-l={l}>{l}</button>)}
-        </div>
-        <div class="grid grid--4" id="artistGrid">
-          {cards.map((c) => (
-            <div data-letter={c.letter}>
-              <ArtistCard artist={c.artist} image={c.image} />
-            </div>
-          ))}
-        </div>
-      </>
+      <ul class="artist-index">
+        {cards.map((c) => (
+          <li>
+            <a class="aii" href={`/artists/${c.artist.slug}`}>
+              <span class="aii-img"><img src={c.image} alt={`Work by ${c.artist.name}`} loading="lazy" /></span>
+              <span class="aii-name">{c.artist.name}</span>
+              <span class="aii-disc">{c.artist.discipline}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
     )}
   </main>
-  <script>
-    const nav = document.getElementById('letterNav');
-    const grid = document.getElementById('artistGrid');
-    nav?.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      if (target.tagName !== 'BUTTON') return;
-      const l = target.dataset.l;
-      grid?.querySelectorAll<HTMLElement>('[data-letter]').forEach((c) => {
-        c.style.display = l === 'all' || c.dataset.letter === l ? '' : 'none';
-      });
-    });
-  </script>
 </Layout>
+
+<style>
+  .artist-index {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.8rem, 3.2vw, 3.4rem) clamp(1.2rem, 2.5vw, 2.4rem);
+  }
+  .aii { display: block; text-decoration: none; color: inherit; }
+  .aii-img {
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--line-soft, #f0f0f0);
+  }
+  .aii-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s var(--ease);
+  }
+  .aii:hover .aii-img img { transform: scale(1.045); }
+  .aii-name {
+    display: block;
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    letter-spacing: 0.005em;
+    color: var(--ink);
+    text-align: center;
+  }
+  .aii-disc {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+  @media (max-width: 900px) { .artist-index { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .artist-index { grid-template-columns: 1fr; gap: 2.2rem; } }
+</style>

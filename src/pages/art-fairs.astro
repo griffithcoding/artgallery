@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getFairs } from '../lib/gallery';
+import { BRAND } from '../lib/site';
+
+const fairs = await getFairs();
+const groups = [
+  { label: 'Upcoming', rows: fairs.filter((f) => f.status === 'Upcoming') },
+  { label: 'Past', rows: fairs.filter((f) => f.status !== 'Upcoming') },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${BRAND.domain}/` },
+    { '@type': 'ListItem', position: 2, name: 'Art Fairs', item: `${BRAND.domain}/art-fairs` },
+  ],
+};
+---
+<Layout
+  title="Art Fairs — Mazlish + Wright Contemporary, Brooklyn"
+  description="Mazlish + Wright Contemporary at international art fairs — The Armory Show, NADA Miami, Independent, and Frieze London. Booth locations and dates for upcoming and past presentations."
+  keywords="art fairs Brooklyn gallery, The Armory Show, NADA Miami, Independent art fair, Frieze London, Mazlish + Wright Contemporary art fairs"
+  jsonLd={jsonLd}
+>
+  <main class="wrap section--tight">
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <a href="/">Home</a> &nbsp;/&nbsp; <span>Art Fairs</span>
+    </nav>
+    <header style="margin-bottom:2rem;">
+      <p class="eyebrow">Where to find us</p>
+      <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 .6rem;">Art Fairs</h1>
+      <p class="lead" style="max-width:60ch;">Beyond the gallery, Mazlish + Wright Contemporary presents at leading international art fairs. Visit our booth for a focused selection of new work — or request a preview and a complimentary pass from the gallery in advance.</p>
+    </header>
+
+    {fairs.length === 0 && (
+      <p class="lead" style="max-width:60ch;">Our upcoming fair schedule will be announced soon. <a class="link-underline" href="/contact">Get in touch</a> to be notified.</p>
+    )}
+
+    {groups.map((g) => g.rows.length > 0 && (
+      <section class="section--tight" style="padding-top:0;border-top:1px solid var(--line);">
+        <h2 class="eyebrow" style="margin-bottom:1.4rem;">{g.label}</h2>
+        <div>
+          {g.rows.map((f) => (
+            <div class="press-item reveal">
+              <div><span class="exhibition-status">{f.status}</span></div>
+              <div>
+                <span class="outlet">{f.name}</span> — {f.city}
+                <div class="muted" style="font-size:.85rem;">{f.booth}</div>
+              </div>
+              <div class="date">{f.dates}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <section class="section center">
+      <p class="eyebrow reveal">Planning to attend?</p>
+      <h2 class="display reveal" style="max-width:22ch;margin:.6rem auto 1.2rem;">Request a preview or a fair pass.</h2>
+      <a class="btn btn--solid" href="/contact">Get in touch</a>
+    </section>
+  </main>
+</Layout>
