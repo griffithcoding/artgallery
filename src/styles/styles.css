@@ -103,10 +103,50 @@ h3.display { font-size: clamp(1.25rem, 2.5vw, 1.6rem); }
    ========================================================================= */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
-  backdrop-filter: saturate(140%) blur(10px);
-  border-bottom: 2px solid #1b2a4a;
+  background: linear-gradient(180deg, #14274b 0%, #0b1a33 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 }
+/* Navy nav — white text + search, all scoped to the header */
+.site-header .brand { color: #fff; }
+.site-header .brand small { color: rgba(255, 255, 255, 0.55); }
+.site-header .nav-links a { color: rgba(255, 255, 255, 0.72); }
+.site-header .nav-links a:hover,
+.site-header .nav-links a[aria-current="page"] { color: #fff; }
+.site-header .nav-actions .link-underline { color: #fff; }
+.site-header .nav-toggle span { background: #fff; }
+.nav-search-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: none; padding: 6px; cursor: pointer;
+  color: rgba(255, 255, 255, 0.85); transition: color 0.25s var(--ease);
+}
+.nav-search-btn:hover { color: #fff; }
+.nav-search {
+  position: absolute; left: 0; right: 0; top: 100%;
+  background: #0a1830; border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24);
+}
+.nav-search[hidden] { display: none; }
+.nav-search-form { display: flex; align-items: center; gap: 0.9rem; padding: 1.1rem 0; }
+.nav-search-form > svg { color: rgba(255, 255, 255, 0.5); flex: 0 0 auto; }
+.nav-search-form input {
+  flex: 1 1 auto; background: transparent; border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3); color: #fff;
+  font-family: var(--sans); font-size: 1.05rem; padding: 0.5rem 0; letter-spacing: 0.01em;
+}
+.nav-search-form input::placeholder { color: rgba(255, 255, 255, 0.45); }
+.nav-search-form input:focus { outline: none; border-bottom-color: #fff; }
+.nav-search-go {
+  background: none; border: 1px solid rgba(255, 255, 255, 0.4); color: #fff;
+  text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.7rem; font-weight: 500;
+  padding: 0.65em 1.3em; border-radius: 999px; cursor: pointer; white-space: nowrap;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease);
+}
+.nav-search-go:hover { background: #fff; color: #0a1830; }
+.nav-search-close {
+  background: none; border: none; color: rgba(255, 255, 255, 0.7);
+  font-size: 1.5rem; line-height: 1; cursor: pointer; padding: 0 0.2rem;
+}
+.nav-search-close:hover { color: #fff; }
 .nav {
   display: flex; align-items: center; justify-content: space-between;
   height: 72px; gap: 1.4rem;
@@ -131,8 +171,8 @@ h3.display { font-size: clamp(1.25rem, 2.5vw, 1.6rem); }
   .nav-toggle { display: block; }
   .nav.is-open .nav-links {
     display: flex; flex-direction: column; align-items: flex-start; gap: 1.4rem;
-    position: absolute; left: 0; right: 0; top: 72px; background: var(--paper);
-    padding: 2rem var(--gutter) 2.5rem; border-bottom: 1px solid var(--line);
+    position: absolute; left: 0; right: 0; top: 72px; background: #0a1830;
+    padding: 2rem var(--gutter) 2.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     max-height: calc(100vh - 72px); overflow-y: auto;
   }
   .nav.is-open .nav-links a { font-size: 1.1rem; }

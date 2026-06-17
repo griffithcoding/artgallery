@@ -16,11 +16,24 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
       </div>
       <div class="nav-actions">
         <a class="link-underline" href="/contact">Inquire</a>
+        <button class="nav-search-btn" id="searchToggle" aria-label="Search" aria-expanded="false" aria-controls="navSearch">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </button>
         <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
     </nav>
+  </div>
+  <div class="nav-search" id="navSearch" hidden>
+    <div class="wrap">
+      <form class="nav-search-form" role="search" action="/works" method="get">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" name="q" id="navSearchInput" placeholder="Search artworks, artists, mediums…" aria-label="Search the collection" autocomplete="off" />
+        <button type="submit" class="nav-search-go">Search</button>
+        <button type="button" class="nav-search-close" id="navSearchClose" aria-label="Close search">×</button>
+      </form>
+    </div>
   </div>
 </header>
 <script>
@@ -29,5 +42,28 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
   toggle?.addEventListener('click', () => {
     const open = nav?.classList.toggle('is-open');
     toggle.setAttribute('aria-expanded', String(!!open));
+  });
+
+  // Search panel: the icon toggles a search bar; the form is a native GET to
+  // /works?q=… which the collection browser reads on load (collection.ts).
+  const sToggle = document.getElementById('searchToggle');
+  const sPanel = document.getElementById('navSearch') as HTMLElement | null;
+  const sInput = document.getElementById('navSearchInput') as HTMLInputElement | null;
+  const sClose = document.getElementById('navSearchClose');
+  const openSearch = () => {
+    if (!sPanel) return;
+    sPanel.hidden = false;
+    sToggle?.setAttribute('aria-expanded', 'true');
+    sInput?.focus();
+  };
+  const closeSearch = () => {
+    if (!sPanel) return;
+    sPanel.hidden = true;
+    sToggle?.setAttribute('aria-expanded', 'false');
+  };
+  sToggle?.addEventListener('click', () => (sPanel?.hidden ? openSearch() : closeSearch()));
+  sClose?.addEventListener('click', closeSearch);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sPanel && !sPanel.hidden) closeSearch();
   });
 </script>
