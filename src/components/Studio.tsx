@@ -40,6 +40,7 @@ export default function Studio({ userId, email }: Props) {
         <span style={{ color: '#6b6860' }}>Design Studio</span>
         {email && <span style={{ color: '#8e8a80', fontSize: '0.78rem' }}>{email}</span>}
         <span style={{ marginLeft: 'auto', color: '#8e8a80', fontSize: '0.75rem' }}>Saved automatically</span>
+        <a href="/studio" style={{ color: '#6b6860', textDecoration: 'none', fontSize: '0.78rem' }}>Dashboard</a>
         <a href="/admin/logout" style={{ color: '#6b6860', textDecoration: 'none', fontSize: '0.78rem' }}>Sign out</a>
       </header>
       <div style={{ flex: '1 1 auto', position: 'relative' }}>

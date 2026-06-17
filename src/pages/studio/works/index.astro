@@ -1,0 +1,50 @@
+---
+export const prerender = false;
+import StudioLayout from '../../../layouts/StudioLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+import { artSVG } from '../../../lib/gallery';
+
+const user = Astro.locals.user!;
+if (!user.artistId) return Astro.redirect('/studio', 303);
+
+const { data: works } = await createSupabaseAdmin()
+  .from('artworks')
+  .select('id, title, year, availability, image_url, ratio')
+  .eq('artist_id', user.artistId)
+  .order('sort_order', { ascending: true });
+const list = (works ?? []) as any[];
+const saved = Astro.url.searchParams.get('saved');
+const deleted = Astro.url.searchParams.get('deleted');
+---
+<StudioLayout title="My works">
+  <div class="admin-toolbar">
+    <div>
+      <h1 style="font-weight:500;">My works</h1>
+      <span class="admin-count">{list.length} {list.length === 1 ? 'work' : 'works'}</span>
+    </div>
+    <a class="admin-btn" href="/studio/works/new">+ New work</a>
+  </div>
+  {saved && <p class="admin-status" style="color:#5b7a4f;">Saved.</p>}
+  {deleted && <p class="admin-status" style="color:#6b6860;">Deleted.</p>}
+  {list.length === 0 && <p style="color:#6b6860;">No works yet. Add your first one.</p>}
+  <div class="admin-grid">
+    {list.map((w) => (
+      <div class="admin-tile">
+        <a class="thumb" href={`/studio/works/${w.id}`}>
+          <img src={w.image_url || artSVG(w.id, w.ratio || 'square')} alt={w.title} loading="lazy" />
+        </a>
+        <div class="tmeta">
+          <a class="ttitle" href={`/studio/works/${w.id}`}>{w.title}</a>
+          <div class="tartist">{[w.year, w.availability].filter(Boolean).join(' · ')}</div>
+          <div class="tactions">
+            <a href={`/studio/works/${w.id}`}>Edit</a>
+            <form method="POST" action="/studio/works/action" onsubmit="return confirm('Delete this work?')">
+              <input type="hidden" name="id" value={w.id} />
+              <button class="tdel" type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</StudioLayout>

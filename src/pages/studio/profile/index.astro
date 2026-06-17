@@ -1,0 +1,28 @@
+---
+export const prerender = false;
+import StudioLayout from '../../../layouts/StudioLayout.astro';
+import { getOwnedArtist } from '../../../lib/creator';
+
+const user = Astro.locals.user!;
+const a = await getOwnedArtist(user.artistId);
+if (!a) return Astro.redirect('/studio', 303);
+const saved = Astro.url.searchParams.get('saved');
+---
+<StudioLayout title="My profile">
+  <h1 style="font-weight:400;">My profile</h1>
+  {saved && <p class="admin-status" style="color:#5b7a4f;">Saved.</p>}
+  <form method="POST" action="/studio/profile/save" class="admin-card" style="max-width:640px;">
+    <div class="admin-field"><label>Name</label><input name="name" value={a.name} required /></div>
+    <div class="admin-field"><label>Birthplace</label><input name="birthplace" value={a.birthplace ?? ''} /></div>
+    <div class="admin-field"><label>Birth year</label><input name="birth_year" type="number" value={a.birth_year ?? ''} /></div>
+    <div class="admin-field"><label>Discipline</label><input name="discipline" value={a.discipline ?? ''} placeholder="e.g. Painting" /></div>
+    <div class="admin-field"><label>Bio</label><textarea name="bio" rows="6">{a.bio ?? ''}</textarea></div>
+    <div class="admin-field"><label>Portrait image</label>
+      <input type="file" data-kind="artists" accept="image/*" />
+      <input type="hidden" name="portrait_image_url" value={a.portrait_image_url ?? ''} />
+      <small style="color:#8a8675;">{a.portrait_image_url ? 'Current image kept unless you upload a new one.' : 'Upload a portrait (JPG, PNG, or WebP, max 5MB).'}</small>
+    </div>
+    <button class="admin-btn" type="submit">Save changes</button>
+  </form>
+  <script>import '../../../scripts/admin-upload.ts';</script>
+</StudioLayout>

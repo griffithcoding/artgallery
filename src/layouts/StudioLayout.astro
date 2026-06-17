@@ -1,0 +1,32 @@
+---
+import '../styles/admin.css';
+interface Props { title: string; }
+const { title } = Astro.props;
+const path = Astro.url.pathname;
+const links = [
+  { href: '/studio', label: 'Dashboard' },
+  { href: '/studio/profile', label: 'My profile' },
+  { href: '/studio/works', label: 'My works' },
+  { href: '/studio/canvas', label: 'Design studio' },
+];
+const isActive = (href: string) => (href === '/studio' ? path === '/studio' : path.startsWith(href));
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>{title} · Mazlish + Wright</title>
+</head>
+<body class="admin-shell">
+  <nav class="admin-nav">
+    <span class="admin-brand">Mazlish + Wright</span>
+    {links.map((l) => (
+      <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>
+    ))}
+    <a href="/admin/logout" style="margin-left:auto;">Sign out</a>
+  </nav>
+  <main class="admin-wrap"><slot /></main>
+</body>
+</html>

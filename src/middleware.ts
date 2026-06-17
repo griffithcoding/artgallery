@@ -18,7 +18,7 @@ function resolveRole(appMetadata: Record<string, unknown> | undefined): App.Role
   if (r === 'creator' || r === 'contributor' || r === 'super_admin') return r;
   // Unset role defaults to the gallery owner (super_admin). Artists must be
   // given 'creator'/'contributor' explicitly, which is what gates them into
-  // /studio and out of nothing else.
+  // /studio and out of the gallery-wide CMS.
   return 'super_admin';
 }
 
@@ -48,10 +48,14 @@ export const onRequest = defineMiddleware(async (context, next) => {
     const supabase = createSupabaseServer(context.cookies, context.request.headers);
     const { data } = await supabase.auth.getUser();
     if (data.user) {
+      const meta = data.user.app_metadata as Record<string, unknown> | undefined;
       context.locals.user = {
         id: data.user.id,
         email: data.user.email ?? '',
-        role: resolveRole(data.user.app_metadata as Record<string, unknown> | undefined),
+        role: resolveRole(meta),
+        // Creators are linked to one artist record via app_metadata.artist_id;
+        // every creator-portal query is scoped to it.
+        artistId: typeof meta?.artist_id === 'string' ? meta.artist_id : undefined,
       };
     }
   } catch {
@@ -62,15 +66,17 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const isAdmin = pathname.startsWith('/admin');
   const isStudio = pathname.startsWith('/studio');
 
-  // Admin (gallery-owner CMS) — any authenticated user; login page is public.
+  // Admin (gallery-owner CMS) — super_admin ONLY. The login page is public;
+  // signed-in creators are sent to their own portal instead.
   if (pathname === '/admin/login') {
     // allow
-  } else if (isAdmin && !user) {
-    return context.redirect('/admin/login', 302);
+  } else if (isAdmin) {
+    if (!user) return context.redirect('/admin/login', 302);
+    if (user.role !== 'super_admin') return context.redirect('/studio', 302);
   }
 
-  // Studio (artist design tool) — creator/contributor roles ONLY. Gallery
-  // owners (super_admin) are intentionally kept out.
+  // Studio / creator portal — creator/contributor roles ONLY. Gallery owners
+  // (super_admin) are intentionally kept in the admin CMS.
   if (isStudio) {
     if (!user) return context.redirect('/admin/login', 302);
     if (!CREATOR_ROLES.has(user.role)) return context.redirect('/admin', 302);

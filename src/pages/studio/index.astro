@@ -1,22 +1,52 @@
 ---
 export const prerender = false;
-import Studio from '../../components/Studio.tsx';
-// Guarded by src/middleware.ts: /studio is for creator/contributor roles only
-// (gallery-owner super_admins are redirected to /admin).
+import StudioLayout from '../../layouts/StudioLayout.astro';
+import { getOwnedArtist } from '../../lib/creator';
+import { createSupabaseAdmin } from '../../lib/supabase/server';
+
 const user = Astro.locals.user!;
+const artist = await getOwnedArtist(user.artistId);
+
+let workCount = 0;
+if (artist) {
+  const { count } = await createSupabaseAdmin()
+    .from('artworks')
+    .select('id', { count: 'exact', head: true })
+    .eq('artist_id', artist.id);
+  workCount = count ?? 0;
+}
+
+const cards = [
+  { href: '/studio/profile', title: 'My profile', body: 'Edit your name, bio, discipline, and portrait image.' },
+  { href: '/studio/works', title: `My works (${workCount})`, body: 'Add, edit, and remove the works shown on your page.' },
+  { href: '/studio/canvas', title: 'Design studio', body: 'An infinite canvas for moodboards, layouts, and mockups.' },
+];
 ---
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="robots" content="noindex" />
-  <title>Design Studio · Mazlish + Wright Contemporary</title>
-  <style>
-    html, body { margin: 0; height: 100%; background: #f7f6f3; overflow: hidden; }
-  </style>
-</head>
-<body>
-  <Studio client:only="react" userId={user.id} email={user.email} />
-</body>
-</html>
+<StudioLayout title="Studio">
+  <h1 style="font-weight:400;margin-bottom:.4rem;">Welcome{artist ? `, ${artist.name}` : ''}</h1>
+  {!artist && (
+    <p class="admin-status err" style="max-width:60ch;">
+      No artist profile is linked to your account yet. Ask the gallery to connect your login to your artist page.
+    </p>
+  )}
+  {artist && (
+    <>
+      <p style="color:#6b6860;max-width:62ch;margin-bottom:1.6rem;">
+        Manage your public artist page and the works the gallery shows online, or open the design studio.
+      </p>
+      <div class="studio-cards">
+        {cards.map((c) => (
+          <a class="admin-card studio-card" href={c.href}>
+            <h3 style="font-weight:500;margin:0 0 .35rem;">{c.title}</h3>
+            <p style="color:#6b6860;font-size:.9rem;margin:0;line-height:1.5;">{c.body}</p>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+</StudioLayout>
+<style>
+  .studio-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .studio-card { text-decoration: none; color: inherit; display: block; transition: border-color .2s ease; }
+  .studio-card:hover { border-color: #c9c5ba; }
+</style>

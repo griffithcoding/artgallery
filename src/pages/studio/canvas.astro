@@ -1,0 +1,21 @@
+---
+export const prerender = false;
+import Studio from '../../components/Studio.tsx';
+// Guarded by src/middleware.ts: /studio is for creator/contributor roles only.
+const user = Astro.locals.user!;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Design Studio · Mazlish + Wright Contemporary</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #f7f6f3; overflow: hidden; }
+  </style>
+</head>
+<body>
+  <Studio client:only="react" userId={user.id} email={user.email} />
+</body>
+</html>
