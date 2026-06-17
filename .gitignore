@@ -9,6 +9,13 @@ dist/
 
 .vercel
 
+# Research/verification scratch (capture scripts + screenshots)
+/shot-*.png
+/mazlish-*.png
+/fremin-*.png
+/*-capture.mjs
+/verify-shot.mjs
+
 # Local site-tour render + scratch (not for VCS)
 *.mp4
 /tour-raw/

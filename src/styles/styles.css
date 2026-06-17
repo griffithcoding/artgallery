@@ -4,24 +4,27 @@
    Minimalist, art-forward, white-space heavy. Serif display + grotesk UI.
    ========================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Prata&display=swap');
 
-/* ---------- Design tokens ---------- */
+/* ---------- Design tokens ----------
+   Warm editorial system synthesized from mazlishgallery.com: an elegant Prata
+   display serif, a warm gallery-wall white, navy structure (ties to the nav),
+   and one sparing terracotta accent drawn from the gallery's color-joy. */
 :root {
-  /* Palette — near-monochrome, gallery white-cube */
-  --paper:      #ffffff;   /* white background (clean gallery) */
-  --paper-pure: #ffffff;
-  --ink:        #333333;   /* soft dark-grey text */
-  --ink-soft:   #8a8a8a;   /* secondary grey */
-  --line:       #e6e6e6;   /* hairline borders */
-  --line-soft:  #f0f0f0;
-  --accent:     #333333;   /* monochrome — no color accent */
-  --accent-2:   #333333;
+  --paper:      #fbf9f5;   /* warm gallery-wall white */
+  --paper-pure: #ffffff;   /* pure white for image mats / cards */
+  --ink:        #1e2430;   /* deep navy-charcoal text (ties to the navy nav) */
+  --ink-soft:   #7c7a77;   /* warm secondary grey */
+  --line:       #e7e2d9;   /* warm hairline borders */
+  --line-soft:  #f1ede5;
+  --accent:     #16202f;   /* navy — structural accent (eyebrows, underlines) */
+  --accent-2:   #b8553f;   /* terracotta — sparing warm accent */
+  --warm:       #b8553f;
   --placeholder-a: #d9d6cd;
   --placeholder-b: #c7c3b8;
 
-  /* Type */
-  --serif: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  /* Type — Prata (elegant Didone serif) for display + wordmark; Open Sans body */
+  --serif: 'Prata', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --sans:  'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
 
   /* Spacing scale */
@@ -54,20 +57,20 @@ ul { list-style: none; margin: 0; padding: 0; }
 h1, h2, h3, h4 { margin: 0; font-weight: 400; }
 
 /* ---------- Typography ---------- */
-.display { font-family: var(--serif); font-weight: 300; line-height: 1.16; letter-spacing: 0; }
+.display { font-family: var(--serif); font-weight: 400; line-height: 1.14; letter-spacing: 0; }
 .eyebrow {
   font-family: var(--sans);
   font-size: 0.72rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--ink-soft);
-  font-weight: 500;
+  color: var(--accent);
+  font-weight: 600;
 }
-.lead { font-family: var(--serif); font-size: clamp(1.1rem, 2vw, 1.5rem); line-height: 1.5; color: var(--ink); font-weight: 300; }
+.lead { font-family: var(--sans); font-size: clamp(1.08rem, 1.8vw, 1.42rem); line-height: 1.6; color: var(--ink); font-weight: 400; }
 
-h1.display { font-size: clamp(2rem, 5vw, 3.6rem); }
-h2.display { font-size: clamp(1.5rem, 3.5vw, 2.4rem); }
-h3.display { font-size: clamp(1.25rem, 2.5vw, 1.6rem); }
+h1.display { font-size: clamp(2.2rem, 5.2vw, 3.9rem); }
+h2.display { font-size: clamp(1.6rem, 3.6vw, 2.6rem); }
+h3.display { font-size: clamp(1.25rem, 2.5vw, 1.65rem); }
 
 /* ---------- Layout helpers ---------- */
 .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
@@ -468,13 +471,13 @@ button.link-underline {
 /* ---- "Now on view" live status dot for the hero eyebrow ---- */
 .eyebrow .dot {
   display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-  background: var(--accent); margin-right: .55em; vertical-align: middle;
+  background: var(--warm); margin-right: .55em; vertical-align: middle;
   animation: versoPulse 2.6s var(--ease) infinite;
 }
 @keyframes versoPulse {
-  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
-  70%  { box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 0%, transparent); }
-  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); }
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--warm) 55%, transparent); }
+  70%  { box-shadow: 0 0 0 7px color-mix(in srgb, var(--warm) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--warm) 0%, transparent); }
 }
 
 /* ---- Staggered hero load — one orchestrated reveal beats scattered effects ---- */
