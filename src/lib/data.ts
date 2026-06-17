@@ -99,7 +99,7 @@ for (let i = 0; i < ARTIST_COUNT; i++) {
     slug,
     birth: CITIES[Math.floor(r() * CITIES.length)] + ', ' + (1955 + Math.floor(r() * 45)),
     discipline: CATEGORIES[Math.floor(r() * CATEGORIES.length)],
-    bio: `${name} is a contemporary artist whose practice moves between ${SUBJECTS[Math.floor(r() * SUBJECTS.length)].toLowerCase()} and ${SUBJECTS[Math.floor(r() * SUBJECTS.length)].toLowerCase()}. Working primarily in ${MEDIUMS[Math.floor(r() * MEDIUMS.length)].toLowerCase()}, the work investigates memory, material, and the architecture of everyday space. ${first}'s work has been exhibited internationally and is held in private and institutional collections.`,
+    bio: `${name} works primarily in ${MEDIUMS[Math.floor(r() * MEDIUMS.length)].toLowerCase()}, moving between ${SUBJECTS[Math.floor(r() * SUBJECTS.length)].toLowerCase()} and ${SUBJECTS[Math.floor(r() * SUBJECTS.length)].toLowerCase()}. ${first}'s recent work has been shown in Brooklyn and elsewhere in the United States, and is held in private collections.`,
   });
 }
 artists.sort((a, b) => a.name.localeCompare(b.name));
@@ -144,7 +144,7 @@ for (let i = 0; i < DEMO_COUNT; i++) {
 
 /* ---- Exhibitions ---- */
 const exhibitions: Exhibition[] = [
-  { id: 'ex1', slug: 'soft-architecture', title: 'Soft Architecture', subtitle: 'New paintings and works on paper', status: 'On View', dates: 'May 22 – Jul 12, 2026', year: 2026, artistIds: [artists[0].id, artists[3].id, artists[7].id], blurb: 'A group exhibition examining the porous boundary between built space and the body, bringing together six painters who treat the surface as a kind of dwelling.' },
+  { id: 'ex1', slug: 'soft-architecture', title: 'Soft Architecture', subtitle: 'New paintings and works on paper', status: 'On View', dates: 'May 22 – Jul 12, 2026', year: 2026, artistIds: [artists[0].id, artists[3].id, artists[7].id], blurb: 'A group exhibition on the boundary between built space and the body, with new paintings and works on paper by three artists.' },
   { id: 'ex2', slug: 'low-frequency', title: 'Low Frequency', subtitle: artists[2].name + ', solo exhibition', status: 'Upcoming', dates: 'Jul 24 – Sep 6, 2026', year: 2026, artistIds: [artists[2].id], blurb: 'The gallery presents the first New York solo exhibition of new sculpture and wall reliefs, extending an ongoing inquiry into resonance, weight, and quiet.' },
   { id: 'ex3', slug: 'tideline', title: 'Tideline', subtitle: 'Photography and cyanotype', status: 'Past', dates: 'Mar 6 – May 10, 2026', year: 2026, artistIds: [artists[5].id, artists[9].id], blurb: 'Two artists working at the edge of land and water, mapping erosion, time, and the photographic trace.' },
   { id: 'ex4', slug: 'common-ground', title: 'Common Ground', subtitle: 'Group exhibition', status: 'Past', dates: 'Jan 10 – Feb 28, 2026', year: 2026, artistIds: [artists[1].id, artists[4].id, artists[6].id, artists[8].id], blurb: 'Eight Brooklyn-based artists consider land, labor, and belonging across painting, textile, and assemblage.' },
@@ -163,11 +163,11 @@ const fairs: Fair[] = [
 /* ---- Press ---- */
 const press: PressItem[] = [
   { outlet: 'Artforum', headline: '“Mazlish + Wright Contemporary’s Soft Architecture finds tenderness in structure”', date: 'June 2026', kind: 'Review' },
-  { outlet: 'The New York Times', headline: 'A DUMBO gallery puts its whole program in the open', date: 'May 2026', kind: 'Feature' },
+  { outlet: 'The New York Times', headline: 'At a DUMBO gallery, the whole program is on the wall — and online', date: 'May 2026', kind: 'Feature' },
   { outlet: 'Hyperallergic', headline: 'The best gallery shows in Brooklyn this month', date: 'May 2026', kind: 'Listing' },
   { outlet: 'Cultured', headline: '15 emerging artists to watch, according to their dealers', date: 'Apr 2026', kind: 'Feature' },
   { outlet: 'ARTnews', headline: 'How small galleries are using open access to court collectors', date: 'Mar 2026', kind: 'Feature' },
-  { outlet: 'Brooklyn Magazine', headline: 'Inside Mazlish + Wright Contemporary, the gallery that put its back room in the open', date: 'Feb 2026', kind: 'Profile' },
+  { outlet: 'Brooklyn Magazine', headline: 'Inside Mazlish + Wright Contemporary, the gallery doing away with the back room', date: 'Feb 2026', kind: 'Profile' },
 ];
 
 export { artists, artworks, exhibitions, fairs, press };
