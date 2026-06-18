@@ -21,9 +21,9 @@ export type NavItem = NavLink | { label: string; children: NavLink[] };
 // Top-level nav. "Resources" is a collapsible dropdown that groups the
 // collector/press pages (kept out of the top level so they aren't duplicated).
 export const NAV: NavItem[] = [
-  { href: '/exhibitions', label: 'Exhibitions' },
-  { href: '/artists', label: 'Artists' },
   { href: '/about', label: 'About' },
+  { href: '/artists', label: 'Artists' },
+  { href: '/exhibitions', label: 'Exhibitions' },
   {
     label: 'Resources',
     children: [
