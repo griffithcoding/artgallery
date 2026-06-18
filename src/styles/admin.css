@@ -117,3 +117,27 @@ table.admin-table a:hover { color: var(--mw-accent); }
 /* ---- Image preview (forms) ---- */
 .admin-preview { margin-top: .7rem; border: 1px solid var(--mw-line); max-width: 240px; background: var(--mw-white); border-radius: 8px; overflow: hidden; }
 .admin-preview img { display: block; width: 100%; height: auto; }
+
+/* ── Page composer ─────────────────────────────────────────────── */
+body.composer-on { padding-bottom: 64px; }
+.composer-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 9999;
+  display: flex; align-items: center; gap: .5rem;
+  padding: .55rem 1rem; background: #1b2233; color: #f3ede2;
+  font: 500 .85rem/1 ui-sans-serif, Inter, Arial, sans-serif;
+  box-shadow: 0 -4px 18px rgba(0,0,0,.25);
+}
+.composer-brand { font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #e7b9ad; margin-right: .5rem; }
+.composer-spacer { flex: 1; }
+.composer-mode, .composer-btn {
+  border: 1px solid rgba(243,237,226,.25); background: transparent; color: inherit;
+  padding: .4rem .8rem; border-radius: 999px; cursor: pointer;
+}
+.composer-mode.is-active { background: #8a2b1f; border-color: #8a2b1f; }
+.composer-mode[disabled] { opacity: .4; cursor: not-allowed; }
+.composer-btn--solid { background: #f3ede2; color: #1b2233; border-color: #f3ede2; }
+.composer-status { margin-left: .5rem; color: #cdd3df; min-width: 8ch; }
+.composer-editable:focus { outline: 2px dashed #8a2b1f; outline-offset: 3px; }
+.composer-editable-img { outline: 2px dashed rgba(138,43,31,.6); outline-offset: 3px; }
+body.composer-preview .composer-editable:focus { outline: none; }
+body.composer-preview .composer-editable-img { outline: none; cursor: default; }
