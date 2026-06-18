@@ -1,0 +1,26 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin, isSupabaseConfigured } from '../../../lib/supabase/server';
+
+let pages: { slug: string; title: string; status: string }[] = [];
+if (isSupabaseConfigured()) {
+  try {
+    const sb = createSupabaseAdmin();
+    const { data } = await sb.from('pages').select('slug, title, status').order('updated_at', { ascending: false });
+    pages = data ?? [];
+  } catch { /* storage unavailable */ }
+}
+---
+<AdminLayout title="Pages">
+  <h1 style="font-weight:400;">Pages</h1>
+  <p style="color:#6b6860;max-width:60ch;">Composer pages. Edit in place, then publish. (Creating new pages from here arrives with Layout mode.)</p>
+  {pages.length === 0
+    ? <p style="color:#6b6860;">No composer pages yet — seed one with <code>supabase/seed-page.ts</code>.</p>
+    : <ul>{pages.map((p) => (
+        <li style="margin:.4rem 0;">
+          <a class="admin-btn" href={`/admin/pages/${p.slug}`}>Edit "{p.title || p.slug}"</a>
+          <a href={`/p/${p.slug}`} target="_blank" style="margin-left:.6rem;">view ↗</a>
+          <span style="margin-left:.6rem;color:#8a8675;">{p.status}</span>
+        </li>))}</ul>}
+</AdminLayout>

@@ -1,0 +1,17 @@
+---
+export const prerender = false;
+import Layout from '../../../layouts/Layout.astro';
+import BlockRenderer from '../../../components/blocks/BlockRenderer.astro';
+import { getPageDraft } from '../../../lib/pages';
+
+const { slug } = Astro.params;
+const page = await getPageDraft(slug!);
+if (!page) return new Response('Page not found', { status: 404 });
+---
+<Layout title={`Editing: ${page.title}`}>
+  <div id="composer-root" data-slug={page.slug}>
+    <main><BlockRenderer blocks={page.blocks} /></main>
+  </div>
+  <script type="application/json" id="composer-blocks" set:html={JSON.stringify(page.blocks)}></script>
+  <script>import '../../../scripts/composer.ts';</script>
+</Layout>
