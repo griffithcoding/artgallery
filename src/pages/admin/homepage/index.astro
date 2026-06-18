@@ -1,0 +1,46 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin, isSupabaseConfigured } from '../../../lib/supabase/server';
+
+let heroUrl: string | null = null;
+if (isSupabaseConfigured()) {
+  try {
+    const sb = createSupabaseAdmin();
+    const { data: files } = await sb.storage.from('gallery-images').list('site', { search: 'hero' });
+    const f = files?.find((x) => x.name === 'hero');
+    if (f) {
+      const pub = sb.storage.from('gallery-images').getPublicUrl('site/hero').data.publicUrl;
+      heroUrl = pub + '?v=' + (f.updated_at ? new Date(f.updated_at).getTime() : '');
+    }
+  } catch { /* storage unavailable */ }
+}
+const saved = Astro.url.searchParams.get('saved');
+const err = Astro.url.searchParams.get('err');
+---
+<AdminLayout title="Homepage">
+  <h1 style="font-weight:400;">Homepage</h1>
+  {saved && <p class="admin-status" style="color:#5b7a4f;">Hero image updated.</p>}
+  {err && <p class="admin-status err">{err}</p>}
+
+  <section class="admin-card" style="max-width:720px;">
+    <h2 style="font-weight:500;font-size:1.1rem;margin:0 0 .3rem;">Hero image</h2>
+    <p style="color:#6b6860;font-size:.9rem;margin:0 0 1rem;">The large photo at the top of the homepage. A wide landscape shot of the gallery works best (JPG, PNG, or WebP, up to 8&nbsp;MB).</p>
+    {heroUrl
+      ? <div style="margin-bottom:1rem;"><img src={heroUrl} alt="Current homepage hero" style="max-width:100%;display:block;border:1px solid var(--mw-line,#e4e2db);" /></div>
+      : <p style="color:#6b6860;">No custom hero set yet — the homepage shows a branded placeholder until you upload one.</p>}
+    <form method="POST" action="/admin/homepage/hero" enctype="multipart/form-data">
+      <div class="admin-field"><label>Upload {heroUrl ? 'a new' : 'a'} hero image</label>
+        <input type="file" name="file" accept="image/jpeg,image/png,image/webp" required />
+      </div>
+      <button class="admin-btn" type="submit">Save hero image</button>
+    </form>
+  </section>
+
+  <section class="admin-card" style="max-width:720px;margin-top:1.5rem;">
+    <h2 style="font-weight:500;font-size:1.1rem;margin:0 0 .3rem;">Selected works on the homepage</h2>
+    <p style="color:#6b6860;font-size:.9rem;margin:0 0 1rem;">The “Contemporary art, available now” grid shows artworks marked <strong>Featured</strong>. To put a work on the homepage, add or edit it under Artworks and tick “Featured on home page.”</p>
+    <a class="admin-btn" href="/admin/artworks/new">+ New artwork</a>
+    <a class="admin-btn" href="/admin/artworks" style="margin-left:.6rem;">Manage artworks</a>
+  </section>
+</AdminLayout>

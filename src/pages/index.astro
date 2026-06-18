@@ -3,12 +3,28 @@ import Layout from '../layouts/Layout.astro';
 import ArtworkCard from '../components/ArtworkCard.astro';
 import { getArtworks, getFeaturedArtworks, getExhibitions, getWorksByArtist, artSVG } from '../lib/gallery';
 import { BRAND } from '../lib/site';
+import { createSupabaseAdmin, isSupabaseConfigured } from '../lib/supabase/server';
 
 const allWorks = await getArtworks();
 const works = await getFeaturedArtworks(8);
 const exhibitions = await getExhibitions();
 const current = exhibitions.find((e) => e.status === 'On View') ?? exhibitions[0];
 const heroWork = (await getWorksByArtist(current.artistIds[0]))[0] ?? allWorks[0];
+
+// Homepage hero photo — managed in the admin (Homepage → Hero image), stored at
+// gallery-images/site/hero. Falls back to a static file, then a branded SVG.
+let heroSrc = '/images/hero-gallery.jpg';
+if (isSupabaseConfigured()) {
+  try {
+    const sb = createSupabaseAdmin();
+    const { data: files } = await sb.storage.from('gallery-images').list('site', { search: 'hero' });
+    const f = files?.find((x) => x.name === 'hero');
+    if (f) {
+      heroSrc = sb.storage.from('gallery-images').getPublicUrl('site/hero').data.publicUrl
+        + (f.updated_at ? `?v=${new Date(f.updated_at).getTime()}` : '');
+    }
+  } catch { /* storage unavailable → keep static fallback */ }
+}
 
 const mapsSearch = 'https://www.google.com/maps/search/?api=1&query=65-B+Pearl+Street+Brooklyn+NY+11201';
 const mapsDir = 'https://www.google.com/maps/dir/?api=1&destination=65-B+Pearl+Street+Brooklyn+NY+11201';
@@ -119,7 +135,7 @@ const jsonLd = {
 
       <a href={`/exhibitions/${current.slug}`} class="hero-photo reveal" aria-label={`Now on view: ${current.title}`}>
         <img
-          src="/images/hero-gallery.jpg"
+          src={heroSrc}
           onerror="this.onerror=null;this.src='/images/hero-fallback.svg'"
           alt="Inside Mazlish + Wright Contemporary, a contemporary art gallery in DUMBO, Brooklyn"
           width="1600" height="1000" loading="eager" />
