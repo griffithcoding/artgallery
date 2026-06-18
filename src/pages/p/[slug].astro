@@ -1,0 +1,13 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import BlockRenderer from '../../components/blocks/BlockRenderer.astro';
+import { getPage } from '../../lib/pages';
+
+const { slug } = Astro.params;
+const page = await getPage(slug!);
+if (!page) return new Response(null, { status: 404 });
+---
+<Layout title={`${page.title} — Mazlish + Wright Contemporary`}>
+  <main><BlockRenderer blocks={page.blocks} /></main>
+</Layout>
