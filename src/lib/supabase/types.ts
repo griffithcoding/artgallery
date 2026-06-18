@@ -11,7 +11,11 @@ export interface ArtworkRow {
 export interface ArtistRow {
   id: string; slug: string; name: string; birthplace: string;
   birth_year: number | null; discipline: string; bio: string;
-  portrait_image_url: string | null; created_at: string; updated_at: string;
+  portrait_image_url: string | null;
+  represented_since: number | null; active_since: number | null;
+  based_in: string; website_url: string; instagram_url: string;
+  education: string; nationality: string; cv_url: string; featured: boolean;
+  created_at: string; updated_at: string;
 }
 export interface ExhibitionRow {
   id: string; slug: string; title: string; subtitle: string;

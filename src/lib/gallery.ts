@@ -32,6 +32,15 @@ export interface Artist {
   birth: string;
   discipline: string;
   bio: string;
+  representedSince?: number;
+  activeSince?: number;
+  basedIn?: string;
+  websiteUrl?: string;
+  instagramUrl?: string;
+  education?: string;
+  nationality?: string;
+  cvUrl?: string;
+  featured?: boolean;
 }
 export interface Artwork {
   id: string;
@@ -147,7 +156,11 @@ export async function getArtists(): Promise<Artist[]> {
   if (!isSupabaseConfigured()) return _artists;
   try {
     const sb = createSupabaseAnon();
-    const { data, error } = await sb.from('artists').select('*').order('name', { ascending: true });
+    const { data, error } = await sb
+      .from('artists')
+      .select('*')
+      .order('featured', { ascending: false })
+      .order('name', { ascending: true });
     if (error) throw error;
     return (data ?? []).map((r) => rowToArtist(r as ArtistRow));
   } catch {
@@ -171,6 +184,28 @@ export async function getArtist(slug: string): Promise<Artist | undefined> {
 // in Supabase yet). Moves to Supabase when the exhibitions CMS plan lands.
 export async function getArtistById(id: string): Promise<Artist | undefined> {
   return _artists.find((a) => a.id === id);
+}
+
+// Per-artist artwork counts for the admin list + public credentials. Dual-mode.
+export async function getArtistWorkCounts(): Promise<Map<string, number>> {
+  const m = new Map<string, number>();
+  const tally = (rows: Array<{ artistId?: string; artist_id?: string }>) => {
+    for (const r of rows) {
+      const id = (r as { artistId?: string }).artistId ?? (r as { artist_id?: string }).artist_id;
+      if (id) m.set(id, (m.get(id) ?? 0) + 1);
+    }
+  };
+  if (!isSupabaseConfigured()) { tally(_artworks as Array<{ artistId?: string }>); return m; }
+  try {
+    const sb = createSupabaseAnon();
+    const { data, error } = await sb.from('artworks').select('artist_id');
+    if (error) throw error;
+    tally((data ?? []) as Array<{ artist_id?: string }>);
+    return m;
+  } catch {
+    tally(_artworks as Array<{ artistId?: string }>);
+    return m;
+  }
 }
 
 // ---- Exhibitions / fairs / press (generator until their own plan) ----

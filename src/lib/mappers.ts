@@ -32,5 +32,14 @@ export function rowToArtist(r: ArtistRow): Artist {
     birth,
     discipline: r.discipline,
     bio: r.bio,
+    representedSince: r.represented_since ?? undefined,
+    activeSince: r.active_since ?? undefined,
+    basedIn: r.based_in ?? '',
+    websiteUrl: r.website_url ?? '',
+    instagramUrl: r.instagram_url ?? '',
+    education: r.education ?? '',
+    nationality: r.nationality ?? '',
+    cvUrl: r.cv_url ?? '',
+    featured: r.featured ?? false,
   };
 }
