@@ -74,7 +74,12 @@ export function initLayout(ctx: Ctx) {
   }
 
   let menu: HTMLElement | null = null;
-  function closeMenu() { menu?.remove(); menu = null; }
+  let dismissListener: ((e: MouseEvent) => void) | null = null;
+  function closeMenu() {
+    menu?.remove();
+    menu = null;
+    if (dismissListener) { document.removeEventListener('click', dismissListener); dismissListener = null; }
+  }
   function openAddMenu(afterEl: HTMLElement | null, e: MouseEvent) {
     closeMenu();
     menu = document.createElement('div');
@@ -85,7 +90,7 @@ export function initLayout(ctx: Ctx) {
     document.body.appendChild(menu);
     menu.querySelectorAll<HTMLButtonElement>('button[data-type]').forEach((b) =>
       b.addEventListener('click', () => { add(b.dataset.type!, afterEl); closeMenu(); }));
-    setTimeout(() => document.addEventListener('click', closeMenu, { once: true }), 0);
+    setTimeout(() => { dismissListener = () => closeMenu(); document.addEventListener('click', dismissListener, { once: true }); }, 0);
   }
 
   const addEnd = document.createElement('button');

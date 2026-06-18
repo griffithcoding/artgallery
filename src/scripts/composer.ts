@@ -1,6 +1,6 @@
 // Superadmin in-place editor. Loaded only on /admin/pages/[slug].
 // Builds the top mode bar; Content mode wires contenteditable text + image swap.
-interface Block { id: string; type: string; props: Record<string, unknown>; }
+import type { Block } from '../lib/blocks';
 import { initLayout } from './composer-layout';
 
 const root = document.getElementById('composer-root');
@@ -103,7 +103,7 @@ if (root && dataEl) {
   setMode('content');
 
   // ---- layout mode ----
-  initLayout({ root, state: state as any, byId: byId as any, status });
+  initLayout({ root, state, byId, status });
 
   // ---- preview toggle ----
   bar.querySelector('#composer-preview')!.addEventListener('click', () => {
