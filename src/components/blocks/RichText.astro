@@ -1,5 +1,7 @@
 ---
+import sanitizeHtml from 'sanitize-html';
 const { id, props } = Astro.props;
 const { html = '' } = props ?? {};
+const safe = sanitizeHtml(String(html));
 ---
-<div class="wrap"><div class="prose cb-richtext" data-block-id={id} data-field="text" data-prop="html" set:html={html} /></div>
+<div class="wrap"><div class="prose cb-richtext" data-block-id={id} data-field="text" data-prop="html" set:html={safe} /></div>
