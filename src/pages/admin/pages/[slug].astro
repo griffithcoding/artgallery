@@ -10,7 +10,7 @@ if (!page) return new Response('Page not found', { status: 404 });
 ---
 <Layout title={`Editing: ${page.title}`}>
   <div id="composer-root" data-slug={page.slug}>
-    <main><BlockRenderer blocks={page.blocks} /></main>
+    <main><BlockRenderer blocks={page.blocks} editable={true} /></main>
   </div>
   <script type="application/json" id="composer-blocks" set:html={JSON.stringify(page.blocks).replace(/<\//g, '<\\/')}></script>
   <script>import '../../../scripts/composer.ts';</script>

@@ -1,5 +1,5 @@
 ---
-// block.type → component dispatch.
+// block.type → component dispatch, with an optional editable wrapper.
 import Hero from './Hero.astro';
 import Heading from './Heading.astro';
 import RichText from './RichText.astro';
@@ -9,17 +9,21 @@ import Quote from './Quote.astro';
 import Spacer from './Spacer.astro';
 import type { Block } from '../../lib/blocks';
 
-const { blocks = [] } = Astro.props as { blocks: Block[] };
+const { blocks = [], editable = false } = Astro.props as { blocks: Block[]; editable?: boolean };
 ---
 {blocks.map((b) => {
+  let inner;
   switch (b.type) {
-    case 'hero': return <Hero id={b.id} props={b.props} />;
-    case 'heading': return <Heading id={b.id} props={b.props} />;
-    case 'richText': return <RichText id={b.id} props={b.props} />;
-    case 'image': return <ImageBlock id={b.id} props={b.props} />;
-    case 'worksGrid': return <WorksGrid id={b.id} props={b.props} />;
-    case 'quote': return <Quote id={b.id} props={b.props} />;
-    case 'spacer': return <Spacer id={b.id} props={b.props} />;
+    case 'hero': inner = <Hero id={b.id} props={b.props} />; break;
+    case 'heading': inner = <Heading id={b.id} props={b.props} />; break;
+    case 'richText': inner = <RichText id={b.id} props={b.props} />; break;
+    case 'image': inner = <ImageBlock id={b.id} props={b.props} />; break;
+    case 'worksGrid': inner = <WorksGrid id={b.id} props={b.props} />; break;
+    case 'quote': inner = <Quote id={b.id} props={b.props} />; break;
+    case 'spacer': inner = <Spacer id={b.id} props={b.props} />; break;
     default: return null;
   }
+  return editable
+    ? <div class="cb-block" data-block-id={b.id} data-block-type={b.type}>{inner}</div>
+    : inner;
 })}
