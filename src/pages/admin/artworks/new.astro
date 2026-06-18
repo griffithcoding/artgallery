@@ -4,6 +4,7 @@ import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { createSupabaseAdmin } from '../../../lib/supabase/server';
 import { categories, subjects } from '../../../lib/gallery';
 const { data: artists } = await createSupabaseAdmin().from('artists').select('id, name').order('name');
+const preArtist = Astro.url.searchParams.get('artist') ?? ''; // pre-select when adding from an artist
 const RATIOS = ['portrait', 'landscape', 'square', 'tall'];
 const AVAIL = ['Available', 'Inquire', 'Sold'];
 ---
@@ -13,7 +14,7 @@ const AVAIL = ['Available', 'Inquire', 'Sold'];
     <div class="admin-field"><label>Title</label><input name="title" required /></div>
     <div class="admin-field"><label>Artist</label>
       <select name="artist_id"><option value="">— none —</option>
-        {(artists ?? []).map((a) => <option value={a.id}>{a.name}</option>)}
+        {(artists ?? []).map((a) => <option value={a.id} selected={a.id === preArtist}>{a.name}</option>)}
       </select></div>
     <div class="admin-field"><label>Year</label><input name="year" type="number" /></div>
     <div class="admin-field"><label>Medium</label><input name="medium" /></div>

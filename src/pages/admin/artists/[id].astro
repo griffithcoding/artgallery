@@ -9,6 +9,8 @@ if (!a) return Astro.redirect('/admin/artists', 303);
 const currentCreator = await getLinkedCreatorEmail(a.id);
 const { count: workCount } = await createSupabaseAdmin()
   .from('artworks').select('id', { count: 'exact', head: true }).eq('artist_id', a.id);
+const { data: works } = await createSupabaseAdmin()
+  .from('artworks').select('id, title, year, availability').eq('artist_id', a.id).order('sort_order', { ascending: true });
 const creatorStatus = Astro.url.searchParams.get('creator');
 const creatorError = Astro.url.searchParams.get('creator_error');
 ---
@@ -44,6 +46,21 @@ const creatorError = Astro.url.searchParams.get('creator_error');
     </div>
     <button class="admin-btn" type="submit">Save changes</button>
   </form>
+
+  <section class="admin-card" style="max-width:640px;margin-top:1.5rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:0 0 .3rem;">
+      <h2 style="font-weight:500;font-size:1.1rem;margin:0;">Works <span style="color:#8a8675;font-weight:400;">· {workCount ?? 0}</span></h2>
+      <a class="admin-btn" href={`/admin/artworks/new?artist=${a.id}`}>+ Add work</a>
+    </div>
+    <p style="color:#6b6860;font-size:.88rem;margin:0 0 1rem;">Artworks by {a.name}. This is where the gallery’s pieces are managed — add a work or edit an existing one.</p>
+    {(works && works.length)
+      ? <ul style="list-style:none;padding:0;margin:0;">{works.map((w) => (
+          <li style="display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.55rem 0;border-top:1px solid var(--mw-line,#e4e2db);">
+            <span>{w.title}{w.year ? ` · ${w.year}` : ''} <span style="color:#8a8675;">· {w.availability}</span></span>
+            <a href={`/admin/artworks/${w.id}`} style="white-space:nowrap;">Edit →</a>
+          </li>))}</ul>
+      : <p style="color:#6b6860;margin:0;">No works yet — add the first one.</p>}
+  </section>
 
   <section class="admin-card" style="max-width:640px;margin-top:1.5rem;">
     <h2 style="font-weight:500;font-size:1.1rem;margin:0 0 .3rem;">Creator access</h2>

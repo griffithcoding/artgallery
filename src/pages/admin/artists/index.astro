@@ -9,6 +9,9 @@ const { data: artists } = await createSupabaseAdmin()
   .order('featured', { ascending: false })
   .order('name');
 const counts = await getArtistWorkCounts();
+const { data: orphanWorks } = await createSupabaseAdmin()
+  .from('artworks').select('id, title, year, availability').is('artist_id', null).order('sort_order', { ascending: true });
+const orphans = (orphanWorks ?? []) as any[];
 const saved = Astro.url.searchParams.get('saved');
 const list = (artists ?? []) as any[];
 ---
@@ -45,4 +48,16 @@ const list = (artists ?? []) as any[];
       </div>
     ))}
   </div>
+
+  {orphans.length > 0 && (
+    <section class="admin-card" style="margin-top:1.5rem;">
+      <h2 style="font-weight:500;font-size:1.1rem;margin:0 0 .3rem;">Unassigned works <span style="color:#8a8675;font-weight:400;">· {orphans.length}</span></h2>
+      <p style="color:#6b6860;font-size:.88rem;margin:0 0 1rem;">Artworks not linked to an artist. Open one and set its artist to file it under that artist.</p>
+      <ul style="list-style:none;padding:0;margin:0;">{orphans.map((w) => (
+        <li style="display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.55rem 0;border-top:1px solid var(--mw-line,#e4e2db);">
+          <span>{w.title}{w.year ? ` · ${w.year}` : ''} <span style="color:#8a8675;">· {w.availability}</span></span>
+          <a href={`/admin/artworks/${w.id}`} style="white-space:nowrap;">Edit →</a>
+        </li>))}</ul>
+    </section>
+  )}
 </AdminLayout>
