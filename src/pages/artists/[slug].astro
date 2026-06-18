@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import ArtworkCard from '../../components/ArtworkCard.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
 import { getArtist, getWorksByArtist, artSVG } from '../../lib/gallery';
+import { yearsActive, normalizeUrl, instagramUrl } from '../../lib/artistMeta';
 import { BRAND } from '../../lib/site';
 
 const { slug } = Astro.params;
@@ -13,6 +14,9 @@ const works = await getWorksByArtist(artist.id);
 const portrait = works[0]?.image ?? artSVG(artist.id, 'portrait');
 const shownWorks = works.slice(0, 12);
 const firstName = artist.name.split(' ')[0];
+const ya = yearsActive(artist.activeSince);
+const web = normalizeUrl(artist.websiteUrl);
+const ig = instagramUrl(artist.instagramUrl);
 
 const description = `${artist.name} (${artist.birth}), represented by Mazlish + Wright Contemporary, Brooklyn. ${artist.bio.slice(0, 120)}…`;
 
@@ -43,6 +47,20 @@ const jsonLd = {
         <h1 class="display" style="font-size:clamp(2.2rem,5vw,3.5rem);margin:.4rem 0 1.2rem;">{artist.name}</h1>
         <p class="prose lead" style="margin-bottom:1.4rem;">{artist.discipline}</p>
         <div class="prose" set:html={artist.bio} />
+        <dl class="artist-creds">
+          {artist.featured && <div class="cred-featured"><dt>Status</dt><dd>★ Featured artist</dd></div>}
+          {artist.representedSince && <div><dt>Represented since</dt><dd>{artist.representedSince}</dd></div>}
+          {ya !== null && <div><dt>Years active</dt><dd>{ya}</dd></div>}
+          {artist.basedIn && <div><dt>Based in</dt><dd>{artist.basedIn}</dd></div>}
+          <div><dt>Works on view</dt><dd>{works.length}</dd></div>
+          {artist.education && <div><dt>Education</dt><dd>{artist.education}</dd></div>}
+          {artist.nationality && <div><dt>Nationality</dt><dd>{artist.nationality}</dd></div>}
+        </dl>
+        <div class="artist-links">
+          {web && <a href={web} rel="noopener" target="_blank">Website ↗</a>}
+          {ig && <a href={ig} rel="noopener" target="_blank">Instagram ↗</a>}
+          {artist.cvUrl && <a href={artist.cvUrl} rel="noopener" target="_blank">Download CV (PDF) ↗</a>}
+        </div>
         <div class="flex gap-1 mt-2" style="flex-wrap:wrap;">
           <a class="btn" href={`/works?artist=${encodeURIComponent(artist.name)}`}>All works by {firstName}</a>
           <button class="btn btn--solid" onclick={`openInquiry('Works by ${artist.name.replace(/'/g, "\\'")}')`}>Inquire</button>

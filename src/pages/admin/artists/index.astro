@@ -2,11 +2,13 @@
 export const prerender = false;
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { createSupabaseAdmin } from '../../../lib/supabase/server';
-import { artSVG } from '../../../lib/gallery';
+import { artSVG, getArtistWorkCounts } from '../../../lib/gallery';
 const { data: artists } = await createSupabaseAdmin()
   .from('artists')
-  .select('id, name, discipline, portrait_image_url')
+  .select('id, name, discipline, portrait_image_url, featured, represented_since')
+  .order('featured', { ascending: false })
   .order('name');
+const counts = await getArtistWorkCounts();
 const saved = Astro.url.searchParams.get('saved');
 const list = (artists ?? []) as any[];
 ---
@@ -28,7 +30,10 @@ const list = (artists ?? []) as any[];
         </a>
         <div class="tmeta">
           <a class="ttitle" href={`/admin/artists/${a.id}`}>{a.name}</a>
-          <div class="tartist">{a.discipline}</div>
+          <div class="tartist">
+            {a.featured && <span style="color:var(--mw-accent);">★ </span>}
+            {a.discipline}{a.discipline ? ' · ' : ''}{counts.get(a.id) ?? 0} works{a.represented_since ? ` · since ${a.represented_since}` : ''}
+          </div>
           <div class="tactions">
             <a href={`/admin/artists/${a.id}`}>Edit</a>
             <form method="POST" action="/admin/artists/action" onsubmit="return confirm('Delete this artist?')">

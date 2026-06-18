@@ -489,6 +489,16 @@ img, svg, video, table { max-width: 100%; }
 input, textarea, select, button { max-width: 100%; }
 .newsletter { max-width: 100%; }
 
+/* Artist credentials block (public artist page) */
+.artist-creds { margin: 1.6rem 0 0; padding: 1.3rem 0 0; border-top: 1px solid var(--line); display: grid; gap: 0.7rem; }
+.artist-creds > div { display: flex; justify-content: space-between; gap: 1.5rem; align-items: baseline; }
+.artist-creds dt { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); margin: 0; }
+.artist-creds dd { margin: 0; font-size: 0.95rem; color: var(--ink); text-align: right; }
+.artist-creds .cred-featured dd { color: var(--accent-2); }
+.artist-links { display: flex; flex-wrap: wrap; gap: 1.4rem; margin-top: 1.3rem; }
+.artist-links a { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+.artist-links a:hover { border-color: var(--accent-2); color: var(--accent-2); }
+
 /* =========================================================================
    Aesthetic refinement pass — 2026-06 (competitor-informed)
    Precision elevation toward blue-chip gallery polish, plus the new

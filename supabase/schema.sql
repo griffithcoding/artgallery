@@ -13,6 +13,15 @@ create table if not exists public.artists (
   discipline text default '',
   bio text default '',
   portrait_image_url text,
+  represented_since int,
+  active_since int,
+  based_in text default '',
+  website_url text default '',
+  instagram_url text default '',
+  education text default '',
+  nationality text default '',
+  cv_url text default '',
+  featured boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

@@ -27,18 +27,24 @@ document.querySelectorAll<HTMLInputElement>('input[type=file]').forEach((input) 
   input.addEventListener('change', async () => {
     const file = input.files?.[0];
     if (!file) return;
-    previewImg.src = URL.createObjectURL(file); // instant local preview
-    preview!.style.display = 'block';
-    if (msg) msg.textContent = 'Uploading…';
+    const kind = input.dataset.kind ?? 'artworks';
+    if (kind === 'cv') {
+      preview!.style.display = 'none';
+      if (msg) msg.textContent = `Uploading ${file.name}…`;
+    } else {
+      previewImg.src = URL.createObjectURL(file); // instant local preview
+      preview!.style.display = 'block';
+      if (msg) msg.textContent = 'Uploading…';
+    }
     const fd = new FormData();
     fd.append('file', file);
-    fd.append('kind', input.dataset.kind ?? 'artworks');
+    fd.append('kind', kind);
     try {
       const res = await fetch('/api/upload', { method: 'POST', body: fd });
       if (!res.ok) { if (msg) msg.textContent = 'Upload failed.'; return; }
       const { url } = await res.json();
       if (hidden) hidden.value = url;
-      if (msg) msg.textContent = 'Uploaded ✓';
+      if (msg) msg.textContent = kind === 'cv' ? `CV uploaded ✓ (${file.name})` : 'Uploaded ✓';
     } catch {
       if (msg) msg.textContent = 'Upload failed.';
     }

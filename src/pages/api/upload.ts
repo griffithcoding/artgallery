@@ -3,9 +3,10 @@ import { createSupabaseServer, createSupabaseAdmin } from '../../lib/supabase/se
 
 export const prerender = false;
 
-const ALLOWED = ['image/jpeg', 'image/png', 'image/webp'];
-const MAX = 5 * 1024 * 1024;
-const PREFIXES = new Set(['artworks', 'artists', 'posts']);
+const ALLOWED_IMG = ['image/jpeg', 'image/png', 'image/webp'];
+const MAX_IMG = 5 * 1024 * 1024;
+const MAX_CV = 10 * 1024 * 1024;
+const PREFIXES = new Set(['artworks', 'artists', 'posts', 'cv']);
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   const auth = createSupabaseServer(cookies, request.headers);
@@ -19,10 +20,13 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const kindRaw = String(form.get('kind') ?? 'artworks');
   const kind = PREFIXES.has(kindRaw) ? kindRaw : 'artworks';
   if (!(file instanceof File)) return new Response('No file', { status: 400 });
-  if (!ALLOWED.includes(file.type)) return new Response('Bad type', { status: 415 });
-  if (file.size > MAX) return new Response('Too large', { status: 413 });
+  const isCv = kind === 'cv';
+  const allowed = isCv ? ['application/pdf'] : ALLOWED_IMG;
+  const max = isCv ? MAX_CV : MAX_IMG;
+  if (!allowed.includes(file.type)) return new Response('Bad type', { status: 415 });
+  if (file.size > max) return new Response('Too large', { status: 413 });
 
-  const ext = file.type.split('/')[1].replace('jpeg', 'jpg');
+  const ext = isCv ? 'pdf' : file.type.split('/')[1].replace('jpeg', 'jpg');
   const path = `${kind}/${crypto.randomUUID()}.${ext}`;
   const admin = createSupabaseAdmin();
   const { error } = await admin.storage

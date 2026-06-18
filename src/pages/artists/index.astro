@@ -43,7 +43,7 @@ const jsonLd = {
         {cards.map((c) => (
           <li>
             <a class="aii" href={`/artists/${c.artist.slug}`}>
-              <span class="aii-img"><img src={c.image} alt={`Work by ${c.artist.name}`} loading="lazy" /></span>
+              <span class="aii-img"><img src={c.image} alt={`Work by ${c.artist.name}`} loading="lazy" />{c.artist.featured && <span class="aii-badge">Featured</span>}</span>
               <span class="aii-name">{c.artist.name}</span>
               <span class="aii-disc">{c.artist.discipline}</span>
             </a>
@@ -66,9 +66,16 @@ const jsonLd = {
   .aii { display: block; text-decoration: none; color: inherit; }
   .aii-img {
     display: block;
+    position: relative;
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background: var(--line-soft, #f0f0f0);
+  }
+  .aii-badge {
+    position: absolute; top: 0.7rem; left: 0.7rem;
+    font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 0.3rem 0.6rem; background: var(--paper); color: var(--accent-2);
+    border: 1px solid var(--line);
   }
   .aii-img img {
     width: 100%;

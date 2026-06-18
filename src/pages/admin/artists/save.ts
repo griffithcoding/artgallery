@@ -22,6 +22,14 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     discipline: String(f.get('discipline') ?? ''),
     bio: String(f.get('bio') ?? ''),
     portrait_image_url: String(f.get('portrait_image_url') ?? '') || null,
+    represented_since: f.get('represented_since') ? Number(f.get('represented_since')) : null,
+    active_since: f.get('active_since') ? Number(f.get('active_since')) : null,
+    based_in: String(f.get('based_in') ?? ''),
+    website_url: String(f.get('website_url') ?? ''),
+    instagram_url: String(f.get('instagram_url') ?? ''),
+    education: String(f.get('education') ?? ''),
+    cv_url: String(f.get('cv_url') ?? ''),
+    featured: f.get('featured') === '1',
   };
 
   if (id) {
