@@ -140,4 +140,38 @@ body.composer-on { padding-bottom: 64px; }
 .composer-editable:focus { outline: 2px dashed #8a2b1f; outline-offset: 3px; }
 .composer-editable-img { outline: 2px dashed rgba(138,43,31,.6); outline-offset: 3px; }
 body.composer-preview .composer-editable:focus { outline: none; }
+/* ── Composer Layout mode ──────────────────────────────────────── */
+.cb-block { position: relative; }
+body.composer-mode-layout .cb-block { outline: 1px dashed rgba(138,43,31,.35); outline-offset: 4px; }
+.cb-tools { display: none; position: absolute; top: 6px; right: 6px; gap: 4px; z-index: 50; }
+body.composer-mode-layout .cb-block:hover > .cb-tools { display: flex; }
+.cb-tools button {
+  border: 1px solid #1b2233; background: #1b2233; color: #f3ede2;
+  width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-size: 14px; line-height: 1;
+}
+.cb-tools .cb-drag { cursor: grab; }
+.cb-tools .cb-pick { width: auto; padding: 0 .6rem; font-size: 12px; }
+.cb-add-end {
+  display: none; margin: 1.5rem auto; padding: .5rem 1rem; border-radius: 999px;
+  border: 1px dashed #8a2b1f; background: transparent; color: #8a2b1f; cursor: pointer;
+}
+body.composer-mode-layout .cb-add-end { display: block; }
+.cb-add-menu {
+  position: fixed; z-index: 10000; background: #fff; border: 1px solid #d9d4c9;
+  border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,.18); padding: 4px; min-width: 160px;
+}
+.cb-add-menu button { display: block; width: 100%; text-align: left; padding: .45rem .7rem; border: 0; background: transparent; cursor: pointer; border-radius: 5px; }
+.cb-add-menu button:hover { background: #f3ede2; }
+body.composer-preview .cb-tools, body.composer-preview .cb-add-end { display: none !important; }
+body.composer-preview .cb-block { outline: none !important; }
+/* works-picker modal */
+.cb-modal { position: fixed; inset: 0; z-index: 10001; background: rgba(18,22,36,.45); display: flex; align-items: center; justify-content: center; }
+.cb-modal-card { background: #fff; border-radius: 10px; padding: 1.4rem; width: min(560px, 92vw); max-height: 82vh; overflow: auto; }
+.cb-modal-card h3 { margin: 0 0 .8rem; font-weight: 500; }
+.cb-cols { display: block; margin-bottom: .8rem; font-size: .9rem; }
+.cb-work-list { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: .35rem; }
+.cb-work-list label { display: flex; gap: .5rem; align-items: center; font-size: .9rem; }
+.cb-modal-actions { display: flex; justify-content: flex-end; gap: .6rem; }
+.cb-modal-actions button { padding: .45rem .9rem; border-radius: 999px; border: 1px solid #1b2233; background: transparent; cursor: pointer; }
+.cb-modal-actions .composer-btn--solid { background: #1b2233; color: #f3ede2; }
 body.composer-preview .composer-editable-img { outline: none; cursor: default; }
