@@ -9,7 +9,9 @@ if (!user || user.role !== 'super_admin') return new Response('Forbidden', { sta
 
 const type = Astro.url.searchParams.get('type') ?? '';
 const id = Astro.url.searchParams.get('id') ?? '';
-const blocks = normalizeBlocks([{ id, type, props: {} }]);
+let props: Record<string, unknown> = {};
+try { props = JSON.parse(Astro.url.searchParams.get('props') ?? '{}'); } catch { props = {}; }
+const blocks = normalizeBlocks([{ id, type, props }]);
 if (!blocks.length) return new Response('Bad block type', { status: 400 });
 ---
 <BlockRenderer blocks={blocks} editable={true} />
