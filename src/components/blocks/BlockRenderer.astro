@@ -1,0 +1,18 @@
+---
+// block.type → component dispatch.
+import Hero from './Hero.astro';
+import Heading from './Heading.astro';
+import RichText from './RichText.astro';
+import ImageBlock from './ImageBlock.astro';
+import WorksGrid from './WorksGrid.astro';
+import Quote from './Quote.astro';
+import Spacer from './Spacer.astro';
+import type { Block } from '../../lib/blocks';
+
+const MAP = { hero: Hero, heading: Heading, richText: RichText, image: ImageBlock, worksGrid: WorksGrid, quote: Quote, spacer: Spacer } as const;
+const { blocks = [] } = Astro.props as { blocks: Block[] };
+---
+{blocks.map((b) => {
+  const C = (MAP as Record<string, any>)[b.type];
+  return C ? <C id={b.id} props={b.props} /> : null;
+})}

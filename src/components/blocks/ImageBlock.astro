@@ -1,0 +1,8 @@
+---
+const { id, props } = Astro.props;
+const { url = '', alt = '', caption = '' } = props ?? {};
+---
+<figure class="wrap cb-image">
+  <img data-block-id={id} data-field="image" data-prop="url" src={url} alt={alt} />
+  <figcaption data-block-id={id} data-field="text" data-prop="caption">{caption}</figcaption>
+</figure>

@@ -1,0 +1,5 @@
+---
+const { id, props } = Astro.props;
+const { html = '' } = props ?? {};
+---
+<div class="wrap"><div class="prose cb-richtext" data-block-id={id} data-field="text" data-prop="html" set:html={html} /></div>

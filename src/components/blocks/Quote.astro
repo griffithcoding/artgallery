@@ -1,0 +1,8 @@
+---
+const { id, props } = Astro.props;
+const { text = '', cite = '' } = props ?? {};
+---
+<blockquote class="wrap cb-quote">
+  <p class="display" data-block-id={id} data-field="text" data-prop="text">{text}</p>
+  <cite data-block-id={id} data-field="text" data-prop="cite">{cite}</cite>
+</blockquote>

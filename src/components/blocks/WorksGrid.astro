@@ -1,0 +1,11 @@
+---
+import { getArtworks } from '../../lib/gallery';
+import ArtworkCard from '../ArtworkCard.astro';
+const { props } = Astro.props;
+const { workIds = [], cols = 3 } = props ?? {};
+const all = await getArtworks();
+const ids = Array.isArray(workIds) ? workIds : [];
+const works = ids.map((wid: string) => all.find((w) => w.id === wid)).filter(Boolean);
+const gridClass = `grid grid--${[2,3,4].includes(Number(cols)) ? cols : 3}`;
+---
+<div class="wrap"><div class={gridClass}>{works.map((w) => <ArtworkCard work={w} />)}</div></div>
