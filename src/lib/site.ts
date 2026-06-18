@@ -23,12 +23,12 @@ export type NavItem = NavLink | { label: string; children: NavLink[] };
 export const NAV: NavItem[] = [
   { href: '/exhibitions', label: 'Exhibitions' },
   { href: '/artists', label: 'Artists' },
-  { href: '/works', label: 'Works' },
   { href: '/about', label: 'About' },
   {
     label: 'Resources',
     children: [
       { href: '/resources', label: 'Overview' },
+      { href: '/works', label: 'Works' },
       { href: '/art-fairs', label: 'Art Fairs' },
       { href: '/press', label: 'Press' },
       { href: '/events', label: 'Events' },

@@ -28,11 +28,11 @@ if (isSupabaseConfigured()) {
 
 // Selected works shown on the homepage — the gallery's own featured paintings.
 const featured = [
-  { img: '/images/works/ballad-of-the-caged-bird.jpeg', title: 'Ballad of the Caged Bird', meta: 'Latex enamel, spray paint & plastisol on canvas · 60 × 60 in · 2026', price: '$12,000' },
-  { img: '/images/works/the-space-between.jpeg', title: 'The Space Between', meta: 'Mixed media on canvas', price: 'Inquire' },
-  { img: '/images/works/connecting-stations.jpeg', title: 'Connecting Stations', meta: 'Latex enamel, spray paint & plastisol on canvas · 60 × 52 in · 2025', price: '$10,000' },
-  { img: '/images/works/gravity.jpeg', title: 'Gravity', meta: 'Latex enamel, spray paint & plastisol on canvas · 62 × 40 in · 2026', price: '$7,500' },
-  { img: '/images/works/catharsis.jpeg', title: 'Catharsis', meta: 'Mixed media on canvas · 60 × 60 in · 2023', price: '$10,000' },
+  { img: '/images/works/ballad-of-the-caged-bird.jpeg', title: 'Ballad of the Caged Bird', meta: 'Latex enamel, spray paint & plastisol on canvas · 60 × 60 in · 2026' },
+  { img: '/images/works/the-space-between.jpeg', title: 'The Space Between', meta: 'Mixed media on canvas' },
+  { img: '/images/works/connecting-stations.jpeg', title: 'Connecting Stations', meta: 'Latex enamel, spray paint & plastisol on canvas · 60 × 52 in · 2025' },
+  { img: '/images/works/gravity.jpeg', title: 'Gravity', meta: 'Latex enamel, spray paint & plastisol on canvas · 62 × 40 in · 2026' },
+  { img: '/images/works/catharsis.jpeg', title: 'Catharsis', meta: 'Mixed media on canvas · 60 × 60 in · 2023' },
 ];
 
 const mapsSearch = 'https://www.google.com/maps/search/?api=1&query=65-B+Pearl+Street+Brooklyn+NY+11201';
@@ -135,10 +135,6 @@ const jsonLd = {
   <main>
     <!-- Hero — brand lockup + gallery interior + answer-ready intro -->
     <section class="hero wrap section--tight">
-      <div class="hero-brand reveal">
-        <img class="hero-logo" src="/images/logo.png" alt="Mazlish + Wright Contemporary" width="640" height="400" />
-      </div>
-
       <a href={`/exhibitions/${current.slug}`} class="hero-photo reveal" aria-label={`Now on view: ${current.title}`}>
         <img
           src={heroSrc}
@@ -182,7 +178,6 @@ const jsonLd = {
             <figcaption>
               <span class="fw-title">{p.title}</span>
               {p.meta && <span class="fw-meta">{p.meta}</span>}
-              {p.price && <span class="fw-price">{p.price}</span>}
             </figcaption>
           </figure>
         ))}
@@ -250,7 +245,6 @@ const jsonLd = {
 <style>
   /* Hero — brand lockup + gallery interior */
   .hero { padding-top: clamp(1.5rem, 4vw, 3.5rem); }
-  .hero-brand { display: flex; justify-content: center; margin-bottom: clamp(1.6rem, 4vw, 3rem); }
   .brand-lockup { border: 1px solid var(--ink); padding: clamp(0.85rem, 2vw, 1.4rem) clamp(1.3rem, 3.4vw, 2.8rem); text-align: center; line-height: 1; max-width: 100%; }
   .bl-main { display: block; font-family: var(--serif); font-size: clamp(1.15rem, 4.6vw, 2.9rem); letter-spacing: 0.12em; color: var(--ink); white-space: nowrap; }
   .bl-bar { display: inline-block; width: 1px; height: 0.9em; background: currentColor; opacity: 0.45; margin: 0 0.55em; vertical-align: -0.05em; }
@@ -262,7 +256,6 @@ const jsonLd = {
   .hero-belt-main h1.display { margin: 0.35rem 0 1rem; }
   .hero-belt-side { padding-top: 0.2rem; }
   @media (max-width: 860px) { .hero-belt { grid-template-columns: 1fr; gap: 1.5rem; } }
-  .hero-logo { display: block; width: min(600px, 90%); height: auto; margin: 0 auto; mix-blend-mode: multiply; }
 
   /* Selected works — full paintings, no crop (masonry columns) */
   .featured-grid { columns: 3; column-gap: clamp(1rem, 2.5vw, 2.2rem); }
@@ -273,7 +266,6 @@ const jsonLd = {
   .featured-work figcaption { display: flex; flex-direction: column; gap: 0.12rem; margin-top: 0.7rem; }
   .fw-title { font-family: var(--serif); font-size: 1.05rem; color: var(--ink); }
   .fw-meta { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.45; }
-  .fw-price { font-size: 0.8rem; color: var(--accent); letter-spacing: 0.02em; margin-top: 0.15rem; }
   @media (max-width: 900px) { .featured-grid { columns: 2; } }
   @media (max-width: 560px) { .featured-grid { columns: 1; } }
 
