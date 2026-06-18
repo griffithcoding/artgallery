@@ -45,3 +45,36 @@ describe('publish', () => {
     expect(draft[0].props.text).toBe('X');
   });
 });
+
+import { insertBlockAt, removeBlock, reorderByIds, defaultBlock } from './blocks';
+
+describe('insertBlockAt', () => {
+  const a = { id: 'a', type: 'spacer', props: {} };
+  const b = { id: 'b', type: 'spacer', props: {} };
+  const x = { id: 'x', type: 'spacer', props: {} };
+  it('inserts at an index', () => expect(insertBlockAt([a, b], x, 1).map((n) => n.id)).toEqual(['a', 'x', 'b']));
+  it('clamps a high index to the end', () => expect(insertBlockAt([a], x, 99).map((n) => n.id)).toEqual(['a', 'x']));
+  it('clamps a negative index to the start', () => expect(insertBlockAt([a], x, -5).map((n) => n.id)).toEqual(['x', 'a']));
+  it('does not mutate the input', () => { const src = [a]; insertBlockAt(src, x, 0); expect(src).toEqual([a]); });
+});
+
+describe('removeBlock', () => {
+  const a = { id: 'a', type: 'spacer', props: {} };
+  const b = { id: 'b', type: 'spacer', props: {} };
+  it('removes by id', () => expect(removeBlock([a, b], 'a').map((n) => n.id)).toEqual(['b']));
+  it('no-ops on unknown id', () => expect(removeBlock([a, b], 'zz').map((n) => n.id)).toEqual(['a', 'b']));
+});
+
+describe('reorderByIds', () => {
+  const a = { id: 'a', type: 'spacer', props: {} };
+  const b = { id: 'b', type: 'spacer', props: {} };
+  const c = { id: 'c', type: 'spacer', props: {} };
+  it('reorders to match the id list', () => expect(reorderByIds([a, b, c], ['c', 'a', 'b']).map((n) => n.id)).toEqual(['c', 'a', 'b']));
+  it('ignores unknown ids and appends missing ones', () => expect(reorderByIds([a, b, c], ['c', 'zz']).map((n) => n.id)).toEqual(['c', 'a', 'b']));
+});
+
+describe('defaultBlock', () => {
+  it('builds a normalized block of a type with default props + id', () => {
+    expect(defaultBlock('heading', 'h9')).toEqual({ id: 'h9', type: 'heading', props: { text: '', level: 2 } });
+  });
+});
