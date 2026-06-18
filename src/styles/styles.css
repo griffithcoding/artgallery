@@ -106,7 +106,7 @@ h3.display { font-size: clamp(1.25rem, 2.5vw, 1.65rem); }
    ========================================================================= */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: linear-gradient(180deg, #14274b 0%, #0b1a33 100%);
+  background: linear-gradient(180deg, #18386b 0%, #0e2750 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 }
 /* Navy nav — white text + search, all scoped to the header */
@@ -115,7 +115,7 @@ h3.display { font-size: clamp(1.25rem, 2.5vw, 1.65rem); }
 .site-header .nav-links a { color: rgba(255, 255, 255, 0.72); }
 .site-header .nav-links a:hover,
 .site-header .nav-links a[aria-current="page"] { color: #fff; }
-.site-header .nav-actions .link-underline { color: #fff; }
+.site-header .nav-actions .link-underline { color: #fff; white-space: nowrap; }
 .site-header .nav-toggle span { background: #fff; }
 .nav-search-btn {
   display: inline-flex; align-items: center; justify-content: center;
