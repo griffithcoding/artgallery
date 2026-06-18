@@ -7,11 +7,30 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
   <div class="wrap">
     <nav class="nav" id="nav">
       <a class="brand" href="/" aria-label={`${BRAND.name} home`}>
-        {BRAND.wordmark}<small>{BRAND.city}</small>
+        <img class="brand-logo" src="/images/logo-nav.png" alt={BRAND.name} width="810" height="320" />
       </a>
       <div class="nav-links">
         {NAV.map((n) => (
-          <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+          'children' in n ? (
+            <div class="nav-dd">
+              <button
+                type="button"
+                class:list={['nav-dd-toggle', { 'is-current': n.children.some((c) => isActive(c.href)) }]}
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                {n.label}
+                <svg class="nav-dd-caret" width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1.5 5 5.5 9 1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <ul class="nav-dd-menu">
+                {n.children.map((c) => (
+                  <li><a href={c.href} aria-current={isActive(c.href) ? 'page' : undefined}>{c.label}</a></li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+          )
         ))}
       </div>
       <div class="nav-actions">
@@ -64,4 +83,27 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && sPanel && !sPanel.hidden) closeSearch();
   });
+
+  // Resources dropdown — click toggles (touch + keyboard); on desktop CSS also
+  // opens it on hover/focus. Closes on outside click or Escape.
+  const dds = Array.from(document.querySelectorAll('.nav-dd'));
+  const closeDds = () => dds.forEach((dd) => {
+    dd.classList.remove('is-open');
+    dd.querySelector('.nav-dd-toggle')?.setAttribute('aria-expanded', 'false');
+  });
+  dds.forEach((dd) => {
+    const btn = dd.querySelector('.nav-dd-toggle');
+    btn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = dd.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+  document.addEventListener('click', (e) => {
+    dds.forEach((dd) => { if (!dd.contains(e.target as Node)) {
+      dd.classList.remove('is-open');
+      dd.querySelector('.nav-dd-toggle')?.setAttribute('aria-expanded', 'false');
+    }});
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDds(); });
 </script>

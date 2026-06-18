@@ -15,13 +15,25 @@ export const BRAND = {
   domain: 'https://www.versogallery.com',
 } as const;
 
-export const NAV = [
+export type NavLink = { href: string; label: string };
+export type NavItem = NavLink | { label: string; children: NavLink[] };
+
+// Top-level nav. "Resources" is a collapsible dropdown that groups the
+// collector/press pages (kept out of the top level so they aren't duplicated).
+export const NAV: NavItem[] = [
   { href: '/exhibitions', label: 'Exhibitions' },
   { href: '/artists', label: 'Artists' },
   { href: '/works', label: 'Works' },
-  { href: '/events', label: 'Events' },
-  { href: '/press', label: 'Press' },
-  { href: '/art-fairs', label: 'Art Fairs' },
   { href: '/about', label: 'About' },
+  {
+    label: 'Resources',
+    children: [
+      { href: '/resources', label: 'Overview' },
+      { href: '/art-fairs', label: 'Art Fairs' },
+      { href: '/press', label: 'Press' },
+      { href: '/events', label: 'Events' },
+      { href: '/viewing-rooms', label: 'Viewing Rooms' },
+    ],
+  },
   { href: '/visit', label: 'Visit' },
-] as const;
+];
