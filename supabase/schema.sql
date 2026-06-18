@@ -177,6 +177,24 @@ create policy posts_auth_read on public.posts for select to authenticated using 
 
 -- inquiries: NO public policies (service-role only for insert + read)
 
+-- ── Pages (composer) ────────────────────────────────────────────────────────
+create table if not exists public.pages (
+  id               uuid primary key default gen_random_uuid(),
+  slug             text not null unique,
+  title            text not null default '',
+  status           text not null default 'draft',       -- 'draft' | 'published'
+  blocks           jsonb not null default '[]'::jsonb,   -- working draft
+  published_blocks jsonb not null default '[]'::jsonb,   -- public-facing
+  updated_by       uuid,
+  updated_at       timestamptz not null default now(),
+  created_at       timestamptz not null default now()
+);
+alter table public.pages enable row level security;
+drop policy if exists pages_public_read on public.pages;
+create policy pages_public_read on public.pages
+  for select using (status = 'published');
+-- Writes use the service-role client from /admin endpoints (bypasses RLS).
+
 -- ===== storage bucket =====
 insert into storage.buckets (id, name, public)
 values ('gallery-images','gallery-images', true)

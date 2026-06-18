@@ -28,3 +28,10 @@ export interface ViewingRoomRow { id: string; slug: string; title: string; descr
 export interface InquiryRow { id: string; artwork_id: string | null; artwork_title: string; name: string; email: string; message: string; status: 'new' | 'replied' | 'archived'; source: 'artwork' | 'contact'; created_at: string; }
 export interface PostRow { id: string; slug: string; title: string; description: string; body: string; cover_image_url: string | null; status: 'draft' | 'published'; category: 'Journal' | 'Press' | 'Exhibitions'; published_at: string | null; created_at: string; updated_at: string; }
 export interface PressMentionRow { id: string; outlet: string; headline: string; url: string; date: string; kind: 'Review' | 'Feature' | 'Listing' | 'Profile'; sort_order: number; created_at: string; updated_at: string; }
+export interface PageRow {
+  id: string; slug: string; title: string;
+  status: 'draft' | 'published';
+  blocks: unknown;            // Block[] as jsonb
+  published_blocks: unknown;  // Block[] as jsonb
+  updated_by: string | null; updated_at: string; created_at: string;
+}
