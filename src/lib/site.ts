@@ -30,7 +30,6 @@ export const NAV: NavItem[] = [
       { href: '/resources', label: 'Overview' },
       { href: '/art-fairs', label: 'Art Fairs' },
       { href: '/events', label: 'Events' },
-      { href: '/viewing-rooms', label: 'Viewing Rooms' },
     ],
   },
   { href: '/visit', label: 'Visit' },
