@@ -19,8 +19,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
   if (body.publish) { patch.published_blocks = publish(draft); patch.status = 'published'; }
 
   const sb = createSupabaseAdmin();
-  const { error } = await sb.from('pages').update(patch).eq('slug', slug);
+  const { data, error } = await sb.from('pages').update(patch).eq('slug', slug).select('id');
   if (error) return new Response(error.message, { status: 500 });
+  if (!data?.length) return new Response('Not found', { status: 404 });
   return new Response(JSON.stringify({ ok: true, published: Boolean(body.publish) }), {
     status: 200, headers: { 'content-type': 'application/json' },
   });
