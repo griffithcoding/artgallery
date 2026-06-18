@@ -1,6 +1,7 @@
 // Superadmin in-place editor. Loaded only on /admin/pages/[slug].
 // Builds the top mode bar; Content mode wires contenteditable text + image swap.
 interface Block { id: string; type: string; props: Record<string, unknown>; }
+import { initLayout } from './composer-layout';
 
 const root = document.getElementById('composer-root');
 const dataEl = document.getElementById('composer-blocks');
@@ -15,7 +16,7 @@ if (root && dataEl) {
   bar.innerHTML = `
     <span class="composer-brand">Composer</span>
     <button data-mode="content" class="composer-mode is-active">Content</button>
-    <button class="composer-mode" disabled title="Coming in Layout mode">Layout</button>
+    <button data-mode="layout" class="composer-mode">Layout</button>
     <button class="composer-mode" disabled title="Coming in Type mode">Type</button>
     <button class="composer-mode" disabled title="Coming in Color mode">Color</button>
     <span class="composer-spacer"></span>
@@ -88,6 +89,21 @@ if (root && dataEl) {
   }
   bar.querySelector('#composer-save')!.addEventListener('click', () => send(false));
   bar.querySelector('#composer-publish')!.addEventListener('click', () => send(true));
+
+  // ---- mode switching (content | layout) ----
+  function setMode(mode: string) {
+    document.body.classList.toggle('composer-mode-layout', mode === 'layout');
+    document.body.classList.toggle('composer-mode-content', mode === 'content');
+    bar.querySelectorAll<HTMLElement>('.composer-mode[data-mode]').forEach((b) =>
+      b.classList.toggle('is-active', b.dataset.mode === mode));
+    textEls.forEach((el) => (el.contentEditable = mode === 'content' ? 'true' : 'false'));
+  }
+  bar.querySelectorAll<HTMLElement>('.composer-mode[data-mode]').forEach((b) =>
+    b.addEventListener('click', () => setMode(b.dataset.mode!)));
+  setMode('content');
+
+  // ---- layout mode ----
+  initLayout({ root, state: state as any, byId: byId as any, status });
 
   // ---- preview toggle ----
   bar.querySelector('#composer-preview')!.addEventListener('click', () => {
