@@ -1,0 +1,15 @@
+---
+export const prerender = false;
+export const partial = true;
+import BlockRenderer from '../../../components/blocks/BlockRenderer.astro';
+import { normalizeBlocks } from '../../../lib/blocks';
+
+const user = Astro.locals.user;
+if (!user || user.role !== 'super_admin') return new Response('Forbidden', { status: 403 });
+
+const type = Astro.url.searchParams.get('type') ?? '';
+const id = Astro.url.searchParams.get('id') ?? '';
+const blocks = normalizeBlocks([{ id, type, props: {} }]);
+if (!blocks.length) return new Response('Bad block type', { status: 400 });
+---
+<BlockRenderer blocks={blocks} editable={true} />
