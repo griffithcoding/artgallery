@@ -5,7 +5,7 @@ export const BRAND = {
   wordmark: 'Mazlish + Wright',
   tagline: 'Contemporary Art Gallery',
   city: 'Brooklyn, New York',
-  addressLine: '65 B Pearl Street',
+  addressLine: '65B Pearl Street',
   addressCity: 'Brooklyn, NY 11201',
   neighborhood: 'DUMBO',
   hours: 'Tue–Sat, 1–6pm',
