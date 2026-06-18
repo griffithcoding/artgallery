@@ -1,7 +1,6 @@
 ---
 import { BRAND } from '../lib/site';
 const year = new Date().getFullYear();
-const tel = BRAND.phone.replace(/[^+\d]/g, '');
 ---
 <footer class="site-footer">
   <div class="wrap">
@@ -40,7 +39,6 @@ const tel = BRAND.phone.replace(/[^+\d]/g, '');
         <h4>Connect</h4>
         <ul>
           <li><a href={`mailto:${BRAND.email}`}>{BRAND.email}</a></li>
-          <li><a href={`tel:${tel}`}>{BRAND.phone}</a></li>
           <li><a href={BRAND.instagram} rel="noopener" target="_blank">Instagram</a></li>
           <li><a href="/contact">Contact</a></li>
         </ul>

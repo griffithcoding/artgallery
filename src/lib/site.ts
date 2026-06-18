@@ -9,7 +9,7 @@ export const BRAND = {
   addressCity: 'Brooklyn, NY 11201',
   neighborhood: 'DUMBO',
   hours: 'Tue–Sat, 1–6pm',
-  email: 'hello@versogallery.com',
+  email: 'info@mazlishwrightcontemporary.com',
   phone: '+1 (718) 555-0142',
   instagram: 'https://www.instagram.com/',
   domain: 'https://www.versogallery.com',
