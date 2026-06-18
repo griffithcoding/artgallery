@@ -26,6 +26,15 @@ if (isSupabaseConfigured()) {
   } catch { /* storage unavailable → keep static fallback */ }
 }
 
+// Selected works shown on the homepage — the gallery's own featured paintings.
+const featured = [
+  { img: '/images/works/ballad-of-the-caged-bird.jpeg', title: 'Ballad of the Caged Bird', meta: 'Latex enamel, spray paint & plastisol on canvas · 60 × 60 in · 2026', price: '$12,000' },
+  { img: '/images/works/the-space-between.jpeg', title: 'The Space Between', meta: 'Mixed media on canvas', price: 'Inquire' },
+  { img: '/images/works/connecting-stations.jpeg', title: 'Connecting Stations', meta: 'Latex enamel, spray paint & plastisol on canvas · 60 × 52 in · 2025', price: '$10,000' },
+  { img: '/images/works/gravity.jpeg', title: 'Gravity', meta: 'Latex enamel, spray paint & plastisol on canvas · 62 × 40 in · 2026', price: '$7,500' },
+  { img: '/images/works/catharsis.jpeg', title: 'Catharsis', meta: 'Mixed media on canvas · 60 × 60 in · 2023', price: '$10,000' },
+];
+
 const mapsSearch = 'https://www.google.com/maps/search/?api=1&query=65-B+Pearl+Street+Brooklyn+NY+11201';
 const mapsDir = 'https://www.google.com/maps/dir/?api=1&destination=65-B+Pearl+Street+Brooklyn+NY+11201';
 
@@ -127,10 +136,7 @@ const jsonLd = {
     <!-- Hero — brand lockup + gallery interior + answer-ready intro -->
     <section class="hero wrap section--tight">
       <div class="hero-brand reveal">
-        <div class="brand-lockup" aria-label="Mazlish + Wright Contemporary">
-          <span class="bl-main">MAZLISH<i class="bl-bar" aria-hidden="true"></i>WRIGHT</span>
-          <span class="bl-sub">Contemporary</span>
-        </div>
+        <img class="hero-logo" src="/images/logo.png" alt="Mazlish + Wright Contemporary" width="640" height="400" />
       </div>
 
       <a href={`/exhibitions/${current.slug}`} class="hero-photo reveal" aria-label={`Now on view: ${current.title}`}>
@@ -169,8 +175,17 @@ const jsonLd = {
         <h2 class="display reveal">Contemporary art, available now</h2>
         <a class="link-underline reveal" href="/works">View all works →</a>
       </div>
-      <div class="grid grid--4">
-        {works.map((w) => <ArtworkCard work={w} />)}
+      <div class="featured-grid">
+        {featured.map((p) => (
+          <figure class="featured-work reveal">
+            <a href="/works" class="fw-img"><img src={p.img} alt={p.title} loading="lazy" /></a>
+            <figcaption>
+              <span class="fw-title">{p.title}</span>
+              {p.meta && <span class="fw-meta">{p.meta}</span>}
+              {p.price && <span class="fw-price">{p.price}</span>}
+            </figcaption>
+          </figure>
+        ))}
       </div>
     </section>
 
@@ -247,6 +262,20 @@ const jsonLd = {
   .hero-belt-main h1.display { margin: 0.35rem 0 1rem; }
   .hero-belt-side { padding-top: 0.2rem; }
   @media (max-width: 860px) { .hero-belt { grid-template-columns: 1fr; gap: 1.5rem; } }
+  .hero-logo { display: block; width: min(600px, 90%); height: auto; margin: 0 auto; mix-blend-mode: multiply; }
+
+  /* Selected works — full paintings, no crop (masonry columns) */
+  .featured-grid { columns: 3; column-gap: clamp(1rem, 2.5vw, 2.2rem); }
+  .featured-work { break-inside: avoid; margin: 0 0 clamp(1.6rem, 3.2vw, 2.6rem); }
+  .featured-work .fw-img { display: block; overflow: hidden; background: var(--line-soft); }
+  .featured-work .fw-img img { width: 100%; height: auto; display: block; transition: transform 0.8s var(--ease); }
+  .featured-work:hover .fw-img img { transform: scale(1.02); }
+  .featured-work figcaption { display: flex; flex-direction: column; gap: 0.12rem; margin-top: 0.7rem; }
+  .fw-title { font-family: var(--serif); font-size: 1.05rem; color: var(--ink); }
+  .fw-meta { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.45; }
+  .fw-price { font-size: 0.8rem; color: var(--accent); letter-spacing: 0.02em; margin-top: 0.15rem; }
+  @media (max-width: 900px) { .featured-grid { columns: 2; } }
+  @media (max-width: 560px) { .featured-grid { columns: 1; } }
 
   .visit-nap { font-style: normal; line-height: 1.85; font-size: 0.95rem; margin: 1.2rem 0; color: var(--ink); }
   .visit-nap a { border-bottom: 1px solid var(--line); }
