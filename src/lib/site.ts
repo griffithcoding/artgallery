@@ -28,9 +28,7 @@ export const NAV: NavItem[] = [
     label: 'Resources',
     children: [
       { href: '/resources', label: 'Overview' },
-      { href: '/works', label: 'Works' },
       { href: '/art-fairs', label: 'Art Fairs' },
-      { href: '/press', label: 'Press' },
       { href: '/events', label: 'Events' },
       { href: '/viewing-rooms', label: 'Viewing Rooms' },
     ],
