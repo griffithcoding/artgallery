@@ -2,5 +2,6 @@
 const { props } = Astro.props;
 const sizes: Record<string, string> = { sm: '1.5rem', md: '3.5rem', lg: '6rem' };
 const h = (props?.size && sizes[props.size as string]) ? sizes[props.size as string] : sizes.md;
+const heightStyle = `height:${h}`;
 ---
-<div class="cb-spacer" style={`height:${h}`} aria-hidden="true"></div>
+<div class="cb-spacer" style={heightStyle} aria-hidden="true"></div>

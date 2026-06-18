@@ -9,10 +9,17 @@ import Quote from './Quote.astro';
 import Spacer from './Spacer.astro';
 import type { Block } from '../../lib/blocks';
 
-const MAP = { hero: Hero, heading: Heading, richText: RichText, image: ImageBlock, worksGrid: WorksGrid, quote: Quote, spacer: Spacer } as const;
 const { blocks = [] } = Astro.props as { blocks: Block[] };
 ---
 {blocks.map((b) => {
-  const C = (MAP as Record<string, any>)[b.type];
-  return C ? <C id={b.id} props={b.props} /> : null;
+  switch (b.type) {
+    case 'hero': return <Hero id={b.id} props={b.props} />;
+    case 'heading': return <Heading id={b.id} props={b.props} />;
+    case 'richText': return <RichText id={b.id} props={b.props} />;
+    case 'image': return <ImageBlock id={b.id} props={b.props} />;
+    case 'worksGrid': return <WorksGrid id={b.id} props={b.props} />;
+    case 'quote': return <Quote id={b.id} props={b.props} />;
+    case 'spacer': return <Spacer id={b.id} props={b.props} />;
+    default: return null;
+  }
 })}

@@ -1,8 +1,9 @@
 ---
 const { id, props } = Astro.props;
 const { heading = '', sub = '', imageUrl = '' } = props ?? {};
+const bgStyle = imageUrl ? `background-image:url('${imageUrl}')` : '';
 ---
-<section class="cb-hero" style={imageUrl ? `background-image:url('${imageUrl}')` : ''}>
+<section class="cb-hero" style={bgStyle}>
   <!-- img is the in-place editor anchor (carries data-field); background-image is the visual render -->
   <img class="cb-hero-bg" data-block-id={id} data-field="image" data-prop="imageUrl" src={imageUrl} alt={heading} hidden={!imageUrl} />
   <div class="cb-hero-inner wrap">

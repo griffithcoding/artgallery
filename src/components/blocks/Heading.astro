@@ -1,6 +1,11 @@
 ---
 const { id, props } = Astro.props;
 const { text = '', level = 2 } = props ?? {};
-const Tag = `h${[1,2,3,4].includes(Number(level)) ? level : 2}`;
+const num = [1,2,3,4].includes(Number(level)) ? Number(level) : 2;
 ---
-<div class="wrap"><Tag class="display cb-heading" data-block-id={id} data-field="text" data-prop="text">{text}</Tag></div>
+<div class="wrap">
+{num === 1 && <h1 class="display cb-heading" data-block-id={id} data-field="text" data-prop="text">{text}</h1>}
+{num === 2 && <h2 class="display cb-heading" data-block-id={id} data-field="text" data-prop="text">{text}</h2>}
+{num === 3 && <h3 class="display cb-heading" data-block-id={id} data-field="text" data-prop="text">{text}</h3>}
+{num === 4 && <h4 class="display cb-heading" data-block-id={id} data-field="text" data-prop="text">{text}</h4>}
+</div>
