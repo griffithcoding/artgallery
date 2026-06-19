@@ -34,7 +34,7 @@ name, email, message, created_at`.
 | Column | Type | Notes |
 |---|---|---|
 | `status` | text enum | **Change** allowed set to `new, contacted, won, lost, archived` (default `new`). Migration drops the old check constraint and re-adds. Existing `replied`→ map to `contacted`; `new`/`archived` unchanged. |
-| `source` | text enum | Extend to `artwork, contact, viewing_room` (default `contact`). |
+| `source` | text enum | Existing `artwork, contact` (default `contact`); unchanged. |
 | `phone` | text null | Optional. |
 | `consent_marketing` | boolean | default `false`. |
 | `consent_ts` | timestamptz null | Set when consent box ticked. |
@@ -129,7 +129,6 @@ Phase 1 introduces small, dependency-free building blocks the later modules reus
 
 - A separate `contacts`/CRM table, contact de-dupe/merge, lead scoring, follow-up reminder sequences.
 - The fuller funnel (negotiating/reserved) — lean set only; extensible later.
-- `viewing_room` as a live source value is reserved now but only emitted once Phase 3 ships.
 - In-app email composing/sending (reply is `mailto:` only).
 
 ## 11. New / changed files

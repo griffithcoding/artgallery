@@ -17,7 +17,7 @@ defines tables for far more than the admin UI exposes. The build is **schema-ric
 | Homepage hero | (storage) | ✅ upload | ✅ |
 | **Inquiries / leads** | `inquiries` | ❌ none | ⚠️ modal is a **stub** (no POST; leads discarded) |
 | **Exhibitions** | `exhibitions`, `exhibition_artists` | ❌ none | ⚠️ generator-only |
-| **Viewing rooms** | `viewing_rooms`, `viewing_room_artworks` | ❌ none | ⚠️ index only |
+| ~~Viewing rooms~~ *(out of scope)* | `viewing_rooms`, `viewing_room_artworks` | ❌ none | ⚠️ index only |
 | **Journal / Press** | `posts`, `press_mentions` | ❌ none | ❓ minimal |
 | **Art fairs** | `fairs` | ❌ none | ⚠️ static page |
 | Dashboard / settings / media | — | ⚠️ placeholder | — |
@@ -38,13 +38,12 @@ conventions.
    **price-on-request "Inquire"** routed to a **lead inbox/CRM**. This single flow is the defining
    "blue-chip" signal. We already have the relational core and price-on-request; **the inbox is the
    missing half.**
-2. **One lightweight Online Viewing Room.** Zwirner proved the small, curated format outperforms
-   heavy VR. A differentiator that punches above its weight.
-3. **A modest editorial "Journal".** Interviews / studio visits for SEO + E-E-A-T authority.
-4. **Admin that feels elite:** draft/publish workflow, status badges, searchable/sortable content
+2. **A modest editorial "Journal".** Interviews / studio visits for SEO + E-E-A-T authority.
+3. **Admin that feels elite:** draft/publish workflow, status badges, searchable/sortable content
    lists, bulk actions, empty states, a real dashboard, and **outcome-first onboarding** (a persistent
    setup checklist beats a feature tour).
-5. **Deliberately deferred:** custom VR/AR, podcasts, gated-pricing accounts, custom-checkout commerce.
+4. **Deliberately deferred / out of scope:** online viewing rooms (dropped by decision), custom VR/AR,
+   podcasts, gated-pricing accounts, custom-checkout commerce.
 
 ## 3. Goals & non-goals
 
@@ -59,6 +58,7 @@ conventions.
 - Invoicing, consignments, payments, multi-currency accounting.
 - Custom checkout / e-commerce (defer to hosted Shopify if ever needed).
 - Immersive 3D/VR/AR, gated-pricing collector accounts, podcasts.
+- **Online viewing rooms** (dropped by decision; the `viewing_rooms` / `viewing_room_artworks` tables stay dormant and unused).
 - Re-introducing the artist/creator portal (removed by decision).
 
 ## 4. Module decomposition & sequence
@@ -69,11 +69,9 @@ Each module is its own **spec → plan → build → verify** cycle. Order is by
    wired modal/buttons, admin inbox with lean pipeline. Seeds the shared admin list-UX kit.
 2. **Exhibitions CMS.** CRUD + artist linking + status workflow (On View / Upcoming / Past) +
    featured works; replace generator-only public data with DB-backed reads through the existing seam.
-3. **Online Viewing Rooms.** Curate works, hero + narrative, access control (public / passworded /
-   expiry), shareable link, Inquire integration (source = `viewing_room`), optional who-viewed analytics.
-4. **Journal / Press.** `posts` CRUD (draft/publish, category) + `press_mentions`; public journal pages.
-5. **Art Fairs.** Simple CRUD on `fairs` (name, city, booth, dates, status).
-6. **Dashboard + Settings + Media library + global search.** Real dashboard (counts, drafts, recent
+3. **Journal / Press.** `posts` CRUD (draft/publish, category) + `press_mentions`; public journal pages.
+4. **Art Fairs.** Simple CRUD on `fairs` (name, city, booth, dates, status).
+5. **Dashboard + Settings + Media library + global search.** Real dashboard (counts, drafts, recent
    inquiries, quick-create, onboarding checklist); a `settings` table to move hours/address/contact out
    of `site.ts`; a media browser over the `gallery-images` bucket; cross-module search.
 
