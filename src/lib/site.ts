@@ -24,6 +24,7 @@ export const NAV: NavItem[] = [
   { href: '/about', label: 'About' },
   { href: '/artists', label: 'Artists' },
   { href: '/exhibitions', label: 'Exhibitions' },
+  { href: '/visit', label: 'Visit' },
   {
     label: 'Resources',
     children: [
@@ -32,5 +33,4 @@ export const NAV: NavItem[] = [
       { href: '/events', label: 'Events' },
     ],
   },
-  { href: '/visit', label: 'Visit' },
 ];
