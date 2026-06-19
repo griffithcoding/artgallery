@@ -5,13 +5,11 @@ export const prerender = false;
 
 const ALLOWED = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX = 8 * 1024 * 1024;
-const isOwner = (m: Record<string, unknown> | undefined) => m?.role !== 'creator' && m?.role !== 'contributor';
 
 export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   const auth = createSupabaseServer(cookies, request.headers);
   const { data: { user } } = await auth.auth.getUser();
   if (!user) return new Response('Unauthorized', { status: 401 });
-  if (!isOwner(user.app_metadata as Record<string, unknown> | undefined)) return new Response('Forbidden', { status: 403 });
 
   const f = await request.formData();
   const file = f.get('file');

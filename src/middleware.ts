@@ -3,23 +3,11 @@ import { createSupabaseServer } from './lib/supabase/server';
 
 const WRITE_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
-const CREATOR_ROLES = new Set<App.Role>(['creator', 'contributor']);
-
 function isPublicCacheable(pathname: string): boolean {
   if (pathname.startsWith('/admin')) return false;
-  if (pathname.startsWith('/studio')) return false;
   if (pathname.startsWith('/api')) return false;
   if (pathname.startsWith('/_')) return false;
   return true;
-}
-
-function resolveRole(appMetadata: Record<string, unknown> | undefined): App.Role {
-  const r = appMetadata?.role;
-  if (r === 'creator' || r === 'contributor' || r === 'super_admin') return r;
-  // Unset role defaults to the gallery owner (super_admin). Artists must be
-  // given 'creator'/'contributor' explicitly, which is what gates them into
-  // /studio and out of the gallery-wide CMS.
-  return 'super_admin';
 }
 
 export const onRequest = defineMiddleware(async (context, next) => {
@@ -28,7 +16,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // CSRF: host-only Origin check on writes to privileged surfaces
   if (
     WRITE_METHODS.has(context.request.method) &&
-    (pathname.startsWith('/admin') || pathname.startsWith('/studio') || pathname.startsWith('/_actions') || pathname.startsWith('/api'))
+    (pathname.startsWith('/admin') || pathname.startsWith('/_actions') || pathname.startsWith('/api'))
   ) {
     const origin = context.request.headers.get('origin');
     const host = context.request.headers.get('host');
@@ -43,19 +31,16 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
-  // Resolve session for all requests (never throw — missing env = logged out)
+  // Resolve session for all requests (never throw — missing env = logged out).
+  // Anyone who can sign in is the gallery owner; there is a single admin role.
   try {
     const supabase = createSupabaseServer(context.cookies, context.request.headers);
     const { data } = await supabase.auth.getUser();
     if (data.user) {
-      const meta = data.user.app_metadata as Record<string, unknown> | undefined;
       context.locals.user = {
         id: data.user.id,
         email: data.user.email ?? '',
-        role: resolveRole(meta),
-        // Creators are linked to one artist record via app_metadata.artist_id;
-        // every creator-portal query is scoped to it.
-        artistId: typeof meta?.artist_id === 'string' ? meta.artist_id : undefined,
+        role: 'super_admin',
       };
     }
   } catch {
@@ -64,22 +49,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   const user = context.locals.user;
   const isAdmin = pathname.startsWith('/admin');
-  const isStudio = pathname.startsWith('/studio');
 
-  // Admin (gallery-owner CMS) — super_admin ONLY. The login page is public;
-  // signed-in creators are sent to their own portal instead.
+  // Admin (gallery CMS) — any signed-in user is the gallery owner. The login
+  // page itself is public.
   if (pathname === '/admin/login') {
     // allow
   } else if (isAdmin) {
     if (!user) return context.redirect('/admin/login', 302);
-    if (user.role !== 'super_admin') return context.redirect('/studio', 302);
-  }
-
-  // Studio / creator portal — creator/contributor roles ONLY. Gallery owners
-  // (super_admin) are intentionally kept in the admin CMS.
-  if (isStudio) {
-    if (!user) return context.redirect('/admin/login', 302);
-    if (!CREATOR_ROLES.has(user.role)) return context.redirect('/admin', 302);
   }
 
   const res = await next();

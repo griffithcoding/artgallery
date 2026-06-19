@@ -9,13 +9,10 @@ if (Astro.request.method === 'POST') {
     const email = String(form.get('email') ?? '');
     const password = String(form.get('password') ?? '');
     const supabase = createSupabaseServer(Astro.cookies, Astro.request.headers);
-    const { data, error: e } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: e } = await supabase.auth.signInWithPassword({ email, password });
     if (e) error = e.message;
     else {
-      // Route by role: artists (creator/contributor) → /studio; owners → /admin.
-      const role = (data.user?.app_metadata as Record<string, unknown> | undefined)?.role;
-      const dest = role === 'creator' || role === 'contributor' ? '/studio' : '/admin';
-      return Astro.redirect(dest, 303);
+      return Astro.redirect('/admin', 303);
     }
   } catch {
     error = 'Sign-in is not configured yet. Add the Supabase environment variables.';

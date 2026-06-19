@@ -1,7 +1,8 @@
 /// <reference types="astro/client" />
 declare namespace App {
-  type Role = 'super_admin' | 'creator' | 'contributor';
+  // Single admin role — the gallery owner. (The artist/creator portal was removed.)
+  type Role = 'super_admin';
   interface Locals {
-    user?: { id: string; email: string; role: Role; artistId?: string };
+    user?: { id: string; email: string; role: Role };
   }
 }
