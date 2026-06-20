@@ -15,9 +15,11 @@ const groups: { status: Exhibition['status']; label: string; rows: Exhibition[] 
   { status: 'Past', label: 'Past', rows: exhibitions.filter((e) => e.status === 'Past') },
 ];
 
-// Resolve a lead image per exhibition (first work by the first artist, falling back to first work).
+// Resolve a lead image per exhibition: uploaded hero image first, else the first
+// work by the first participating artist, else any work.
 async function leadImage(e: Exhibition): Promise<string> {
-  const works = await getWorksByArtist(e.artistIds[0]);
+  if (e.heroImage) return e.heroImage;
+  const works = e.artistIds[0] ? await getWorksByArtist(e.artistIds[0]) : [];
   return (works[0] ?? allWorks[0]).image;
 }
 const rowImages = new Map<string, string>();

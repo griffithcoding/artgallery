@@ -1,0 +1,45 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+const { id } = Astro.params;
+const sb = createSupabaseAdmin();
+const { data: e } = await sb
+  .from('exhibitions')
+  .select('*, exhibition_artists(artist_id)')
+  .eq('id', id)
+  .maybeSingle();
+if (!e) return Astro.redirect('/admin/exhibitions', 303);
+const { data: artists } = await sb.from('artists').select('id, name').order('name');
+const artistList = (artists ?? []) as any[];
+const selected = new Set(((e.exhibition_artists ?? []) as any[]).map((j) => j.artist_id));
+const STATUSES = ['On View', 'Upcoming', 'Past'];
+---
+<AdminLayout title={`Edit ${e.title}`}>
+  <h1 style="font-weight:400;">Edit exhibition</h1>
+  <form method="POST" action="/admin/exhibitions/save" class="admin-card" style="max-width:680px;">
+    <input type="hidden" name="id" value={e.id} />
+    <div class="admin-field"><label>Title</label><input name="title" value={e.title} required /></div>
+    <div class="admin-field"><label>Subtitle</label><input name="subtitle" value={e.subtitle ?? ''} /></div>
+    <div class="admin-field"><label>Status</label>
+      <select name="status">{STATUSES.map((s) => <option value={s} selected={s === e.status}>{s}</option>)}</select></div>
+    <div class="admin-field"><label>Start date</label><input name="start_date" type="date" value={e.start_date ?? ''} /></div>
+    <div class="admin-field"><label>End date</label><input name="end_date" type="date" value={e.end_date ?? ''} /></div>
+    <div class="admin-field"><label>Blurb (one line, shown on listing cards)</label><textarea name="blurb" rows="2">{e.blurb ?? ''}</textarea></div>
+    <div class="admin-field"><label>Description (long-form, shown on the exhibition page)</label><textarea name="description" rows="8" placeholder="Full exhibition text. Separate paragraphs with a blank line.">{e.description ?? ''}</textarea></div>
+    <div class="admin-field"><label>Artists</label>
+      <select name="artist_ids" multiple size="8">
+        {artistList.map((a) => <option value={a.id} selected={selected.has(a.id)}>{a.name}</option>)}
+      </select>
+      <small style="color:#8a8675;">Hold Ctrl/Cmd to select multiple.</small>
+    </div>
+    <div class="admin-field"><label>Sort order</label><input name="sort_order" type="number" value={e.sort_order ?? 0} /></div>
+    <div class="admin-field"><label>Hero image</label>
+      <input type="file" data-kind="exhibitions" accept="image/*" />
+      <input type="hidden" name="hero_image_url" value={e.hero_image_url ?? ''} />
+      <small style="color:#8a8675;">{e.hero_image_url ? 'Current image kept unless you upload a new one.' : 'Optional — falls back to a featured artist’s work if empty.'}</small>
+    </div>
+    <button class="admin-btn" type="submit">Save changes</button>
+  </form>
+  <script>import '../../../scripts/admin-upload.ts';</script>
+</AdminLayout>

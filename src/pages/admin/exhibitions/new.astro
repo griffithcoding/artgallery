@@ -1,0 +1,35 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+const { data: artists } = await createSupabaseAdmin().from('artists').select('id, name').order('name');
+const STATUSES = ['On View', 'Upcoming', 'Past'];
+const artistList = (artists ?? []) as any[];
+---
+<AdminLayout title="New exhibition">
+  <h1 style="font-weight:400;">New exhibition</h1>
+  <form method="POST" action="/admin/exhibitions/save" class="admin-card" style="max-width:680px;">
+    <div class="admin-field"><label>Title</label><input name="title" required /></div>
+    <div class="admin-field"><label>Subtitle</label><input name="subtitle" placeholder="e.g. New paintings and works on paper" /></div>
+    <div class="admin-field"><label>Status</label>
+      <select name="status">{STATUSES.map((s) => <option value={s} selected={s === 'Upcoming'}>{s}</option>)}</select></div>
+    <div class="admin-field"><label>Start date</label><input name="start_date" type="date" /></div>
+    <div class="admin-field"><label>End date</label><input name="end_date" type="date" /></div>
+    <div class="admin-field"><label>Blurb (one line, shown on listing cards)</label><textarea name="blurb" rows="2"></textarea></div>
+    <div class="admin-field"><label>Description (long-form, shown on the exhibition page)</label><textarea name="description" rows="8" placeholder="Full exhibition text. Separate paragraphs with a blank line."></textarea></div>
+    <div class="admin-field"><label>Artists</label>
+      <select name="artist_ids" multiple size="8">
+        {artistList.map((a) => <option value={a.id}>{a.name}</option>)}
+      </select>
+      <small style="color:#8a8675;">Hold Ctrl/Cmd to select multiple.</small>
+    </div>
+    <div class="admin-field"><label>Sort order</label><input name="sort_order" type="number" value="0" /></div>
+    <div class="admin-field"><label>Hero image</label>
+      <input type="file" data-kind="exhibitions" accept="image/*" />
+      <input type="hidden" name="hero_image_url" />
+      <small style="color:#8a8675;">Optional — falls back to a featured artist's work if empty.</small>
+    </div>
+    <button class="admin-btn" type="submit">Create exhibition</button>
+  </form>
+  <script>import '../../../scripts/admin-upload.ts';</script>
+</AdminLayout>

@@ -56,10 +56,15 @@ create table if not exists public.exhibitions (
   start_date date,
   end_date date,
   blurb text default '',
+  description text default '',
+  hero_image_url text,
   sort_order int not null default 0,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+-- additive migration for live DBs created before these columns existed
+alter table public.exhibitions add column if not exists description text default '';
+alter table public.exhibitions add column if not exists hero_image_url text;
 create table if not exists public.exhibition_artists (
   exhibition_id uuid references public.exhibitions(id) on delete cascade,
   artist_id uuid references public.artists(id) on delete cascade,

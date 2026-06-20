@@ -6,7 +6,7 @@ export const prerender = false;
 const ALLOWED_IMG = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMG = 5 * 1024 * 1024;
 const MAX_CV = 10 * 1024 * 1024;
-const PREFIXES = new Set(['artworks', 'artists', 'posts', 'cv', 'pages']);
+const PREFIXES = new Set(['artworks', 'artists', 'posts', 'cv', 'pages', 'exhibitions']);
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   const auth = createSupabaseServer(cookies, request.headers);

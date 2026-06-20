@@ -25,7 +25,13 @@ for (const id of ex.artistIds) {
   works = works.concat((await getWorksByArtist(id)).slice(0, 3));
 }
 if (!works.length) works = (await getArtworks()).slice(0, 6);
-const heroImage = works[0]?.image ?? '';
+// Uploaded hero image first, else the lead work.
+const heroImage = ex.heroImage || works[0]?.image || '';
+// Long-form CMS description split into paragraphs; empty → boilerplate fallback.
+const descParagraphs = (ex.description ?? '')
+  .split(/\n{2,}/)
+  .map((p) => p.trim())
+  .filter(Boolean);
 
 const description = `${ex.title} (${ex.dates}) at Mazlish + Wright Contemporary, Brooklyn. ${ex.blurb}`;
 
@@ -81,8 +87,14 @@ const jsonLd = {
 
     <section class="prose" style="max-width:68ch;margin-bottom:3.5rem;">
       <p class="lead tldr-block">{ex.blurb}</p>
-      <p>The exhibition brings together recent work by {names.join(', ')}, on view at Mazlish + Wright Contemporary’s Pearl Street space and in a companion online viewing room. A printed checklist is available at the front desk and online — every work in the show can be reserved or inquired about directly from its page.</p>
-      <p>Gallery hours are Tuesday through Saturday, 1–6pm, with Sunday and Monday by appointment. For a private viewing or press materials, contact <a class="link-underline" href="mailto:info@mazlishwrightcontemporary.com">info@mazlishwrightcontemporary.com</a>.</p>
+      {descParagraphs.length > 0 ? (
+        descParagraphs.map((p) => <p>{p}</p>)
+      ) : (
+        <>
+          <p>The exhibition brings together recent work by {names.join(', ')}, on view at Mazlish + Wright Contemporary’s Pearl Street space and in a companion online viewing room. A printed checklist is available at the front desk and online — every work in the show can be reserved or inquired about directly from its page.</p>
+          <p>Gallery hours are Tuesday through Saturday, 1–6pm, with Sunday and Monday by appointment. For a private viewing or press materials, contact <a class="link-underline" href="mailto:info@mazlishwrightcontemporary.com">info@mazlishwrightcontemporary.com</a>.</p>
+        </>
+      )}
     </section>
 
     {works.length > 0 && (

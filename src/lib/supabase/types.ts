@@ -21,6 +21,7 @@ export interface ExhibitionRow {
   id: string; slug: string; title: string; subtitle: string;
   status: 'On View' | 'Upcoming' | 'Past';
   start_date: string | null; end_date: string | null; blurb: string;
+  description: string; hero_image_url: string | null;
   sort_order: number; created_at: string; updated_at: string;
 }
 export interface FairRow { id: string; name: string; city: string; booth: string; dates: string; status: string; sort_order: number; created_at: string; updated_at: string; }

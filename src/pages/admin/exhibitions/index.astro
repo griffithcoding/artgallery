@@ -1,0 +1,50 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+import { artSVG } from '../../../lib/gallery';
+import { formatDateRange } from '../../../lib/mappers';
+const { data: exhibitions } = await createSupabaseAdmin()
+  .from('exhibitions')
+  .select('id, title, status, start_date, end_date, hero_image_url, exhibition_artists(artist_id)')
+  .order('sort_order', { ascending: true })
+  .order('start_date', { ascending: false });
+const saved = Astro.url.searchParams.get('saved');
+const deleted = Astro.url.searchParams.get('deleted');
+const list = (exhibitions ?? []) as any[];
+const artistCount = (e: any) => (e.exhibition_artists ?? []).length;
+---
+<AdminLayout title="Exhibitions">
+  <div class="admin-toolbar">
+    <div>
+      <h1 style="font-weight:500;">Exhibitions</h1>
+      <span class="admin-count">{list.length} {list.length === 1 ? 'exhibition' : 'exhibitions'}</span>
+    </div>
+    <a class="admin-btn" href="/admin/exhibitions/new">+ New exhibition</a>
+  </div>
+  {saved && <p class="admin-status" style="color:#5b7a4f;">Saved.</p>}
+  {deleted && <p class="admin-status" style="color:#6b6860;">Deleted.</p>}
+  {list.length === 0 && <p style="color:#6b6860;">No exhibitions yet. The public site shows placeholder exhibitions until you add your first.</p>}
+  <div class="admin-grid">
+    {list.map((e) => (
+      <div class="admin-tile">
+        <a class="thumb landscape" href={`/admin/exhibitions/${e.id}`}>
+          <img src={e.hero_image_url || artSVG(e.id, 'landscape')} alt={e.title} loading="lazy" />
+        </a>
+        <div class="tmeta">
+          <a class="ttitle" href={`/admin/exhibitions/${e.id}`}>{e.title}</a>
+          <div class="tartist">
+            {e.status} · {formatDateRange(e.start_date, e.end_date) || 'No dates'} · {artistCount(e)} {artistCount(e) === 1 ? 'artist' : 'artists'}
+          </div>
+          <div class="tactions">
+            <a href={`/admin/exhibitions/${e.id}`}>Edit</a>
+            <form method="POST" action="/admin/exhibitions/action" onsubmit="return confirm('Delete this exhibition?')">
+              <input type="hidden" name="id" value={e.id} />
+              <button class="tdel" type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</AdminLayout>

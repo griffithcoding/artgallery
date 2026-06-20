@@ -22,8 +22,8 @@ import {
   SUBJECTS_LIST,
 } from './data';
 import { createSupabaseAnon, isSupabaseConfigured } from './supabase/server';
-import { rowToArtwork, rowToArtist } from './mappers';
-import type { ArtworkRow, ArtistRow } from './supabase/types';
+import { rowToArtwork, rowToArtist, rowToExhibition } from './mappers';
+import type { ArtworkRow, ArtistRow, ExhibitionRow } from './supabase/types';
 
 export interface Artist {
   id: string;
@@ -68,6 +68,8 @@ export interface Exhibition {
   year: number;
   artistIds: string[];
   blurb: string;
+  description?: string;
+  heroImage?: string;
 }
 export interface Fair {
   name: string;
@@ -180,9 +182,20 @@ export async function getArtist(slug: string): Promise<Artist | undefined> {
   }
 }
 
-// Generator-only: resolves generator-exhibition artist ids (exhibitions are not
-// in Supabase yet). Moves to Supabase when the exhibitions CMS plan lands.
+// Dual-mode by id. DB-backed exhibitions reference Supabase artist UUIDs; the
+// generator-fallback exhibitions reference 'a0'-style ids. Querying a uuid column
+// with a non-uuid id errors → caught → resolved from the generator. Both work.
 export async function getArtistById(id: string): Promise<Artist | undefined> {
+  if (isSupabaseConfigured()) {
+    try {
+      const sb = createSupabaseAnon();
+      const { data, error } = await sb.from('artists').select('*').eq('id', id).maybeSingle();
+      if (error) throw error;
+      if (data) return rowToArtist(data as ArtistRow);
+    } catch {
+      /* fall through to generator */
+    }
+  }
   return _artists.find((a) => a.id === id);
 }
 
@@ -208,11 +221,50 @@ export async function getArtistWorkCounts(): Promise<Map<string, number>> {
   }
 }
 
-// ---- Exhibitions / fairs / press (generator until their own plan) ----
-export async function getExhibitions(): Promise<Exhibition[]> {
-  return _exhibitions;
+// ---- Exhibitions (dual-mode) ----
+// When Supabase is configured and the table has rows, exhibitions come from the DB
+// (joined to exhibition_artists). When the table is empty or on any error, the
+// generator data is used so the public page is never blank pre-population.
+const EXHIBITION_SELECT = '*, exhibition_artists(artist_id)';
+
+function joinArtistIds(row: any): string[] {
+  return ((row.exhibition_artists ?? []) as Array<{ artist_id: string }>)
+    .map((j) => j.artist_id)
+    .filter(Boolean);
 }
+
+export async function getExhibitions(): Promise<Exhibition[]> {
+  if (!isSupabaseConfigured()) return _exhibitions;
+  try {
+    const sb = createSupabaseAnon();
+    const { data, error } = await sb
+      .from('exhibitions')
+      .select(EXHIBITION_SELECT)
+      .order('sort_order', { ascending: true })
+      .order('start_date', { ascending: false });
+    if (error) throw error;
+    const rows = data ?? [];
+    if (!rows.length) return _exhibitions;
+    return rows.map((r: any) => rowToExhibition(r as ExhibitionRow, joinArtistIds(r)));
+  } catch {
+    return _exhibitions;
+  }
+}
+
 export async function getExhibition(slug: string): Promise<Exhibition | undefined> {
+  if (!isSupabaseConfigured()) return _exhibitions.find((e) => e.slug === slug);
+  try {
+    const sb = createSupabaseAnon();
+    const { data, error } = await sb
+      .from('exhibitions')
+      .select(EXHIBITION_SELECT)
+      .eq('slug', slug)
+      .maybeSingle();
+    if (error) throw error;
+    if (data) return rowToExhibition(data as any as ExhibitionRow, joinArtistIds(data));
+  } catch {
+    /* fall through to generator */
+  }
   return _exhibitions.find((e) => e.slug === slug);
 }
 export async function getFairs(): Promise<Fair[]> {
