@@ -1,0 +1,49 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+const { data: rows } = await createSupabaseAdmin()
+  .from('fairs')
+  .select('*')
+  .order('sort_order', { ascending: true })
+  .order('created_at', { ascending: false });
+const fairs = (rows ?? []) as any[];
+const saved = Astro.url.searchParams.get('saved');
+const deleted = Astro.url.searchParams.get('deleted');
+---
+<AdminLayout title="Art Fairs">
+  <div class="admin-toolbar">
+    <div>
+      <h1 style="font-weight:500;">Art Fairs</h1>
+      <span class="admin-count">{fairs.length} {fairs.length === 1 ? 'fair' : 'fairs'}</span>
+    </div>
+    <a class="admin-btn" href="/admin/fairs/new">+ New fair</a>
+  </div>
+  {saved && <p class="admin-status" style="color:#5b7a4f;">Saved.</p>}
+  {deleted && <p class="admin-status" style="color:#6b6860;">Deleted.</p>}
+  {fairs.length === 0 ? (
+    <p class="admin-empty">No fairs yet. The public Art Fairs page shows placeholder fairs until you add your first.</p>
+  ) : (
+    <table class="admin-table">
+      <thead><tr><th>Name</th><th>City</th><th>Booth</th><th>Dates</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {fairs.map((f) => (
+          <tr>
+            <td><a href={`/admin/fairs/${f.id}`}>{f.name}</a></td>
+            <td>{f.city}</td>
+            <td>{f.booth}</td>
+            <td style="white-space:nowrap;">{f.dates}</td>
+            <td><span class="badge">{f.status}</span></td>
+            <td style="white-space:nowrap;">
+              <a href={`/admin/fairs/${f.id}`}>Edit</a>
+              <form method="POST" action="/admin/fairs/action" style="display:inline;margin-left:.7rem;" onsubmit="return confirm('Delete this fair?')">
+                <input type="hidden" name="id" value={f.id} />
+                <button type="submit" style="background:none;border:none;color:var(--mw-danger,#8a2b1f);cursor:pointer;font-size:.85rem;padding:0;">Delete</button>
+              </form>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</AdminLayout>

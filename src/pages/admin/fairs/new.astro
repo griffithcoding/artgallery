@@ -1,0 +1,22 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+---
+<AdminLayout title="New fair">
+  <p><a href="/admin/fairs">← All fairs</a></p>
+  <h1 style="font-weight:400;">New art fair</h1>
+  <form method="POST" action="/admin/fairs/save" class="admin-card" style="max-width:560px;">
+    <div class="admin-field"><label>Name</label><input name="name" required placeholder="e.g. The Armory Show" /></div>
+    <div class="admin-field"><label>City</label><input name="city" placeholder="e.g. New York" /></div>
+    <div class="admin-field"><label>Booth</label><input name="booth" placeholder="e.g. Booth 412, Pier 94" /></div>
+    <div class="admin-field"><label>Dates</label><input name="dates" placeholder="e.g. September 5–8, 2026" /></div>
+    <div class="admin-field"><label>Status</label>
+      <select name="status">
+        <option value="Upcoming">Upcoming</option>
+        <option value="Past">Past</option>
+      </select>
+    </div>
+    <div class="admin-field"><label>Sort order</label><input name="sort_order" type="number" value="0" /></div>
+    <button class="admin-btn" type="submit">Create fair</button>
+  </form>
+</AdminLayout>

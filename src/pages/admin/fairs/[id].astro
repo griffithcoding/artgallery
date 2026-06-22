@@ -1,0 +1,31 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+const { id } = Astro.params;
+const { data: f } = await createSupabaseAdmin().from('fairs').select('*').eq('id', id).maybeSingle();
+if (!f) return Astro.redirect('/admin/fairs', 303);
+---
+<AdminLayout title={`Edit ${f.name}`}>
+  <p><a href="/admin/fairs">← All fairs</a></p>
+  <h1 style="font-weight:400;">Edit art fair</h1>
+  <form method="POST" action="/admin/fairs/save" class="admin-card" style="max-width:560px;">
+    <input type="hidden" name="id" value={f.id} />
+    <div class="admin-field"><label>Name</label><input name="name" value={f.name} required /></div>
+    <div class="admin-field"><label>City</label><input name="city" value={f.city} /></div>
+    <div class="admin-field"><label>Booth</label><input name="booth" value={f.booth} /></div>
+    <div class="admin-field"><label>Dates</label><input name="dates" value={f.dates} /></div>
+    <div class="admin-field"><label>Status</label>
+      <select name="status">
+        <option value="Upcoming" selected={f.status === 'Upcoming'}>Upcoming</option>
+        <option value="Past" selected={f.status === 'Past'}>Past</option>
+      </select>
+    </div>
+    <div class="admin-field"><label>Sort order</label><input name="sort_order" type="number" value={f.sort_order ?? 0} /></div>
+    <button class="admin-btn" type="submit">Save changes</button>
+  </form>
+  <form method="POST" action="/admin/fairs/action" style="margin-top:.6rem;" onsubmit="return confirm('Delete this fair?')">
+    <input type="hidden" name="id" value={f.id} />
+    <button class="admin-btn danger" type="submit">Delete</button>
+  </form>
+</AdminLayout>
