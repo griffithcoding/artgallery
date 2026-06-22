@@ -1,14 +1,113 @@
 ---
 export const prerender = false;
 import AdminLayout from '../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../lib/supabase/server';
+import { buildChecklist, checklistComplete } from '../../lib/dashboard';
+import { rowToInquiry } from '../../lib/inquiries';
+
 const user = Astro.locals.user!;
+const admin = createSupabaseAdmin();
+
+async function countOf(table: string): Promise<number> {
+  try {
+    const { count } = await admin.from(table).select('*', { count: 'exact', head: true });
+    return count ?? 0;
+  } catch { return 0; }
+}
+
+const [artworks, artists, exhibitions, fairs] = await Promise.all([
+  countOf('artworks'), countOf('artists'), countOf('exhibitions'), countOf('fairs'),
+]);
+
+// recent inquiries + new count
+let recent: ReturnType<typeof rowToInquiry>[] = [];
+let newInquiries = 0;
+try {
+  const { data } = await admin.from('inquiries').select('*').order('created_at', { ascending: false }).limit(5);
+  recent = (data ?? []).map(rowToInquiry);
+  const { count } = await admin.from('inquiries').select('*', { count: 'exact', head: true }).eq('status', 'new');
+  newInquiries = count ?? 0;
+} catch { /* none */ }
+
+// homepage hero present?
+let homepageHero = false;
+try {
+  const { data } = await admin.storage.from('gallery-images').list('site', { search: 'hero' });
+  homepageHero = (data ?? []).length > 0;
+} catch { /* none */ }
+
+const checklist = buildChecklist({ artists, artworks, exhibitions, fairs, homepageHero });
+const done = checklistComplete(checklist);
+
+const cards = [
+  { label: 'Artworks', value: artworks, href: '/admin/artworks' },
+  { label: 'Artists', value: artists, href: '/admin/artists' },
+  { label: 'Exhibitions', value: exhibitions, href: '/admin/exhibitions' },
+  { label: 'Art Fairs', value: fairs, href: '/admin/fairs' },
+  { label: 'New inquiries', value: newInquiries, href: '/admin/inquiries' },
+];
 ---
 <AdminLayout title="Dashboard">
-  <h1 style="font-weight:400;">Dashboard</h1>
-  <p>Signed in as {user.email}.</p>
-  <p style="color:#6b6860;max-width:60ch;">
-    Use the navigation above to manage artworks, artists, inquiries, exhibitions,
-    viewing rooms, and press. Each module is added by its implementation plan; the
-    data-access seam is already in place.
-  </p>
+  <div class="admin-toolbar">
+    <div>
+      <p class="admin-eyebrow">Welcome</p>
+      <h1>Dashboard</h1>
+      <span class="admin-count">Signed in as {user.email}</span>
+    </div>
+    <a class="admin-btn" href="/admin/artworks/new">+ New artwork</a>
+  </div>
+
+  <div class="stat-row">
+    {cards.map((c) => (
+      <a class="stat-card" href={c.href}>
+        <span class="stat-value">{c.value}</span>
+        <span class="stat-label">{c.label}</span>
+      </a>
+    ))}
+  </div>
+
+  {!done && (
+    <section class="dash-section">
+      <h2 class="dash-h2">Get set up</h2>
+      <ul class="checklist">
+        {checklist.map((i) => (
+          <li class={i.done ? 'is-done' : ''}>
+            <span class="check">{i.done ? '✓' : ''}</span>
+            {i.done ? <span>{i.label}</span> : <a href={i.href}>{i.label} →</a>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+  {done && <p class="admin-status" style="color:#3f6b4f;">Setup complete ✓</p>}
+
+  <section class="dash-section">
+    <h2 class="dash-h2">Recent inquiries</h2>
+    {recent.length === 0 ? (
+      <p class="admin-empty">No inquiries yet — your public Inquire form feeds the inbox.</p>
+    ) : (
+      <table class="admin-table">
+        <thead><tr><th>Date</th><th>Name</th><th>Status</th></tr></thead>
+        <tbody>
+          {recent.map((i) => (
+            <tr>
+              <td style="white-space:nowrap;">{new Date(i.createdAt).toLocaleDateString()}</td>
+              <td><a href={`/admin/inquiries/${i.id}`}>{i.name}</a></td>
+              <td><span class={`badge badge--${i.status}`}>{i.status}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </section>
+
+  <section class="dash-section">
+    <h2 class="dash-h2">Quick actions</h2>
+    <div class="quick-actions">
+      <a class="admin-btn ghost" href="/admin/artworks/new">+ New artwork</a>
+      <a class="admin-btn ghost" href="/admin/artists/new">+ New artist</a>
+      <a class="admin-btn ghost" href="/admin/exhibitions/new">+ New exhibition</a>
+      <a class="admin-btn ghost" href="/admin/fairs/new">+ New fair</a>
+    </div>
+  </section>
 </AdminLayout>
