@@ -24,6 +24,9 @@ document.querySelectorAll<HTMLInputElement>('input[type=file]').forEach((input) 
     preview.style.display = 'block';
   }
 
+  const form = input.closest('form');
+  const submitBtn = form?.querySelector<HTMLButtonElement>('button[type=submit], button:not([type])') ?? null;
+
   input.addEventListener('change', async () => {
     const file = input.files?.[0];
     if (!file) return;
@@ -32,21 +35,35 @@ document.querySelectorAll<HTMLInputElement>('input[type=file]').forEach((input) 
       preview!.style.display = 'none';
       if (msg) msg.textContent = `Uploading ${file.name}…`;
     } else {
-      previewImg.src = URL.createObjectURL(file); // instant local preview
+      previewImg.src = URL.createObjectURL(file);
       preview!.style.display = 'block';
       if (msg) msg.textContent = 'Uploading…';
     }
+    if (submitBtn) submitBtn.disabled = true;
     const fd = new FormData();
     fd.append('file', file);
     fd.append('kind', kind);
     try {
       const res = await fetch('/api/upload', { method: 'POST', body: fd });
-      if (!res.ok) { if (msg) msg.textContent = 'Upload failed.'; return; }
+      if (!res.ok) {
+        const reason = (await res.text()) || 'Upload failed.';
+        if (msg) { msg.textContent = reason; msg.style.color = '#8a2b1f'; }
+        return;
+      }
       const { url } = await res.json();
       if (hidden) hidden.value = url;
-      if (msg) msg.textContent = kind === 'cv' ? `CV uploaded ✓ (${file.name})` : 'Uploaded ✓';
+      if (msg) { msg.textContent = kind === 'cv' ? `CV uploaded ✓ (${file.name})` : 'Uploaded ✓'; msg.style.color = ''; }
     } catch {
-      if (msg) msg.textContent = 'Upload failed.';
+      if (msg) { msg.textContent = 'Upload failed — check your connection.'; msg.style.color = '#8a2b1f'; }
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+
+  form?.addEventListener('submit', (e) => {
+    if (input.files?.[0] && hidden && !hidden.value) {
+      e.preventDefault();
+      if (msg) { msg.textContent = 'Please wait for the image to finish uploading.'; msg.style.color = '#8a2b1f'; }
     }
   });
 });

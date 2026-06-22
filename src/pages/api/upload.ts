@@ -23,8 +23,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const isCv = kind === 'cv';
   const allowed = isCv ? ['application/pdf'] : ALLOWED_IMG;
   const max = isCv ? MAX_CV : MAX_IMG;
-  if (!allowed.includes(file.type)) return new Response('Bad type', { status: 415 });
-  if (file.size > max) return new Response('Too large', { status: 413 });
+  if (!allowed.includes(file.type))
+    return new Response(isCv ? 'Please upload a PDF.' : 'Please use a JPG, PNG, or WebP image.', { status: 415 });
+  if (file.size > max)
+    return new Response(isCv ? 'PDF must be under 10 MB.' : 'Image must be under 5 MB.', { status: 413 });
 
   const ext = isCv ? 'pdf' : file.type.split('/')[1].replace('jpeg', 'jpg');
   const path = `${kind}/${crypto.randomUUID()}.${ext}`;
