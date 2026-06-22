@@ -208,3 +208,20 @@ drop policy if exists galleryimg_public_read on storage.objects;
 create policy galleryimg_public_read on storage.objects
   for select using (bucket_id = 'gallery-images');
 -- writes via service-role key only (no anon/auth write policy).
+
+-- ===== inquiries: lead-pipeline extension (Phase 1, 2026-06-19) =====
+alter table public.inquiries add column if not exists phone text not null default '';
+alter table public.inquiries add column if not exists consent_marketing boolean not null default false;
+alter table public.inquiries add column if not exists consent_ts timestamptz;
+alter table public.inquiries add column if not exists internal_notes text not null default '';
+alter table public.inquiries add column if not exists status_changed_at timestamptz;
+alter table public.inquiries add column if not exists ip text;
+
+-- migrate the status enum: new,replied,archived -> new,contacted,won,lost,archived
+update public.inquiries set status = 'contacted' where status = 'replied';
+alter table public.inquiries drop constraint if exists inquiries_status_check;
+alter table public.inquiries add constraint inquiries_status_check
+  check (status in ('new','contacted','won','lost','archived'));
+
+create index if not exists inquiries_ip_created_idx on public.inquiries (ip, created_at);
+create index if not exists inquiries_status_created_idx on public.inquiries (status, created_at desc);

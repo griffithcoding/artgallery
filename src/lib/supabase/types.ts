@@ -26,7 +26,14 @@ export interface ExhibitionRow {
 }
 export interface FairRow { id: string; name: string; city: string; booth: string; dates: string; status: string; sort_order: number; created_at: string; updated_at: string; }
 export interface ViewingRoomRow { id: string; slug: string; title: string; description: string; sort_order: number; created_at: string; updated_at: string; }
-export interface InquiryRow { id: string; artwork_id: string | null; artwork_title: string; name: string; email: string; message: string; status: 'new' | 'replied' | 'archived'; source: 'artwork' | 'contact'; created_at: string; }
+export interface InquiryRow {
+  id: string; artwork_id: string | null; artwork_title: string;
+  name: string; email: string; phone: string; message: string;
+  status: 'new' | 'contacted' | 'won' | 'lost' | 'archived';
+  source: 'artwork' | 'contact';
+  internal_notes: string; consent_marketing: boolean; consent_ts: string | null;
+  status_changed_at: string | null; ip: string | null; created_at: string;
+}
 export interface PostRow { id: string; slug: string; title: string; description: string; body: string; cover_image_url: string | null; status: 'draft' | 'published'; category: 'Journal' | 'Press' | 'Exhibitions'; published_at: string | null; created_at: string; updated_at: string; }
 export interface PressMentionRow { id: string; outlet: string; headline: string; url: string; date: string; kind: 'Review' | 'Feature' | 'Listing' | 'Profile'; sort_order: number; created_at: string; updated_at: string; }
 export interface PageRow {
