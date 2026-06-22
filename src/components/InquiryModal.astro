@@ -17,8 +17,20 @@
       <div class="form-grid">
         <div class="field"><label>Name</label><input name="name" required /></div>
         <div class="field"><label>Email</label><input type="email" name="email" required /></div>
+        <div class="field full"><label>Phone (optional)</label><input name="phone" /></div>
         <div class="field full"><label>Message</label><textarea name="message" rows="3" placeholder="I'd like to learn more about this work, including availability."></textarea></div>
       </div>
+      <input type="hidden" name="artwork_id" id="inqArtworkId" />
+      <input type="hidden" name="artwork_title" id="inqArtworkTitle" />
+      <input type="hidden" name="source" id="inqSource" value="contact" />
+      <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+        <label>Company<input name="company" tabindex="-1" autocomplete="off" /></label>
+      </div>
+      <label style="display:flex;gap:.5rem;align-items:flex-start;font-size:.78rem;margin-top:.8rem;">
+        <input type="checkbox" name="consent" style="width:auto;margin-top:.15rem;" />
+        <span>Keep me informed about new works and exhibitions.</span>
+      </label>
+      <p id="inqError" class="muted" style="display:none;color:#8a2b1f;margin-top:.6rem;"></p>
       <button class="btn btn--solid mt-2" type="submit" style="width:100%;justify-content:center;">Send inquiry</button>
       <p class="muted" style="font-size:.74rem;margin-top:1rem;">A gallery representative typically replies within one business day.</p>
     </form>
@@ -26,10 +38,13 @@
 </div>
 <script>
   const modal = document.getElementById('inquireModal');
-  (window as any).openInquiry = (title?: string) => {
+  (window as any).openInquiry = (title?: string, artworkId?: string) => {
     if (!modal) return;
     const sub = modal.querySelector('#inqSub') as HTMLElement | null;
     if (sub) sub.textContent = title ? 'Regarding: ' + title : 'Tell us what you are looking for.';
+    (modal.querySelector('#inqArtworkTitle') as HTMLInputElement).value = title ?? '';
+    (modal.querySelector('#inqArtworkId') as HTMLInputElement).value = artworkId ?? '';
+    (modal.querySelector('#inqSource') as HTMLInputElement).value = artworkId ? 'artwork' : 'contact';
     (modal as HTMLElement).style.display = 'flex';
   };
   modal?.querySelector('#inqClose')?.addEventListener('click', () => {
@@ -38,9 +53,33 @@
   modal?.addEventListener('click', (e) => {
     if (e.target === modal) (modal as HTMLElement).style.display = 'none';
   });
-  modal?.querySelector('#inquireForm')?.addEventListener('submit', (e) => {
+  modal?.querySelector('#inquireForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    (e.currentTarget as HTMLElement).innerHTML =
-      '<p class="lead" style="font-size:1.2rem;">Thank you. Your inquiry has been received — we’ll be in touch shortly.</p>';
+    const form = e.currentTarget as HTMLFormElement;
+    const err = form.querySelector('#inqError') as HTMLElement;
+    const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
+    err.style.display = 'none';
+    btn.disabled = true;
+    const payload = Object.fromEntries(new FormData(form).entries());
+    try {
+      const res = await fetch('/api/inquire', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        form.innerHTML =
+          '<p class="lead" style="font-size:1.2rem;">Thank you. Your inquiry has been received — we’ll be in touch shortly.</p>';
+      } else {
+        err.textContent = data.error || 'Please check your details and try again.';
+        err.style.display = 'block';
+        btn.disabled = false;
+      }
+    } catch {
+      err.textContent = 'Network error — please try again.';
+      err.style.display = 'block';
+      btn.disabled = false;
+    }
   });
 </script>
