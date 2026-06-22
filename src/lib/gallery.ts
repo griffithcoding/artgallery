@@ -22,8 +22,8 @@ import {
   SUBJECTS_LIST,
 } from './data';
 import { createSupabaseAnon, isSupabaseConfigured } from './supabase/server';
-import { rowToArtwork, rowToArtist, rowToExhibition } from './mappers';
-import type { ArtworkRow, ArtistRow, ExhibitionRow } from './supabase/types';
+import { rowToArtwork, rowToArtist, rowToExhibition, rowToFair } from './mappers';
+import type { ArtworkRow, ArtistRow, ExhibitionRow, FairRow } from './supabase/types';
 
 export interface Artist {
   id: string;
@@ -267,8 +267,24 @@ export async function getExhibition(slug: string): Promise<Exhibition | undefine
   }
   return _exhibitions.find((e) => e.slug === slug);
 }
+// ---- Art fairs (dual-mode) ----
+// DB rows when Supabase is configured and the table is non-empty; otherwise the
+// generator, so the public page is never blank pre-population.
 export async function getFairs(): Promise<Fair[]> {
-  return _fairs;
+  if (!isSupabaseConfigured()) return _fairs;
+  try {
+    const sb = createSupabaseAnon();
+    const { data, error } = await sb
+      .from('fairs')
+      .select('*')
+      .order('sort_order', { ascending: true });
+    if (error) throw error;
+    const rows = data ?? [];
+    if (!rows.length) return _fairs;
+    return rows.map((r: any) => rowToFair(r as FairRow));
+  } catch {
+    return _fairs;
+  }
 }
 export async function getPress(): Promise<PressItem[]> {
   return _press;

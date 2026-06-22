@@ -1,6 +1,19 @@
 import { describe, it, expect } from 'vitest';
-import { rowToArtist, rowToExhibition, formatDateRange, exhibitionYear } from './mappers';
-import type { ArtistRow, ExhibitionRow } from './supabase/types';
+import { rowToArtist, rowToExhibition, rowToFair, formatDateRange, exhibitionYear } from './mappers';
+import type { ArtistRow, ExhibitionRow, FairRow } from './supabase/types';
+
+describe('rowToFair', () => {
+  it('maps a fair row to the public shape', () => {
+    const row: FairRow = {
+      id: 'f1', name: 'The Armory Show', city: 'New York', booth: 'Booth 412',
+      dates: 'Sep 5–8, 2026', status: 'Upcoming', sort_order: 0, created_at: '', updated_at: '',
+    };
+    expect(rowToFair(row)).toEqual({
+      name: 'The Armory Show', city: 'New York', booth: 'Booth 412',
+      dates: 'Sep 5–8, 2026', status: 'Upcoming',
+    });
+  });
+});
 
 const base: ArtistRow = {
   id: 'a1', slug: 'jane-doe', name: 'Jane Doe', birthplace: 'Oslo', birth_year: 1980,

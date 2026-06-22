@@ -1,6 +1,6 @@
 import { artSVG } from './data';
-import type { Artwork, Artist, Exhibition } from './gallery';
-import type { ArtworkRow, ArtistRow, ExhibitionRow } from './supabase/types';
+import type { Artwork, Artist, Exhibition, Fair } from './gallery';
+import type { ArtworkRow, ArtistRow, ExhibitionRow, FairRow } from './supabase/types';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -46,6 +46,16 @@ export function rowToExhibition(r: ExhibitionRow, artistIds: string[]): Exhibiti
     blurb: r.blurb,
     description: r.description || undefined,
     heroImage: r.hero_image_url || undefined,
+  };
+}
+
+export function rowToFair(r: FairRow): Fair {
+  return {
+    name: r.name,
+    city: r.city,
+    booth: r.booth,
+    dates: r.dates,
+    status: r.status,
   };
 }
 
