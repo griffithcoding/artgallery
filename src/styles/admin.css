@@ -218,3 +218,10 @@ body.composer-preview .composer-editable-img { outline: none; cursor: default; }
 .checklist a { color: var(--mw-ink); text-decoration: none; }
 .checklist a:hover { color: var(--mw-accent); }
 .quick-actions { display: flex; gap: .7rem; flex-wrap: wrap; }
+
+/* ── Admin search results ─────────────────────────────────────────── */
+.search-group { margin-bottom: 1.8rem; }
+.search-hits { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; max-width: 640px; }
+.search-hits li a { display: block; padding: .65rem .9rem; background: var(--mw-panel); border: 1px solid var(--mw-line); border-radius: 8px; color: var(--mw-ink); text-decoration: none; }
+.search-hits li a:hover { border-color: var(--mw-accent); }
+.search-sub { color: var(--mw-ink-soft); }

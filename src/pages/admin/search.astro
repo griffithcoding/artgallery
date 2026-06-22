@@ -1,0 +1,43 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../lib/supabase/server';
+import { getArtworks, getArtists, getExhibitions } from '../../lib/gallery';
+import { searchAdmin, type SearchDatasets } from '../../lib/search';
+
+const q = Astro.url.searchParams.get('q')?.trim() ?? '';
+let groups: ReturnType<typeof searchAdmin> = [];
+if (q) {
+  const admin = createSupabaseAdmin();
+  const [artworksAll, artistsAll, exhibitionsAll, fairsRes, inquiriesRes] = await Promise.all([
+    getArtworks(), getArtists(), getExhibitions(),
+    admin.from('fairs').select('id,name,city'),
+    admin.from('inquiries').select('id,name,email,message'),
+  ]);
+  const datasets: SearchDatasets = {
+    artworks: artworksAll.map((w) => ({ id: w.id, title: w.title, medium: w.medium, year: w.year, artistName: w.artistName })),
+    artists: artistsAll.map((a) => ({ id: a.id, name: a.name, discipline: a.discipline })),
+    exhibitions: exhibitionsAll.map((e) => ({ id: e.id, title: e.title, subtitle: e.subtitle })),
+    fairs: (fairsRes.data ?? []) as SearchDatasets['fairs'],
+    inquiries: (inquiriesRes.data ?? []) as SearchDatasets['inquiries'],
+  };
+  groups = searchAdmin(q, datasets);
+}
+const total = groups.reduce((n, g) => n + g.hits.length, 0);
+---
+<AdminLayout title="Search">
+  <h1>Search</h1>
+  {!q && <p class="admin-empty">Type a search above to find artworks, artists, exhibitions, fairs, or inquiries.</p>}
+  {q && <p class="admin-count">{total} {total === 1 ? 'result' : 'results'} for "{q}".</p>}
+  {q && total === 0 && <p class="admin-empty">Nothing matched "{q}".</p>}
+  {groups.map((g) => (
+    <section class="search-group">
+      <h2 class="dash-h2">{g.label} <span class="admin-count">({g.hits.length})</span></h2>
+      <ul class="search-hits">
+        {g.hits.map((h) => (
+          <li><a href={h.href}><strong>{h.title}</strong>{h.subtitle && <span class="search-sub"> — {h.subtitle}</span>}</a></li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</AdminLayout>
