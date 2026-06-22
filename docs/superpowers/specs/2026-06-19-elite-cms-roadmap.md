@@ -18,7 +18,7 @@ defines tables for far more than the admin UI exposes. The build is **schema-ric
 | **Inquiries / leads** | `inquiries` | ❌ none | ⚠️ modal is a **stub** (no POST; leads discarded) |
 | **Exhibitions** | `exhibitions`, `exhibition_artists` | ❌ none | ⚠️ generator-only |
 | ~~Viewing rooms~~ *(out of scope)* | `viewing_rooms`, `viewing_room_artworks` | ❌ none | ⚠️ index only |
-| **Journal / Press** | `posts`, `press_mentions` | ❌ none | ❓ minimal |
+| ~~Journal / Press~~ *(out of scope)* | `posts`, `press_mentions` | ❌ none | ❓ minimal |
 | **Art fairs** | `fairs` | ❌ none | ⚠️ static page |
 | Dashboard / settings / media | — | ⚠️ placeholder | — |
 
@@ -38,12 +38,12 @@ conventions.
    **price-on-request "Inquire"** routed to a **lead inbox/CRM**. This single flow is the defining
    "blue-chip" signal. We already have the relational core and price-on-request; **the inbox is the
    missing half.**
-2. **A modest editorial "Journal".** Interviews / studio visits for SEO + E-E-A-T authority.
-3. **Admin that feels elite:** draft/publish workflow, status badges, searchable/sortable content
+2. **Admin that feels elite:** draft/publish workflow, status badges, searchable/sortable content
    lists, bulk actions, empty states, a real dashboard, and **outcome-first onboarding** (a persistent
    setup checklist beats a feature tour).
-4. **Deliberately deferred / out of scope:** online viewing rooms (dropped by decision), custom VR/AR,
-   podcasts, gated-pricing accounts, custom-checkout commerce.
+3. **Deliberately deferred / out of scope:** editorial Journal/Press (dropped by decision), online
+   viewing rooms (dropped by decision), custom VR/AR, podcasts, gated-pricing accounts,
+   custom-checkout commerce.
 
 ## 3. Goals & non-goals
 
@@ -59,6 +59,7 @@ conventions.
 - Custom checkout / e-commerce (defer to hosted Shopify if ever needed).
 - Immersive 3D/VR/AR, gated-pricing collector accounts, podcasts.
 - **Online viewing rooms** (dropped by decision; the `viewing_rooms` / `viewing_room_artworks` tables stay dormant and unused).
+- **Editorial Journal / Press** (dropped by decision; the `posts` / `press_mentions` tables stay dormant and unused).
 - Re-introducing the artist/creator portal (removed by decision).
 
 ## 4. Module decomposition & sequence
@@ -69,9 +70,8 @@ Each module is its own **spec → plan → build → verify** cycle. Order is by
    wired modal/buttons, admin inbox with lean pipeline. Seeds the shared admin list-UX kit.
 2. **Exhibitions CMS.** CRUD + artist linking + status workflow (On View / Upcoming / Past) +
    featured works; replace generator-only public data with DB-backed reads through the existing seam.
-3. **Journal / Press.** `posts` CRUD (draft/publish, category) + `press_mentions`; public journal pages.
-4. **Art Fairs.** Simple CRUD on `fairs` (name, city, booth, dates, status).
-5. **Dashboard + Settings + Media library + global search.** Real dashboard (counts, drafts, recent
+3. **Art Fairs.** Simple CRUD on `fairs` (name, city, booth, dates, status).
+4. **Dashboard + Settings + Media library + global search.** Real dashboard (counts, drafts, recent
    inquiries, quick-create, onboarding checklist); a `settings` table to move hours/address/contact out
    of `site.ts`; a media browser over the `gallery-images` bucket; cross-module search.
 
@@ -80,7 +80,7 @@ Each module is its own **spec → plan → build → verify** cycle. Order is by
 - **Superadmin tutorial** — a persistent **setup checklist** + an **outcome-first guided tour**
   ("publish your first X") + **contextual help drawers**, plus a **written guide**
   (`docs/admin-guide/`). Each module contributes its own checklist item, help-drawer copy, and guide
-  section as it lands; the dashboard (Phase 6) hosts the checklist.
+  section as it lands; the dashboard (Phase 4) hosts the checklist.
 
 ## 5. Technical approach (follow existing patterns)
 
