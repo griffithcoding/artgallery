@@ -89,7 +89,7 @@ const jsonLd = {
     )}
   </main>
 
-  <script id="works-data" type="application/json" set:html={JSON.stringify(artworks)}></script>
+  <script id="works-data" type="application/json" set:html={JSON.stringify(artworks).replace(/<\//g, '<\\/')}></script>
   <InquiryModal />
   <script>import '../../scripts/collection.ts';</script>
 </Layout>
