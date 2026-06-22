@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { createSupabaseServer, createSupabaseAdmin } from '../../../lib/supabase/server';
 import { isValidStatus } from '../../../lib/inquiries';
+import { okRedirect, errRedirect } from '../../../lib/adminResult';
 
 export const prerender = false;
 
@@ -19,6 +20,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     fields.status = status;
     fields.status_changed_at = new Date().toISOString();
   }
-  await createSupabaseAdmin().from('inquiries').update(fields).eq('id', id);
-  return redirect(`/admin/inquiries/${id}?saved=1`, 303);
+  const { error } = await createSupabaseAdmin().from('inquiries').update(fields).eq('id', id);
+  if (error) return redirect(errRedirect(`/admin/inquiries/${id}`, error.message), 303);
+  return redirect(okRedirect(`/admin/inquiries/${id}`, 'updated'), 303);
 };

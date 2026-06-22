@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { createSupabaseServer, createSupabaseAdmin } from '../../../lib/supabase/server';
 import { slugify, uniqueSlug } from '../../../lib/slug';
+import { okRedirect, errRedirect } from '../../../lib/adminResult';
 
 export const prerender = false;
 
@@ -34,15 +35,17 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   let exhibitionId = id;
 
   if (id) {
-    await admin.from('exhibitions').update(fields).eq('id', id);
+    const { error } = await admin.from('exhibitions').update(fields).eq('id', id);
+    if (error) return redirect(errRedirect('/admin/exhibitions', error.message), 303);
   } else {
     const { data: existing } = await admin.from('exhibitions').select('slug');
     const slug = uniqueSlug(slugify(title), (existing ?? []).map((r) => r.slug));
-    const { data: inserted } = await admin
+    const { data: inserted, error } = await admin
       .from('exhibitions')
       .insert({ ...fields, slug })
       .select('id')
       .single();
+    if (error) return redirect(errRedirect('/admin/exhibitions', error.message), 303);
     exhibitionId = inserted?.id ?? '';
   }
 
@@ -50,11 +53,12 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   if (exhibitionId) {
     await admin.from('exhibition_artists').delete().eq('exhibition_id', exhibitionId);
     if (artistIds.length) {
-      await admin
+      const { error } = await admin
         .from('exhibition_artists')
         .insert(artistIds.map((artist_id) => ({ exhibition_id: exhibitionId, artist_id })));
+      if (error) return redirect(errRedirect('/admin/exhibitions', error.message), 303);
     }
   }
 
-  return redirect('/admin/exhibitions?saved=1', 303);
+  return redirect(okRedirect('/admin/exhibitions'), 303);
 };

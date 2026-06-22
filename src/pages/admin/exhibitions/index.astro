@@ -11,6 +11,7 @@ const { data: exhibitions } = await createSupabaseAdmin()
   .order('start_date', { ascending: false });
 const saved = Astro.url.searchParams.get('saved');
 const deleted = Astro.url.searchParams.get('deleted');
+const error = Astro.url.searchParams.get('error');
 const list = (exhibitions ?? []) as any[];
 const artistCount = (e: any) => (e.exhibition_artists ?? []).length;
 ---
@@ -24,6 +25,7 @@ const artistCount = (e: any) => (e.exhibition_artists ?? []).length;
   </div>
   {saved && <p class="admin-status" style="color:#5b7a4f;">Saved.</p>}
   {deleted && <p class="admin-status" style="color:#6b6860;">Deleted.</p>}
+  {error && <p class="admin-status err">{error}</p>}
   {list.length === 0 && <p style="color:#6b6860;">No exhibitions yet. The public site shows placeholder exhibitions until you add your first.</p>}
   <div class="admin-grid">
     {list.map((e) => (

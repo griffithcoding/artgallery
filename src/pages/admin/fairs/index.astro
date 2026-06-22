@@ -10,6 +10,7 @@ const { data: rows } = await createSupabaseAdmin()
 const fairs = (rows ?? []) as any[];
 const saved = Astro.url.searchParams.get('saved');
 const deleted = Astro.url.searchParams.get('deleted');
+const error = Astro.url.searchParams.get('error');
 ---
 <AdminLayout title="Art Fairs">
   <div class="admin-toolbar">
@@ -21,6 +22,7 @@ const deleted = Astro.url.searchParams.get('deleted');
   </div>
   {saved && <p class="admin-status" style="color:#5b7a4f;">Saved.</p>}
   {deleted && <p class="admin-status" style="color:#6b6860;">Deleted.</p>}
+  {error && <p class="admin-status err">{error}</p>}
   {fairs.length === 0 ? (
     <p class="admin-empty">No fairs yet. The public Art Fairs page shows placeholder fairs until you add your first.</p>
   ) : (

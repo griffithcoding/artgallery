@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { createSupabaseServer, createSupabaseAdmin } from '../../../lib/supabase/server';
+import { okRedirect, errRedirect } from '../../../lib/adminResult';
 
 export const prerender = false;
 
@@ -9,6 +10,9 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   if (!user) return new Response('Unauthorized', { status: 401 });
   const f = await request.formData();
   const id = String(f.get('id') ?? '');
-  if (id) await createSupabaseAdmin().from('fairs').delete().eq('id', id);
-  return redirect('/admin/fairs?deleted=1', 303);
+  if (id) {
+    const { error } = await createSupabaseAdmin().from('fairs').delete().eq('id', id);
+    if (error) return redirect(errRedirect('/admin/fairs', error.message), 303);
+  }
+  return redirect(okRedirect('/admin/fairs', 'deleted'), 303);
 };

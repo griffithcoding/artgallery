@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { createSupabaseServer, createSupabaseAdmin } from '../../../lib/supabase/server';
 import { slugify, uniqueSlug } from '../../../lib/slug';
+import { okRedirect, errRedirect } from '../../../lib/adminResult';
 
 export const prerender = false;
 
@@ -33,11 +34,13 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   };
 
   if (id) {
-    await admin.from('artists').update(fields).eq('id', id);
+    const { error } = await admin.from('artists').update(fields).eq('id', id);
+    if (error) return redirect(errRedirect('/admin/artists', error.message), 303);
   } else {
     const { data: existing } = await admin.from('artists').select('slug');
     const slug = uniqueSlug(slugify(name), (existing ?? []).map((r) => r.slug));
-    await admin.from('artists').insert({ ...fields, slug });
+    const { error } = await admin.from('artists').insert({ ...fields, slug });
+    if (error) return redirect(errRedirect('/admin/artists', error.message), 303);
   }
-  return redirect('/admin/artists?saved=1', 303);
+  return redirect(okRedirect('/admin/artists'), 303);
 };

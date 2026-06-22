@@ -13,6 +13,7 @@ const { data: orphanWorks } = await createSupabaseAdmin()
   .from('artworks').select('id, title, year, availability').is('artist_id', null).order('sort_order', { ascending: true });
 const orphans = (orphanWorks ?? []) as any[];
 const saved = Astro.url.searchParams.get('saved');
+const error = Astro.url.searchParams.get('error');
 const list = (artists ?? []) as any[];
 ---
 <AdminLayout title="Artists">
@@ -24,6 +25,7 @@ const list = (artists ?? []) as any[];
     <a class="admin-btn" href="/admin/artists/new">+ New artist</a>
   </div>
   {saved && <p class="admin-status" style="color:#5b7a4f;">Saved.</p>}
+  {error && <p class="admin-status err">{error}</p>}
   {list.length === 0 && <p style="color:#6b6860;">No artists yet.</p>}
   <div class="admin-grid">
     {list.map((a) => (

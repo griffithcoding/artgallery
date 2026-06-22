@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { createSupabaseServer, createSupabaseAdmin } from '../../../lib/supabase/server';
+import { okRedirect, errRedirect } from '../../../lib/adminResult';
 
 export const prerender = false;
 
@@ -27,9 +28,11 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
   const admin = createSupabaseAdmin();
   if (id) {
-    await admin.from('fairs').update(fields).eq('id', id);
+    const { error } = await admin.from('fairs').update(fields).eq('id', id);
+    if (error) return redirect(errRedirect('/admin/fairs', error.message), 303);
   } else {
-    await admin.from('fairs').insert(fields);
+    const { error } = await admin.from('fairs').insert(fields);
+    if (error) return redirect(errRedirect('/admin/fairs', error.message), 303);
   }
-  return redirect('/admin/fairs?saved=1', 303);
+  return redirect(okRedirect('/admin/fairs'), 303);
 };
