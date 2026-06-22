@@ -25,7 +25,7 @@ const artistList = (artists ?? []) as any[];
     </div>
     <div class="admin-field"><label>Sort order</label><input name="sort_order" type="number" value="0" /></div>
     <div class="admin-field"><label>Hero image</label>
-      <input type="file" data-kind="exhibitions" accept="image/*" />
+      <input type="file" data-kind="exhibitions" accept="image/jpeg,image/png,image/webp" />
       <input type="hidden" name="hero_image_url" />
       <small style="color:#8a8675;">Optional — falls back to a featured artist's work if empty.</small>
     </div>

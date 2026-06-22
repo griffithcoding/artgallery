@@ -36,7 +36,7 @@ const { data: works } = await createSupabaseAdmin()
     </div>
     <p class="admin-status">Works on site: <strong>{workCount ?? 0}</strong></p>
     <div class="admin-field"><label>Portrait image</label>
-      <input type="file" data-kind="artists" accept="image/*" />
+      <input type="file" data-kind="artists" accept="image/jpeg,image/png,image/webp" />
       <input type="hidden" name="portrait_image_url" value={a.portrait_image_url ?? ''} />
       <small style="color:#8a8675;">{a.portrait_image_url ? 'Current image kept unless you upload a new one.' : ''}</small>
     </div>
