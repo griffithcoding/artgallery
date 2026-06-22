@@ -225,3 +225,20 @@ alter table public.inquiries add constraint inquiries_status_check
 
 create index if not exists inquiries_ip_created_idx on public.inquiries (ip, created_at);
 create index if not exists inquiries_status_created_idx on public.inquiries (status, created_at desc);
+
+-- ===== site_settings (contact/hours, editable by the owner) — Phase 4, 2026-06-22 =====
+create table if not exists public.site_settings (
+  id smallint primary key default 1 check (id = 1),
+  email text not null default '',
+  phone text not null default '',
+  hours text not null default '',
+  address_line text not null default '',
+  address_city text not null default '',
+  instagram_url text not null default '',
+  updated_at timestamptz not null default now()
+);
+alter table public.site_settings enable row level security;
+drop policy if exists site_settings_public_read on public.site_settings;
+create policy site_settings_public_read on public.site_settings for select using (true);
+-- writes via service-role key only (no anon/auth write policy).
+insert into public.site_settings (id) values (1) on conflict (id) do nothing;
