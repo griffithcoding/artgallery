@@ -1,0 +1,26 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getSettings } from '../../../lib/settings';
+
+const s = await getSettings();
+const saved = Astro.url.searchParams.get('saved');
+const error = Astro.url.searchParams.get('error');
+---
+<AdminLayout title="Settings">
+  <h1>Contact &amp; hours</h1>
+  <p class="admin-count" style="display:block;margin-bottom:1rem;max-width:60ch;">
+    These appear on your Contact page, Visit page, and the footer. Changes go live within about a minute.
+  </p>
+  {saved && <p class="admin-status" style="color:#5b7a4f;">Saved — your site is updated.</p>}
+  {error && <p class="admin-status err">{error}</p>}
+  <form method="POST" action="/admin/settings/save" class="admin-card" style="max-width:640px;">
+    <div class="admin-field"><label>Gallery email</label><input type="email" name="email" value={s.email} /></div>
+    <div class="admin-field"><label>Phone</label><input name="phone" value={s.phone} /></div>
+    <div class="admin-field"><label>Opening hours</label><input name="hours" value={s.hours} placeholder="Tue–Sat, 1–6pm" /></div>
+    <div class="admin-field"><label>Street address</label><input name="address_line" value={s.addressLine} /></div>
+    <div class="admin-field"><label>City line</label><input name="address_city" value={s.addressCity} placeholder="Brooklyn, NY 11201" /></div>
+    <div class="admin-field"><label>Instagram URL</label><input name="instagram_url" value={s.instagramUrl} /></div>
+    <button class="admin-btn" type="submit">Save changes</button>
+  </form>
+</AdminLayout>
