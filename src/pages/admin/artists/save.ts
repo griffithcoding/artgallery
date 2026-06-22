@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { createSupabaseServer, createSupabaseAdmin } from '../../../lib/supabase/server';
 import { slugify, uniqueSlug } from '../../../lib/slug';
 import { okRedirect, errRedirect } from '../../../lib/adminResult';
+import { sanitizeRichHtml } from '../../../lib/sanitize';
 
 export const prerender = false;
 
@@ -21,7 +22,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     birthplace: String(f.get('birthplace') ?? ''),
     birth_year: f.get('birth_year') ? Number(f.get('birth_year')) : null,
     discipline: String(f.get('discipline') ?? ''),
-    bio: String(f.get('bio') ?? ''),
+    bio: sanitizeRichHtml(String(f.get('bio') ?? '')),
     portrait_image_url: String(f.get('portrait_image_url') ?? '') || null,
     represented_since: f.get('represented_since') ? Number(f.get('represented_since')) : null,
     active_since: f.get('active_since') ? Number(f.get('active_since')) : null,
