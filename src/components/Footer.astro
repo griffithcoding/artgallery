@@ -1,5 +1,7 @@
 ---
 import { BRAND } from '../lib/site';
+import { getSettings } from '../lib/settings';
+const s = await getSettings();
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
@@ -20,9 +22,9 @@ const year = new Date().getFullYear();
       <div>
         <h4>Visit</h4>
         <ul>
-          <li>{BRAND.addressLine}</li>
-          <li>{BRAND.addressCity}</li>
-          <li>{BRAND.hours}</li>
+          <li>{s.addressLine}</li>
+          <li>{s.addressCity}</li>
+          <li>{s.hours}</li>
           <li><a href="/visit">Directions →</a></li>
         </ul>
       </div>
@@ -37,15 +39,15 @@ const year = new Date().getFullYear();
       <div>
         <h4>Connect</h4>
         <ul>
-          <li><a href={`mailto:${BRAND.email}`}>{BRAND.email}</a></li>
-          <li><a href={BRAND.instagram} rel="noopener" target="_blank">Instagram</a></li>
+          <li><a href={`mailto:${s.email}`}>{s.email}</a></li>
+          <li><a href={s.instagramUrl} rel="noopener" target="_blank">Instagram</a></li>
           <li><a href="/contact">Contact</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© {year} {BRAND.name}. All artworks © the respective artists.</span>
-      <span>{BRAND.addressLine}, {BRAND.addressCity}</span>
+      <span>{s.addressLine}, {s.addressCity}</span>
     </div>
   </div>
 </footer>
