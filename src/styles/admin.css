@@ -175,3 +175,20 @@ body.composer-preview .cb-block { outline: none !important; }
 .cb-modal-actions button { padding: .45rem .9rem; border-radius: 999px; border: 1px solid #1b2233; background: transparent; cursor: pointer; }
 .cb-modal-actions .composer-btn--solid { background: #1b2233; color: #f3ede2; }
 body.composer-preview .composer-editable-img { outline: none; cursor: default; }
+
+/* ── Inquiry inbox / shared list-UX kit ───────────────────────────── */
+.badge {
+  display: inline-block; padding: .14rem .6rem; border-radius: 999px;
+  font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 500;
+  border: 1px solid currentColor; line-height: 1.4; vertical-align: middle;
+}
+.badge--new { color: var(--mw-accent, #8a2b1f); }
+.badge--contacted { color: #5b6470; }
+.badge--won { color: #3f6b4f; }
+.badge--lost { color: var(--mw-ink-soft, #8a8675); }
+.badge--archived { color: #b0aca2; }
+.admin-empty { color: var(--mw-ink-soft, #6b6860); padding: 2rem 0; }
+.admin-bulkbar { display: flex; gap: .5rem; margin: .5rem 0; }
+.admin-filter select { padding: .4rem .6rem; }
+.admin-help summary { cursor: pointer; color: var(--mw-ink-soft, #6b6860); font-size: .82rem; }
+.admin-help[open] { background: var(--mw-line-soft, #f4f2ec); padding: .6rem .85rem; border-radius: 6px; max-width: 540px; margin-top: .4rem; }

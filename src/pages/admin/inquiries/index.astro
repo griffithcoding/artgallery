@@ -1,0 +1,71 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+import { rowToInquiry, INQUIRY_STATUSES } from '../../../lib/inquiries';
+
+const url = Astro.url;
+const statusFilter = url.searchParams.get('status') ?? '';
+const sourceFilter = url.searchParams.get('source') ?? '';
+
+let q = createSupabaseAdmin().from('inquiries').select('*').order('created_at', { ascending: false });
+if (statusFilter) q = q.eq('status', statusFilter);
+if (sourceFilter) q = q.eq('source', sourceFilter);
+const { data: rows } = await q;
+const inquiries = (rows ?? []).map(rowToInquiry);
+const newCount = inquiries.filter((i) => i.status === 'new').length;
+const flash = url.searchParams.get('saved') ? 'Saved.'
+  : url.searchParams.get('deleted') ? 'Deleted.'
+  : url.searchParams.get('updated') ? 'Updated.' : '';
+---
+<AdminLayout title="Inquiries">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+    <h1 style="font-weight:400;">Inquiries {newCount ? <span class="badge badge--new">{newCount} new</span> : null}</h1>
+    <details class="admin-help"><summary>How inquiries work</summary>
+      <p>Every submission from the public “Inquire” buttons lands here. Open one to read it, change its
+      status as you work the lead, and use <strong>Reply by email</strong> to answer from your mail app.
+      To get an email alert the moment one arrives, add a Resend API key (see the admin guide).</p>
+    </details>
+  </div>
+  {flash && <p class="admin-status">{flash}</p>}
+
+  <form method="get" class="admin-filter" style="display:flex;gap:.6rem;margin:1rem 0;flex-wrap:wrap;">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">All statuses</option>
+      {INQUIRY_STATUSES.map((s) => <option value={s} selected={statusFilter === s}>{s}</option>)}
+    </select>
+    <select name="source" onchange="this.form.submit()">
+      <option value="">All sources</option>
+      <option value="artwork" selected={sourceFilter === 'artwork'}>artwork</option>
+      <option value="contact" selected={sourceFilter === 'contact'}>contact</option>
+    </select>
+    <noscript><button class="admin-btn" type="submit">Filter</button></noscript>
+  </form>
+
+  {inquiries.length === 0 ? (
+    <p class="admin-empty">No inquiries yet — your public Inquire form feeds this inbox.</p>
+  ) : (
+    <form method="POST" action="/admin/inquiries/action">
+      <div class="admin-bulkbar">
+        <button class="admin-btn" name="bulk" value="contacted" type="submit">Mark contacted</button>
+        <button class="admin-btn" name="bulk" value="archived" type="submit">Archive</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th></th><th>Date</th><th>Name</th><th>Work</th><th>Source</th><th>Status</th><th>Message</th></tr></thead>
+        <tbody>
+          {inquiries.map((i) => (
+            <tr>
+              <td><input type="checkbox" name="ids" value={i.id} /></td>
+              <td style="white-space:nowrap;">{new Date(i.createdAt).toLocaleDateString()}</td>
+              <td><a href={`/admin/inquiries/${i.id}`}>{i.name}</a></td>
+              <td>{i.artworkTitle || '—'}</td>
+              <td>{i.source}</td>
+              <td><span class={`badge badge--${i.status}`}>{i.status}</span></td>
+              <td style="color:#6b6860;">{i.message.slice(0, 60)}{i.message.length > 60 ? '…' : ''}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </form>
+  )}
+</AdminLayout>

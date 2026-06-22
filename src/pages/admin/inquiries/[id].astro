@@ -1,0 +1,45 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+import { rowToInquiry, INQUIRY_STATUSES } from '../../../lib/inquiries';
+
+const { id } = Astro.params;
+const { data: row } = await createSupabaseAdmin().from('inquiries').select('*').eq('id', id).maybeSingle();
+if (!row) return Astro.redirect('/admin/inquiries', 303);
+const inq = rowToInquiry(row);
+const subject = 'Re: your inquiry' + (inq.artworkTitle ? ' — ' + inq.artworkTitle : '');
+const mailto = `mailto:${inq.email}?subject=${encodeURIComponent(subject)}`;
+---
+<AdminLayout title={`Inquiry — ${inq.name}`}>
+  <p><a href="/admin/inquiries">← All inquiries</a></p>
+  <h1 style="font-weight:400;">{inq.name} <span class={`badge badge--${inq.status}`}>{inq.status}</span></h1>
+  <p style="color:#6b6860;">{new Date(inq.createdAt).toLocaleString()} · source: {inq.source}</p>
+
+  <section class="admin-card" style="max-width:640px;">
+    <p><strong>Email:</strong> <a href={mailto}>{inq.email}</a></p>
+    {inq.phone && <p><strong>Phone:</strong> {inq.phone}</p>}
+    <p><strong>Work:</strong> {inq.artworkTitle || '—'}</p>
+    <p><strong>Marketing consent:</strong> {inq.consentMarketing ? 'Yes' : 'No'}</p>
+    <p style="margin-bottom:.2rem;"><strong>Message</strong></p>
+    <p style="white-space:pre-wrap;margin-top:0;">{inq.message}</p>
+    <a class="admin-btn" href={mailto}>Reply by email →</a>
+  </section>
+
+  <form method="POST" action="/admin/inquiries/save" class="admin-card" style="max-width:640px;margin-top:1.5rem;">
+    <input type="hidden" name="id" value={inq.id} />
+    <div class="admin-field"><label>Status</label>
+      <select name="status">
+        {INQUIRY_STATUSES.map((s) => <option value={s} selected={inq.status === s}>{s}</option>)}
+      </select>
+    </div>
+    <div class="admin-field"><label>Internal notes</label><textarea name="internal_notes" rows="4">{inq.internalNotes}</textarea></div>
+    <button class="admin-btn" type="submit">Save</button>
+  </form>
+
+  <form method="POST" action="/admin/inquiries/action" style="margin-top:.6rem;" onsubmit="return confirm('Delete this inquiry?')">
+    <input type="hidden" name="ids" value={inq.id} />
+    <input type="hidden" name="bulk" value="delete" />
+    <button class="admin-btn danger" type="submit">Delete</button>
+  </form>
+</AdminLayout>
