@@ -1,0 +1,99 @@
+---
+export const prerender = false;
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { createSupabaseAdmin } from '../../../lib/supabase/server';
+import { collectReferencedUrls, classifyObjects } from '../../../lib/media';
+
+const admin = createSupabaseAdmin();
+const PREFIXES = ['artworks', 'artists', 'exhibitions', 'posts', 'pages', 'library'];
+
+// 1. list objects across image prefixes
+const objects: Array<{ path: string; url: string }> = [];
+for (const prefix of PREFIXES) {
+  try {
+    const { data } = await admin.storage.from('gallery-images').list(prefix, { limit: 200 });
+    for (const obj of data ?? []) {
+      if (!obj.name || obj.name.endsWith('/')) continue;
+      const path = `${prefix}/${obj.name}`;
+      const { data: pub } = admin.storage.from('gallery-images').getPublicUrl(path);
+      objects.push({ path, url: pub.publicUrl });
+    }
+  } catch { /* prefix may not exist yet */ }
+}
+
+// 2. gather referenced URLs from the catalogue + page blocks
+const [aw, ar, ex, po, pg] = await Promise.all([
+  admin.from('artworks').select('image_url'),
+  admin.from('artists').select('portrait_image_url'),
+  admin.from('exhibitions').select('hero_image_url'),
+  admin.from('posts').select('cover_image_url'),
+  admin.from('pages').select('blocks,published_blocks'),
+]);
+const referenced = collectReferencedUrls({
+  artworkImages: (aw.data ?? []).map((r: any) => r.image_url),
+  artistPortraits: (ar.data ?? []).map((r: any) => r.portrait_image_url),
+  exhibitionHeroes: (ex.data ?? []).map((r: any) => r.hero_image_url),
+  postCovers: (po.data ?? []).map((r: any) => r.cover_image_url),
+});
+const blocksText = JSON.stringify(pg.data ?? []);
+const items = classifyObjects(objects, referenced, blocksText).sort((a, b) => Number(a.inUse) - Number(b.inUse));
+
+const saved = Astro.url.searchParams.get('deleted');
+const error = Astro.url.searchParams.get('error');
+---
+<AdminLayout title="Media">
+  <div class="admin-toolbar">
+    <div>
+      <h1>Media library</h1>
+      <span class="admin-count">{items.length} images · {items.filter((i) => !i.inUse).length} unused</span>
+    </div>
+    <form method="POST" action="/api/upload" enctype="multipart/form-data" class="admin-field" style="margin:0;">
+      <input type="file" id="libFile" data-kind="library" accept="image/jpeg,image/png,image/webp" />
+      <input type="hidden" name="kind" value="library" />
+    </form>
+  </div>
+  {saved && <p class="admin-status" style="color:#6b6860;">Deleted.</p>}
+  {error && <p class="admin-status err">{error}</p>}
+
+  {items.length === 0 ? (
+    <p class="admin-empty">No images yet. Images uploaded through artwork/artist/exhibition forms appear here, and you can upload directly above.</p>
+  ) : (
+    <div class="admin-grid">
+      {items.map((m) => (
+        <div class="admin-tile">
+          <span class="thumb"><img src={m.url} alt={m.path} loading="lazy" /></span>
+          <div class="tmeta">
+            <span class={`badge ${m.inUse ? '' : 'inquire'}`}>{m.inUse ? 'In use' : 'Orphan'}</span>
+            <div class="tactions">
+              <a href={m.url} target="_blank" rel="noopener">Open</a>
+              <button type="button" class="tdel media-copy" data-url={m.url}>Copy URL</button>
+              <form method="POST" action="/admin/media/action" style="margin-left:auto;"
+                onsubmit={`return confirm(${m.inUse ? "'This image is STILL IN USE on the site. Delete anyway?'" : "'Delete this unused image?'"})`}>
+                <input type="hidden" name="path" value={m.path} />
+                <button type="submit" class="tdel">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+  <script>
+    import '../../../scripts/admin-upload.ts';
+    document.querySelectorAll<HTMLButtonElement>('.media-copy').forEach((b) => {
+      b.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(b.dataset.url ?? '');
+        const t = b.textContent; b.textContent = 'Copied ✓';
+        setTimeout(() => { b.textContent = t; }, 1200);
+      });
+    });
+    // After a direct library upload finishes, reload so the new image appears.
+    document.getElementById('libFile')?.addEventListener('change', () => {
+      const iv = setInterval(() => {
+        const msg = document.querySelector('#libFile')?.closest('.admin-field')?.querySelector('small');
+        if (msg && /✓/.test(msg.textContent ?? '')) { clearInterval(iv); location.reload(); }
+      }, 500);
+      setTimeout(() => clearInterval(iv), 15000);
+    });
+  </script>
+</AdminLayout>

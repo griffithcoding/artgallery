@@ -225,3 +225,7 @@ body.composer-preview .composer-editable-img { outline: none; cursor: default; }
 .search-hits li a { display: block; padding: .65rem .9rem; background: var(--mw-panel); border: 1px solid var(--mw-line); border-radius: 8px; color: var(--mw-ink); text-decoration: none; }
 .search-hits li a:hover { border-color: var(--mw-accent); }
 .search-sub { color: var(--mw-ink-soft); }
+
+/* ── Media library ────────────────────────────────────────────────── */
+.admin-tile .thumb img { aspect-ratio: 1 / 1; }
+.media-copy { background: none; border: none; cursor: pointer; }
