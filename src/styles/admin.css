@@ -192,3 +192,12 @@ body.composer-preview .composer-editable-img { outline: none; cursor: default; }
 .admin-filter select { padding: .4rem .6rem; }
 .admin-help summary { cursor: pointer; color: var(--mw-ink-soft, #6b6860); font-size: .82rem; }
 .admin-help[open] { background: var(--mw-line-soft, #f4f2ec); padding: .6rem .85rem; border-radius: 6px; max-width: 540px; margin-top: .4rem; }
+
+/* ── Admin search omnibox ─────────────────────────────────────────── */
+.admin-search { margin-left: auto; }
+.admin-search input {
+  background: var(--mw-white); border: 1px solid var(--mw-line); color: var(--mw-ink);
+  padding: .5rem .85rem; font-family: var(--mw-sans); font-size: .85rem; border-radius: 999px; width: 16ch;
+  transition: width .25s var(--mw-ease), border-color .2s var(--mw-ease);
+}
+.admin-search input:focus { outline: none; border-color: var(--mw-accent); width: 22ch; }

@@ -5,12 +5,17 @@ const { title } = Astro.props;
 const path = Astro.url.pathname;
 const links = [
   { href: '/admin', label: 'Dashboard' },
-  { href: '/admin/homepage', label: 'Homepage' },
+  { href: '/admin/artworks', label: 'Artworks' },
   { href: '/admin/artists', label: 'Artists' },
-  { href: '/admin/inquiries', label: 'Inquiries' },
   { href: '/admin/exhibitions', label: 'Exhibitions' },
   { href: '/admin/fairs', label: 'Art Fairs' },
+  { href: '/admin/pages', label: 'Pages' },
+  { href: '/admin/homepage', label: 'Homepage' },
+  { href: '/admin/media', label: 'Media' },
+  { href: '/admin/inquiries', label: 'Inquiries' },
+  { href: '/admin/settings', label: 'Settings' },
 ];
+const q = Astro.url.searchParams.get('q') ?? '';
 ---
 <!doctype html>
 <html lang="en">
@@ -26,7 +31,10 @@ const links = [
     {links.map((l) => (
       <a href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</a>
     ))}
-    <a href="/admin/logout" style="margin-left:auto;">Sign out</a>
+    <form class="admin-search" method="GET" action="/admin/search" role="search">
+      <input type="search" name="q" value={q} placeholder="Search…" aria-label="Search the portal" />
+    </form>
+    <a href="/admin/logout">Sign out</a>
   </nav>
   <main class="admin-wrap"><slot /></main>
 </body>
