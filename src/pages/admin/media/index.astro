@@ -50,6 +50,7 @@ const error = Astro.url.searchParams.get('error');
     <form method="POST" action="/api/upload" enctype="multipart/form-data" class="admin-field" style="margin:0;">
       <input type="file" id="libFile" data-kind="library" accept="image/jpeg,image/png,image/webp" />
       <input type="hidden" name="kind" value="library" />
+      <small style="color:#8a8675;"></small>
     </form>
   </div>
   {saved && <p class="admin-status" style="color:#6b6860;">Deleted.</p>}
