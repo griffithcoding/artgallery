@@ -11,38 +11,45 @@ const year = new Date().getFullYear();
         <a class="footer-brand" href="/" aria-label={`${BRAND.name} home`}>
           <img class="footer-logo" src="/images/logo-nav.png" alt={BRAND.name} width="810" height="320" />
         </a>
-        <p style="color:#b7b3a9;margin-top:1rem;max-width:34ch;font-size:.9rem;">
-          An independent contemporary art gallery in {BRAND.neighborhood}, {BRAND.city}, representing emerging and mid-career artists.
+        <p style="color:var(--ink-soft);margin-top:1rem;max-width:34ch;font-size:.9rem;">
+          Contemporary art gallery in Dumbo, Brooklyn.
         </p>
-        <form class="newsletter mt-2">
-          <input type="email" required placeholder="Email for openings & new works" aria-label="Email address" />
-          <button type="submit">Join</button>
-        </form>
       </div>
       <div>
-        <h4>Visit</h4>
-        <ul>
-          <li>{s.addressLine}</li>
-          <li>{s.addressCity}</li>
-          <li>{s.hours}</li>
-          <li><a href="/visit">Directions →</a></li>
-        </ul>
+        <details class="footer-dd">
+          <summary>Visit<svg class="footer-dd-caret" width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1.5 5 5.5 9 1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <ul>
+            <li>{s.addressLine}</li>
+            <li>{s.addressCity}</li>
+            <li>{s.hours}</li>
+            <li><a href="/visit">Directions →</a></li>
+          </ul>
+        </details>
       </div>
       <div>
-        <h4>Explore</h4>
-        <ul>
-          <li><a href="/exhibitions">Exhibitions</a></li>
-          <li><a href="/artists">Artists</a></li>
-          <li><a href="/events">Events</a></li>
-        </ul>
+        <details class="footer-dd">
+          <summary>Explore<svg class="footer-dd-caret" width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1.5 5 5.5 9 1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <ul>
+            <li><a href="/exhibitions">Exhibitions</a></li>
+            <li><a href="/artists">Artists</a></li>
+            <li><a href="/events">Events</a></li>
+          </ul>
+        </details>
       </div>
       <div>
-        <h4>Connect</h4>
-        <ul>
-          <li><a href={`mailto:${s.email}`}>{s.email}</a></li>
-          <li><a href={s.instagramUrl} rel="noopener" target="_blank">Instagram</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
+        <details class="footer-dd">
+          <summary>Connect<svg class="footer-dd-caret" width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1.5 5 5.5 9 1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <ul>
+            <li><a href={`mailto:${s.email}`}>{s.email}</a></li>
+            <li><a href={s.instagramUrl} rel="noopener" target="_blank">Instagram</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+          <p class="footer-dd-label">Newsletter</p>
+          <form class="newsletter">
+            <input type="email" required placeholder="Email for openings & new works" aria-label="Email address" />
+            <button type="submit">Join</button>
+          </form>
+        </details>
       </div>
     </div>
     <div class="footer-bottom">

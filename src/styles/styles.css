@@ -226,21 +226,38 @@ h3.display { font-size: clamp(1.25rem, 2.5vw, 1.65rem); }
 /* =========================================================================
    Footer
    ========================================================================= */
-.site-footer { background: var(--ink); color: var(--paper); padding-block: clamp(3rem, 6vw, 5rem); }
-.site-footer a { color: var(--paper); }
+.site-footer { background: var(--paper); color: var(--ink); padding-block: clamp(3rem, 6vw, 5rem); border-top: 1px solid var(--line); }
+.site-footer a { color: var(--ink-soft); transition: color .25s var(--ease); }
+.site-footer a:hover { color: var(--ink); }
 .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.4fr; gap: 2.5rem; }
-.footer-grid h4 { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: #b7b3a9; margin-bottom: 1.1rem; font-weight: 500; }
-.footer-grid li { margin-bottom: 0.6rem; font-size: 0.9rem; color: #d9d6cd; }
-.footer-grid li a:hover { color: #fff; }
+.footer-grid h4 { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 1.1rem; font-weight: 500; }
+.footer-grid li { margin-bottom: 0.6rem; font-size: 0.9rem; color: var(--ink-soft); }
+.footer-grid li a:hover { color: var(--ink); }
 .footer-brand { display: inline-block; }
-/* Reuse the nav logo in the footer; invert the black mark to render light on the dark ground. */
-.footer-logo { display: block; width: clamp(190px, 62%, 250px); height: auto; filter: invert(1); opacity: 0.92; }
-.footer-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: 3rem; padding-top: 1.8rem; border-top: 1px solid #34322b; font-size: 0.78rem; color: #9a968c; }
-.newsletter { display: flex; border-bottom: 1px solid #555047; max-width: 360px; }
-.newsletter input { flex: 1; background: none; border: none; color: var(--paper); padding: 0.6rem 0; font-size: 0.9rem; }
-.newsletter input::placeholder { color: #8f8b81; }
+/* Reuse the nav logo in the footer in its native color — identical to the header. */
+.footer-logo { display: block; width: clamp(190px, 62%, 250px); height: auto; }
+.footer-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: 3rem; padding-top: 1.8rem; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--ink-soft); }
+.newsletter { display: flex; border-bottom: 1px solid var(--line); max-width: 360px; }
+.newsletter input { flex: 1; background: none; border: none; color: var(--ink); padding: 0.6rem 0; font-size: 0.9rem; }
+.newsletter input::placeholder { color: var(--ink-soft); }
 .newsletter input:focus { outline: none; }
-.newsletter button { background: none; border: none; color: var(--paper); letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.72rem; }
+.newsletter button { background: none; border: none; color: var(--ink); letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.72rem; }
+/* Footer category dropdowns (Explore / Connect) — native <details> accordion */
+.footer-dd > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;
+  color: var(--ink-soft); transition: color .2s var(--ease);
+}
+.footer-dd > summary::-webkit-details-marker { display: none; }
+.footer-dd > summary::marker { content: ''; }
+.footer-dd:not([open]) > :not(summary) { display: none; }
+.footer-dd > summary:hover { color: var(--ink); }
+.footer-dd[open] > summary { color: var(--ink); margin-bottom: 1.1rem; }
+.footer-dd-caret { flex: 0 0 auto; color: var(--ink-soft); transition: transform .25s var(--ease); }
+.footer-dd[open] .footer-dd-caret { transform: rotate(180deg); }
+.footer-dd[open] > :not(summary) { animation: footerDdReveal .28s var(--ease); }
+.footer-dd-label { margin: 1.1rem 0 0.5rem; font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-soft); }
+@keyframes footerDdReveal { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
 
