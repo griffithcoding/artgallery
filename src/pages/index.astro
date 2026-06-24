@@ -257,17 +257,17 @@ const jsonLd = {
   .hero-belt-side { padding-top: 0.2rem; }
   @media (max-width: 860px) { .hero-belt { grid-template-columns: 1fr; gap: 1.5rem; } }
 
-  /* Selected works — full paintings, no crop (masonry columns) */
-  .featured-grid { columns: 3; column-gap: clamp(1rem, 2.5vw, 2.2rem); }
-  .featured-work { break-inside: avoid; margin: 0 0 clamp(1.6rem, 3.2vw, 2.6rem); }
+  /* Selected works — full paintings, no crop, aligned in an even grid */
+  .featured-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: clamp(1rem, 2.5vw, 2.2rem); row-gap: clamp(1.6rem, 3.2vw, 2.6rem); align-items: start; }
+  .featured-work { margin: 0; }
   .featured-work .fw-img { display: block; overflow: hidden; background: var(--line-soft); }
   .featured-work .fw-img img { width: 100%; height: auto; display: block; transition: transform 0.8s var(--ease); }
   .featured-work:hover .fw-img img { transform: scale(1.02); }
   .featured-work figcaption { display: flex; flex-direction: column; gap: 0.12rem; margin-top: 0.7rem; }
   .fw-title { font-family: var(--serif); font-size: 1.05rem; color: var(--ink); }
   .fw-meta { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.45; }
-  @media (max-width: 900px) { .featured-grid { columns: 2; } }
-  @media (max-width: 560px) { .featured-grid { columns: 1; } }
+  @media (max-width: 900px) { .featured-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .featured-grid { grid-template-columns: 1fr; } }
 
   .visit-nap { font-style: normal; line-height: 1.85; font-size: 0.95rem; margin: 1.2rem 0; color: var(--ink); }
   .visit-nap a { border-bottom: 1px solid var(--line); }
